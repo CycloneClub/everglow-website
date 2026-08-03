@@ -13,7 +13,11 @@ env:
   LANGUAGE_STORAGE_KEY: ${{ vars.LANGUAGE_STORAGE_KEY }}
 
 jobs:
+  build-and-test:
+    uses: ./.github/workflows/build-and-test.yml
+
   build:
+    needs: build-and-test
     runs-on: ubuntu-latest
     environment: github-pages
     steps:

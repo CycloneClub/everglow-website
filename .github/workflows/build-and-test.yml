@@ -1,0 +1,42 @@
+name: Build and Test
+run-name: ${{ github.actor }} is validating the production build
+
+on:
+  pull_request:
+  workflow_call:
+
+env:
+  NODE_VERSION: 22.18.0
+  BASE_URL: ${{ vars.BASE_URL }}
+  COLOR_MODE_STORAGE_KEY: ${{ vars.COLOR_MODE_STORAGE_KEY }}
+  LANGUAGE_STORAGE_KEY: ${{ vars.LANGUAGE_STORAGE_KEY }}
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.18.0
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Pnpm Install
+        run: pnpm install
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Build
+        run: pnpm build
+
+      - name: Start and test production server
+        run: node scripts/smoke-test.mjs
