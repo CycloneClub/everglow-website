@@ -8,7 +8,7 @@
 			: `${t('head.fulltitle')} | ${t('head.fulltitle2')}`;
 	};
 
-	const hreflangLinks = ref([
+	const hreflangLinks = [
 		{
 			rel: 'alternate',
 			hreflang: 'zh-cn',
@@ -29,7 +29,7 @@
 			hreflang: 'x-default',
 			href: 'https://everglow.cloudea.work/',
 		},
-	]);
+	] as const;
 
 	useHead({
 		titleTemplate: i18nTitle,
@@ -39,18 +39,14 @@
 		},
 		link: [
 			...(i18nHead.value.link || []),
-			...hreflangLinks.value,
+			...hreflangLinks,
 			{
-				rel: 'github',
+				rel: 'me',
 				href: 'https://github.com/Solaestas/Everglow',
-				type: 'text/html',
-				title: 'Github',
 			},
 			{
-				rel: 'bilibili',
+				rel: 'me',
 				href: 'https://space.bilibili.com/1079503056',
-				type: 'text/html',
-				title: 'Bilibili',
 			},
 		],
 		meta: [...(i18nHead.value.meta || [])],
