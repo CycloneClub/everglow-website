@@ -23,7 +23,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10.14.0
+          version: 11.18.0
 
       - name: Use Node.js 22
         uses: actions/setup-node@v4
@@ -47,3 +47,5 @@ jobs:
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           TARGET: ${{ secrets.TARGET }}
+          SCRIPT_AFTER: ${{ vars.RESTART_COMMAND }}
+          SCRIPT_AFTER_REQUIRED: true
