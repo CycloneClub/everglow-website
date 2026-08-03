@@ -25,3 +25,6 @@ logs
 !.env.example
 
 .eslintcache
+
+# Local Git worktrees
+.worktrees/
