@@ -56,11 +56,10 @@
 		twitterCard: 'summary_large_image',
 	});
 
-	defineOgImageComponent('Pergel', {
+	defineOgImage('Pergel', {
 		title: 'Everglow',
 		description: 'Welcome to Everglow no Sekai!',
 		headline: 'terraria mod',
-		colorMode: 'dark',
 		siteName: 'Everglow',
 		siteLogo: '/icon.png',
 		theme: '#212121',
