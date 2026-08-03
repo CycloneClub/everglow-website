@@ -138,6 +138,7 @@ export default defineNuxtConfig({
 		allow: '/',
 	},
 	site: {
+		name: 'Everglow',
 		url: 'https://everglow.cloudea.work',
 	},
 	sitemap: {

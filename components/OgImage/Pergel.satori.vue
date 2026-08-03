@@ -23,7 +23,7 @@
 	color.B = '#6495ED';
 	color.C = '#4682B4';
 
-	const title = computed(() => props.title.slice(0, 60));
+	const truncatedTitle = computed(() => props.title.slice(0, 60));
 </script>
 
 <template>
@@ -104,7 +104,7 @@
 			<h1
 				class="w-[600px] m-0 text-[75px] font-semibold mb-4 text-white flex items-center"
 			>
-				<span>{{ title }}</span>
+				<span>{{ truncatedTitle }}</span>
 			</h1>
 			<p class="text-[32px] text-[#E4E4E7] leading-tight">
 				{{ description.slice(0, 200) }}
