@@ -37,7 +37,7 @@ jobs:
       - name: Build
         run: pnpm run build
 
-      # Deploy to official server
+      # Deploy to server
       - name: Deploy
         uses: easingthemes/ssh-deploy@main
         env:
@@ -47,5 +47,3 @@ jobs:
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           TARGET: ${{ secrets.TARGET }}
-          SCRIPT_AFTER: ${{ vars.RESTART_COMMAND }}
-          SCRIPT_AFTER_REQUIRED: true
