@@ -28,6 +28,17 @@ export default defineNuxtConfig({
 		'@nuxt/image',
 		'@tresjs/nuxt',
 	],
+	hooks: {
+		// @nuxtjs/mdc 0.22.2 adds pnpm-specific aliases that Vite 8 cannot resolve.
+		// Remove them after all modules have extended the Vite configuration.
+		'vite:configResolved': (config) => {
+			if (Array.isArray(config.optimizeDeps?.include)) {
+				config.optimizeDeps.include = config.optimizeDeps.include.filter(
+					dependency => !dependency.startsWith('@nuxtjs/mdc > '),
+				);
+			}
+		},
+	},
 	ssr: true,
 	nitro: {
 		// preset: 'node-server',
@@ -39,9 +50,6 @@ export default defineNuxtConfig({
 					// api: 'modern', // @BreakingChanges
 				},
 			},
-		},
-		optimizeDeps: {
-			include: [],
 		},
 	},
 	runtimeConfig: {
