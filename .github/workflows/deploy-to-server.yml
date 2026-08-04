@@ -5,15 +5,17 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - '.github/**'
-      - '.vscode/**'
-      - '.env.example'
-      - '.gitattributes'
-      - '.gitignore'
-      - '.prettierrc.json'
-      - 'README.md'
-      - 'TODO.md'
+    paths:
+      - '**'
+      - '!.github/**'
+      - '.github/workflows/deploy-to-server.yml'
+      - '!.vscode/**'
+      - '!.env.example'
+      - '!.gitattributes'
+      - '!.gitignore'
+      - '!.prettierrc.json'
+      - '!README.md'
+      - '!TODO.md'
 
 env:
   NODE_VERSION: 22.18.0
