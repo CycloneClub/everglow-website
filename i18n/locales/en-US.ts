@@ -1,4 +1,4 @@
-import type { I18nLocale } from '~/types';
+import type { I18nLocale } from '#shared/types';
 
 export default {
 	nuxtSiteConfig: {

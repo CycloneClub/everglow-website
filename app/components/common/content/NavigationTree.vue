@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import type { NavigationGroup, NavigationTree } from '~/types';
+	import type { NavigationGroup, NavigationTree } from '#shared/types';
 
 	const { level, links, defaultOpen } = defineProps({
 		level: {
