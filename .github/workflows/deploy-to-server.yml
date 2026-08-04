@@ -17,6 +17,13 @@ on:
       - '!README.md'
       - '!TODO.md'
 
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-development-server
+  cancel-in-progress: true
+
 env:
   NODE_VERSION: 22.18.0
   BASE_URL: ${{ vars.BASE_URL }}
@@ -33,24 +40,16 @@ jobs:
     environment: github-pages
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Set up pnpm, Node.js, and dependencies
+        uses: pnpm/setup@v1
         with:
-          version: 11.18.0
-
-      - name: Use Node.js 22
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{env.NODE_VERSION}}
-          cache: pnpm
-
-      - name: Pnpm Install
-        run: pnpm install
+          runtime: node@${{ env.NODE_VERSION }}
+          cache: true
 
       - name: Build
-        run: pnpm run build
+        run: pnpm build
 
       - name: Verify restart command
         env:
@@ -61,10 +60,9 @@ jobs:
             exit 1
           fi
 
-      # Deploy to server
       - name: Deploy
-        uses: easingthemes/ssh-deploy@main
-        env:
+        uses: easingthemes/ssh-deploy@v6.0.1
+        with:
           SSH_PRIVATE_KEY: ${{ secrets.ACCESS_TOKEN }}
           ARGS: '-avz --delete'
           SOURCE: '.output/'
@@ -73,7 +71,7 @@ jobs:
           TARGET: ${{ secrets.TARGET }}
 
       - name: Restart server
-        uses: appleboy/ssh-action@v1.2.4
+        uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
