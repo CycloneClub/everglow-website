@@ -50,6 +50,15 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: Verify restart command
+        env:
+          RESTART_COMMAND: ${{ vars.RESTART_COMMAND }}
+        run: |
+          if [ -z "$RESTART_COMMAND" ]; then
+            echo "::error::RESTART_COMMAND is not configured in the github-pages environment"
+            exit 1
+          fi
+
       # Deploy to server
       - name: Deploy
         uses: easingthemes/ssh-deploy@main
@@ -60,3 +69,13 @@ jobs:
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           TARGET: ${{ secrets.TARGET }}
+
+      - name: Restart server
+        uses: appleboy/ssh-action@v1.2.4
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.ACCESS_TOKEN }}
+          script: |
+            set -e
+            ${{ vars.RESTART_COMMAND }}
