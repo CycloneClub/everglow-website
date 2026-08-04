@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import type { NavigationTree } from '~/types';
+	import type { NavigationTree } from '#shared/types';
 
 	const route = useRoute();
 

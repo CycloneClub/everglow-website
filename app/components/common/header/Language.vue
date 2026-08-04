@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import type { Langs } from '~/types';
+	import type { Langs } from '#shared/types';
 
 	const { availableLocales, setLocale } = useI18n();
 

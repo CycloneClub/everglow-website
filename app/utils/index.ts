@@ -4,7 +4,7 @@ import type {
 	Langs,
 	NavigationTree,
 	NewsContentKey,
-} from '~/types';
+} from '#shared/types';
 
 export const mapContentNavigation = (
 	navigation: ContentNavigationItem[],
