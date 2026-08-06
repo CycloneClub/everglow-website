@@ -50,7 +50,7 @@
 		"prettier": "^3.9.6",
 		"sass-embedded": "^1.100.0",
 		"satori": "0.29.0",
-		"typescript": "^5.9.3",
+		"typescript": "^6.0.3",
 		"vite-plugin-eslint2": "5.0.4",
 		"vue-router": "^5.2.0",
 		"vue-tsc": "^3.3.9"
