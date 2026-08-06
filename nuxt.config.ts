@@ -274,7 +274,6 @@ export default defineNuxtConfig({
 	colorMode: {
 		preference: 'dark',
 		fallback: 'dark',
-		hid: 'nuxt-color-mode-script',
 		globalName: '__EVERGLOW_COLOR_MODE__',
 		componentName: 'ColorScheme',
 		classPrefix: 'everglow-',

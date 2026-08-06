@@ -42,7 +42,6 @@
 	const colorMode = useColorMode();
 
 	const changeColorMode = (mode: 'light' | 'dark') => {
-		colorMode.value = mode;
 		colorMode.preference = mode;
 	};
 </script>
