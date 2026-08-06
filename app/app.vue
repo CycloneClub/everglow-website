@@ -56,7 +56,7 @@
 		twitterCard: 'summary_large_image',
 	});
 
-	defineOgImage('Pergel', {
+	defineOgImage('Pergel.satori', {
 		title: 'Everglow',
 		description: 'Welcome to Everglow no Sekai!',
 		headline: 'terraria mod',
