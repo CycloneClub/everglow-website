@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Community support
+    url: https://discord.gg/pdXvp89Dbp
+    about: Ask questions or discuss ideas with the Everglow community.
+  - name: Security vulnerability
+    url: https://github.com/CycloneClub/everglow-website/security
+    about: Report potential vulnerabilities privately; do not create a public issue.

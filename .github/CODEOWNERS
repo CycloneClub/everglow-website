@@ -1,0 +1,5 @@
+# Default reviewers for all repository files.
+* @CycloneClub
+
+# Deployment automation requires maintainer review.
+/.github/ @CycloneClub
