@@ -24,7 +24,7 @@
 		"@prosemirror-adapter/vue": "^0.4.6",
 		"prism-themes": "^1.9.0",
 		"refractor": "^5.0.0",
-		"three": "0.169.0",
+		"three": "0.185.1",
 		"vue": "^3.5.40"
 	},
 	"packageManager": "pnpm@11.20.0",
