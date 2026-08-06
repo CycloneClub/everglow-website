@@ -61,7 +61,7 @@ jobs:
           fi
 
       - name: Deploy
-        uses: easingthemes/ssh-deploy@v6.0.1
+        uses: easingthemes/ssh-deploy@v6.0.3
         with:
           SSH_PRIVATE_KEY: ${{ secrets.ACCESS_TOKEN }}
           ARGS: '-avz --delete'
