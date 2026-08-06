@@ -1,0 +1,33 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      nuxt:
+        patterns:
+          - '@nuxt/*'
+          - '@nuxtjs/*'
+          - nuxt
+      vue:
+        patterns:
+          - vue
+          - vue-router
+          - vue-tsc
+      eslint:
+        patterns:
+          - eslint
+          - '@eslint/*'
+          - '@nuxt/eslint'
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      github-actions:
+        patterns:
+          - '*'

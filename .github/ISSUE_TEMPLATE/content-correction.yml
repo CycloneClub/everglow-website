@@ -1,0 +1,45 @@
+name: Content or translation correction
+description: Report an inaccurate, unclear, missing, or untranslated page.
+title: '[Content]: '
+labels:
+  - documentation
+body:
+  - type: input
+    id: page-url
+    attributes:
+      label: Page URL
+      description: Link to the page that needs attention.
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Type of change
+      options:
+        - Incorrect information
+        - Missing information
+        - Translation issue
+        - Broken link or media
+        - Typo or wording
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Suggested correction
+      description: Explain what should change. Include a source where factual accuracy is involved.
+    validations:
+      required: true
+  - type: dropdown
+    id: locale
+    attributes:
+      label: Affected language
+      options:
+        - Simplified Chinese
+        - Traditional Chinese
+        - English
+        - All languages
+        - Other
+    validations:
+      required: true
