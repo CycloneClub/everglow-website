@@ -40,6 +40,7 @@
 	];
 
 	const colorMode = useColorMode();
+	const { t } = useI18n();
 
 	const changeColorMode = (mode: 'light' | 'dark') => {
 		colorMode.preference = mode;
@@ -58,7 +59,7 @@
 			<h1 class="logo">
 				<NuxtLinkLocale to="/">
 					<EverglowLogo :size="30" />
-					<div class="logo-text">{{ $t('body.header.name') }}</div>
+					<div class="logo-text">{{ t('body.header.name') }}</div>
 				</NuxtLinkLocale>
 			</h1>
 			<CommonHeaderMenu
@@ -73,7 +74,7 @@
 				<li class="user-actions-item mode">
 					<div class="icon-button">
 						<span
-							v-show="$colorMode.value === 'light'"
+							v-show="colorMode.value === 'light'"
 							class="light"
 						>
 							<Icon
@@ -82,7 +83,7 @@
 							/>
 						</span>
 						<span
-							v-show="$colorMode.value === 'dark'"
+							v-show="colorMode.value === 'dark'"
 							class="dark"
 						>
 							<Icon

@@ -66,7 +66,7 @@
 								/>
 							</div>
 							<div class="info">
-								<h2 class="author">{{ $t('meta.team') }}</h2>
+								<h2 class="author">{{ i18n.t('meta.team') }}</h2>
 								<div class="meta-info">
 									<div class="date">
 										<Icon name="line-md:pencil" />

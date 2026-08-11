@@ -14,6 +14,7 @@
 	});
 
 	const open = ref(false);
+	const { t } = useI18n();
 </script>
 
 <template>
@@ -27,7 +28,7 @@
 				tabindex="-1"
 				@click="open = !open"
 			>
-				<span class="label">{{ title || $t('common.toc.title') }}</span>
+				<span class="label">{{ title || t('common.toc.title') }}</span>
 				<Icon
 					:class="['chevron', open ? 'active' : '']"
 					name="lucide:chevron-right"

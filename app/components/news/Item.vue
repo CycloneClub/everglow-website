@@ -4,6 +4,7 @@
 	const { newsItem: props } = defineProps<{
 		newsItem: NewsCollectionItem;
 	}>();
+	const { t } = useI18n();
 
 	const title = props.title && props.title.trim() ? props.title : 'Title';
 	const description =
@@ -41,7 +42,7 @@
 			</div>
 			<div class="news-item-footer">
 				<div class="info">
-					<div class="author">{{ `By ${$t('meta.team')}` }}</div>
+					<div class="author">{{ `By ${t('meta.team')}` }}</div>
 					<div class="divider"></div>
 					<div class="date">
 						<Icon name="line-md:calendar" />
@@ -52,7 +53,7 @@
 					class="btn"
 					:to="props.path"
 				>
-					<span class="btn-text">{{ $t('news.chevron-text') }}</span>
+					<span class="btn-text">{{ t('news.chevron-text') }}</span>
 					<Icon name="lucide:chevron-right" />
 				</NuxtLink>
 			</div>

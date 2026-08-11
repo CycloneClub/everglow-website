@@ -1,5 +1,6 @@
 <script setup lang="ts">
 	const subMenuVisible = ref(false);
+	const { t } = useI18n();
 
 	const { name, link, visible } = defineProps({
 		name: {
@@ -43,7 +44,7 @@
 				@click="handleClickItem"
 			>
 				<div class="text">
-					{{ $t(`body.header.${name}`) }}
+					{{ t(`body.header.${name}`) }}
 				</div>
 			</NuxtLinkLocale>
 			<div class="chevron">

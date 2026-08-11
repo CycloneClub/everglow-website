@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import type { Langs } from '#shared/types';
 
-	const { availableLocales, setLocale } = useI18n();
+	const { availableLocales, setLocale, t } = useI18n();
 
 	const isShowOptions = ref(false);
 
@@ -42,7 +42,7 @@
 							:key="index"
 							@click.stop.prevent="setLanguage(availableLocales[index])"
 						>
-							{{ $t(`body.header.settings.languages.${option}`) }}
+							{{ t(`body.header.settings.languages.${option}`) }}
 						</span>
 					</div>
 				</div>
