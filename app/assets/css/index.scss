@@ -1,4 +1,4 @@
 @use './reset.scss';
 @use './app.scss';
-@use './markdown.scss';
+@use './markdown/index.scss' as markdown;
 @use './theme/index.scss';
