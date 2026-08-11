@@ -58,6 +58,7 @@
 
 <style>
 	.pre-wrap {
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		border-radius: 8px;

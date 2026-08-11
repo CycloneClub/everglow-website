@@ -1,0 +1,23 @@
+.markdown table {
+	width: 100%;
+	margin: 4px 0;
+	overflow: hidden;
+	border-collapse: collapse;
+	table-layout: fixed;
+
+	td,
+	th {
+		position: relative;
+		box-sizing: border-box;
+		padding: 8px 16px;
+		border: 1px solid
+			color-mix(in srgb, var(--crepe-color-outline), transparent 80%);
+		font-size: 16px;
+		line-height: 24px;
+		vertical-align: top;
+	}
+
+	th {
+		text-align: left;
+	}
+}

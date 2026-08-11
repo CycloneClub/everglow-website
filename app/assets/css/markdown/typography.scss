@@ -1,0 +1,140 @@
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6 {
+	position: relative;
+	padding: 2px 0;
+	scroll-margin-top: calc(48px + var(--header-height));
+	outline: none;
+	font-family: var(--crepe-font-title);
+	font-weight: 400;
+	line-height: 1.5;
+
+	* {
+		text-decoration: none !important;
+	}
+
+	&::before {
+		position: absolute;
+		left: -2rem;
+		opacity: 0;
+		color: currentColor;
+		content: '#';
+		transition: opacity 0.3s ease-in-out;
+	}
+
+	&:hover::before {
+		opacity: 1;
+	}
+}
+
+.markdown h1 {
+	margin: 3rem 0;
+	font-size: 36px;
+	line-height: 1.4;
+	letter-spacing: -0.02em;
+}
+
+.markdown h2 {
+	margin: 4rem 0 1.8rem;
+	padding-top: 1.8rem;
+	border-top: 1px solid var(--everglow-trans-black-3);
+	font-size: 30px;
+	letter-spacing: -0.02em;
+}
+
+.markdown h3 {
+	margin: 3rem 0 1.25rem;
+	font-size: 26px;
+	letter-spacing: -0.01em;
+}
+
+.markdown h4 {
+	margin: 1.8rem 0 1rem;
+	font-size: 22px;
+}
+
+.markdown h5 {
+	font-size: 18px;
+}
+
+.markdown h6 {
+	margin-top: 16px;
+	font-size: 14px;
+}
+
+.markdown p {
+	padding: 4px 0;
+	font-size: 16px;
+	line-height: 24px;
+}
+
+.markdown p,
+.markdown ul,
+.markdown ol,
+.markdown summary {
+	margin-bottom: 1.2rem;
+}
+
+.markdown a,
+.markdown a code {
+	color: var(--crepe-color-primary);
+	text-decoration: underline;
+}
+
+.markdown blockquote {
+	position: relative;
+	box-sizing: content-box;
+	margin: 4px 0;
+	padding: 0 0 0 40px;
+}
+
+.markdown blockquote::before {
+	position: absolute;
+	top: 4px;
+	bottom: 4px;
+	left: 0;
+	width: 4px;
+	border-radius: 100px;
+	background: var(--crepe-color-quote);
+	content: '';
+}
+
+.markdown blockquote hr {
+	margin-bottom: 16px;
+}
+
+.markdown hr {
+	position: relative;
+	height: 13px;
+	padding: 6px 0;
+	border: none;
+	background-color: color-mix(
+		in srgb,
+		var(--crepe-color-outline),
+		transparent 80%
+	);
+	background-clip: content-box;
+}
+
+.markdown ol,
+.markdown ul {
+	padding: 0;
+}
+
+.markdown li {
+	position: relative;
+	padding: 4px 0 4px 40px;
+	font-size: 16px;
+
+	&::before {
+		position: absolute;
+		top: -4px;
+		left: 15px;
+		font-size: 30px;
+		font-weight: var(--font-weight--bold);
+		content: '·';
+	}
+}

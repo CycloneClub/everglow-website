@@ -1,0 +1,33 @@
+:root .markdown {
+	--spacing: 0.25rem;
+}
+
+.markdown {
+	padding: 0 0.75rem;
+	overflow-wrap: break-word;
+	font-family: var(--crepe-font-default);
+	color: var(--crepe-color-on-background);
+	background: var(--crepe-color-background);
+}
+
+.markdown * {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+.markdown ::-moz-selection {
+	background: var(--crepe-color-selected);
+}
+
+.markdown ::selection {
+	background: var(--crepe-color-selected);
+}
+
+.markdown img {
+	max-width: 100%;
+}
+
+.markdown p > img {
+	border-radius: 0.5rem;
+}

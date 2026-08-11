@@ -1,0 +1,70 @@
+.markdown code {
+	display: inline-block;
+	padding: 0 10px;
+	border-radius: 4px;
+	background: color-mix(
+		in srgb,
+		var(--crepe-color-inline-area),
+		transparent 40%
+	);
+	color: var(--crepe-color-inline-code);
+	font-family: var(--crepe-font-code);
+	font-size: 87.5%;
+	line-height: 1.4286;
+}
+
+.markdown h1 code,
+.markdown h2 code,
+.markdown h3 code,
+.markdown h4 code,
+.markdown h5 code,
+.markdown h6 code {
+	background: color-mix(
+		in srgb,
+		var(--crepe-color-inline-area),
+		transparent 40%
+	);
+	color: var(--crepe-color-inline-code) !important;
+	font-family: var(--crepe-font-code);
+}
+
+.markdown code::-moz-selection {
+	background: color-mix(
+		in srgb,
+		var(--crepe-color-inline-area) 80%,
+		var(--crepe-color-outline) 80%
+	);
+}
+
+.markdown code::selection {
+	background: color-mix(
+		in srgb,
+		var(--crepe-color-inline-area) 80%,
+		var(--crepe-color-outline) 80%
+	);
+}
+
+.markdown pre {
+	display: flex;
+	padding: 0;
+	background: color-mix(
+		in srgb,
+		var(--crepe-color-inline-area),
+		transparent 40%
+	);
+	white-space: pre-wrap;
+}
+
+.markdown pre code {
+	padding-block: calc(var(--spacing) * 6);
+	padding-inline: calc(var(--spacing) * 8);
+	background: transparent;
+}
+
+.markdown .shiki {
+	padding: 0;
+
+	span {
+		font-size: 1.125rem;
+	}
+}
