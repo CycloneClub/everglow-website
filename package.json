@@ -47,7 +47,7 @@
 		"sass-embedded": "^1.100.0",
 		"satori": "0.29.0",
 		"typescript": "^6.0.3",
-		"vite-plugin-eslint2": "5.0.4",
+		"vite-plugin-eslint2": "5.2.0",
 		"vue-router": "^5.2.0",
 		"vue-tsc": "^3.3.9"
 	}
