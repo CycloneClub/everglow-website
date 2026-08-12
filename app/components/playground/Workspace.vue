@@ -153,9 +153,9 @@
 						/>
 
 						<OrbitControls />
-						<ThreeBox />
-						<ThreeSky />
-						<ThreeWater />
+						<PlaygroundSceneBox />
+						<PlaygroundSceneSky />
+						<PlaygroundSceneWater />
 					</TresCanvas>
 				</template>
 				<HlslPreview v-else />
