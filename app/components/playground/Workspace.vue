@@ -1,4 +1,6 @@
 <script setup lang="ts">
+	import HlslPreview from './hlsl-preview/HlslPreview.vue';
+
 	const i18n = useI18n();
 	const router = useRouter();
 	const localePath = useLocalePath();
@@ -10,6 +12,12 @@
 			name: 'Scene',
 			description: 'Three.js scene preview',
 			icon: 'lucide:box',
+		},
+		{
+			id: 'hlsl-preview',
+			name: 'HLSL Preview',
+			description: 'C# geometry and WebGL2 shaders',
+			icon: 'lucide:code-2',
 		},
 	];
 	const activeWorkspaceId = computed(() => {
@@ -132,22 +140,25 @@
 			</header>
 
 			<div class="canvas-container">
-				<TresCanvas
-					preset="realistic"
-					:tone-mapping-exposure="0.3"
-					shadows
-				>
-					<TresPerspectiveCamera
-						:position="[30, 30, 100]"
-						:fov="55"
-						:look-at="[0, 0, 0]"
-					/>
+				<template v-if="activeWorkspaceId === 'scene'">
+					<TresCanvas
+						preset="realistic"
+						:tone-mapping-exposure="0.3"
+						shadows
+					>
+						<TresPerspectiveCamera
+							:position="[30, 30, 100]"
+							:fov="55"
+							:look-at="[0, 0, 0]"
+						/>
 
-					<OrbitControls />
-					<ThreeBox />
-					<ThreeSky />
-					<ThreeWater />
-				</TresCanvas>
+						<OrbitControls />
+						<ThreeBox />
+						<ThreeSky />
+						<ThreeWater />
+					</TresCanvas>
+				</template>
+				<HlslPreview v-else />
 			</div>
 		</div>
 	</section>
