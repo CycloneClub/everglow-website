@@ -1,3 +1,3 @@
 <template>
-	<HomeParallexDividerSpace> xxx </HomeParallexDividerSpace>
+  <HomeParallexDividerSpace> xxx </HomeParallexDividerSpace>
 </template>

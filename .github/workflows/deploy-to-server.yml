@@ -13,7 +13,6 @@ on:
       - '!.env.example'
       - '!.gitattributes'
       - '!.gitignore'
-      - '!.prettierrc.json'
       - '!README.md'
       - '!TODO.md'
 

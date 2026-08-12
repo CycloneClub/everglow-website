@@ -22,5 +22,4 @@ void DrawRing(Vector2 drawCenter, float timeValue, float wink)
     Main.graphics.GraphicsDevice.Textures[0] = Textures.Ring;
     Main.graphics.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, bars.ToArray(), 0, bars.Count - 2);
 }
-`;
-
+`

@@ -1,3 +1,3 @@
 <template>
-	<div class="empty-page"></div>
+  <div class="empty-page" />
 </template>
