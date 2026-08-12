@@ -2,7 +2,7 @@
 	const { locale, t } = useI18n();
 	const route = useRoute();
 	const i18nHead = useLocaleHead();
-	const isPlayground = computed(() => route.path.endsWith('/playground'));
+	const isPlayground = computed(() => route.path.split('/').includes('playground'));
 
 	const i18nTitle = (titleChunk: string) => {
 		return titleChunk
