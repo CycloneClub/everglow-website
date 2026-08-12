@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	const localePath = useLocalePath();
+const localePath = useLocalePath()
 
-	await navigateTo(localePath('/playground/scene'), { replace: true });
+await navigateTo(localePath('/playground/scene'), { replace: true })
 </script>

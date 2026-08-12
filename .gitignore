@@ -25,6 +25,7 @@ logs
 !.env.example
 
 .eslintcache
+eslint-typegen.d.ts
 
 # Local Git worktrees
 .worktrees/

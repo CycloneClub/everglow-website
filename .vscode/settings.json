@@ -1,16 +1,16 @@
 {
 	"[vue]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.defaultFormatter": "dbaeumer.vscode-eslint",
 		"editor.tabSize": 2,
 		"editor.indentSize": "tabSize"
 	},
 	"[javascript]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.defaultFormatter": "dbaeumer.vscode-eslint",
 		"editor.tabSize": 2,
 		"editor.indentSize": "tabSize"
 	},
 	"[typescript]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.defaultFormatter": "dbaeumer.vscode-eslint",
 		"editor.tabSize": 2,
 		"editor.indentSize": "tabSize"
 	},
@@ -22,9 +22,11 @@
 		"editor.tabSize": 2,
 		"editor.indentSize": "tabSize"
 	},
+	"prettier.enable": false,
 	"eslint.format.enable": true,
-	"editor.formatOnSave": true,
+	"editor.formatOnSave": false,
 	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": "always"
+		"source.fixAll.eslint": "explicit",
+		"source.organizeImports": "never"
 	}
 }
