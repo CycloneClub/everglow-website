@@ -456,39 +456,73 @@ onBeforeUnmount(() => {
     </div>
 
     <div class="hlsl-preview__board">
-      <div class="hlsl-preview__editors">
+      <div class="hlsl-preview__column">
         <HlslPreviewEditor
           v-model="csharpSource"
           language="csharp"
           label="C# — geometry / Draw(time)"
         />
+        <section class="hlsl-params">
+          <h2>C# params</h2>
+          <p v-if="!csParams.length">
+            No <code>@param</code> annotations.
+          </p>
+          <label
+            v-for="param in csParams"
+            :key="param.id"
+          >
+            <span>{{ param.label }} <output>{{ param.value }}</output></span>
+            <input
+              v-model.number="param.value"
+              type="range"
+              :min="param.min"
+              :max="param.max"
+              :step="param.step"
+              @input="applyLiveParams"
+            >
+          </label>
+        </section>
+      </div>
+      <div class="hlsl-preview__column">
         <HlslPreviewEditor
           v-model="vertexSource"
           language="hlsl"
           label="VS — vertex shader"
         />
+        <section class="hlsl-params">
+          <h2>VS params</h2>
+          <p v-if="!vsParams.length">
+            No <code>@param</code> annotations.
+          </p>
+          <label
+            v-for="param in vsParams"
+            :key="param.id"
+          >
+            <span>{{ param.label }} <output>{{ param.value }}</output></span>
+            <input
+              v-model.number="param.value"
+              type="range"
+              :min="param.min"
+              :max="param.max"
+              :step="param.step"
+              @input="applyLiveParams"
+            >
+          </label>
+        </section>
+      </div>
+      <div class="hlsl-preview__column">
         <HlslPreviewEditor
           v-model="fragmentSource"
           language="hlsl"
           label="PS — pixel / fragment shader"
         />
-      </div>
-      <div class="hlsl-preview__params">
-        <section
-          v-for="panel in [
-            { title: 'C# params', values: csParams },
-            { title: 'VS params', values: vsParams },
-            { title: 'PS params', values: psParams },
-          ]"
-          :key="panel.title"
-          class="hlsl-params"
-        >
-          <h2>{{ panel.title }}</h2>
-          <p v-if="!panel.values.length">
+        <section class="hlsl-params">
+          <h2>PS params</h2>
+          <p v-if="!psParams.length">
             No <code>@param</code> annotations.
           </p>
           <label
-            v-for="param in panel.values"
+            v-for="param in psParams"
             :key="param.id"
           >
             <span>{{ param.label }} <output>{{ param.value }}</output></span>
@@ -527,9 +561,13 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
   .hlsl-preview {
+    box-sizing: border-box;
     height: 100%;
     min-height: 0;
-    overflow: auto;
+    display: grid;
+    grid-template-rows: auto minmax(0, 4fr) minmax(0, 5fr) auto;
+    gap: 1rem;
+    overflow: hidden;
     padding: 1.25rem;
     color: #e2e8f0;
     background: #0f172a;
@@ -539,7 +577,7 @@ onBeforeUnmount(() => {
     gap: 1rem;
     align-items: flex-start;
     justify-content: space-between;
-    margin-bottom: 1rem;
+    min-width: 0;
   }
   .hlsl-preview h1,
   .hlsl-preview h2,
@@ -593,11 +631,13 @@ onBeforeUnmount(() => {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(15rem, 22rem);
     gap: 1rem;
-    margin-bottom: 1rem;
+    min-width: 0;
+    min-height: 0;
   }
   .hlsl-preview__stage {
     position: relative;
-    min-height: 20rem;
+    min-width: 0;
+    min-height: 0;
     overflow: hidden;
     background: #111827;
     border: 1px solid #334155;
@@ -607,7 +647,6 @@ onBeforeUnmount(() => {
     display: block;
     width: 100%;
     height: 100%;
-    min-height: 20rem;
   }
   .hlsl-preview__error {
     position: absolute;
@@ -626,6 +665,9 @@ onBeforeUnmount(() => {
   }
   .hlsl-textures,
   .hlsl-params {
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
     padding: 0.85rem;
     background: #172033;
     border: 1px solid #334155;
@@ -678,16 +720,20 @@ onBeforeUnmount(() => {
   }
   .hlsl-preview__board {
     display: grid;
-    gap: 1rem;
-  }
-  .hlsl-preview__editors,
-  .hlsl-preview__params {
-    display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    min-width: 0;
+    min-height: 0;
+  }
+  .hlsl-preview__column {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) minmax(7rem, 0.65fr);
+    min-width: 0;
+    min-height: 0;
     gap: 1rem;
   }
   .hlsl-params {
-    min-height: 8rem;
+    min-height: 0;
   }
   .hlsl-params h2 {
     font-size: 0.85rem;
@@ -709,7 +755,9 @@ onBeforeUnmount(() => {
     width: 100%;
   }
   .hlsl-preview__dialect {
-    margin-top: 1rem;
+    min-height: 0;
+    max-height: 8rem;
+    overflow: auto;
     color: #94a3b8;
   }
   .hlsl-preview__dialect summary {
@@ -722,18 +770,27 @@ onBeforeUnmount(() => {
     color: #7dd3fc;
   }
   @media (max-width: 1000px) {
-    .hlsl-preview__preview-row {
-      grid-template-columns: 1fr;
+    .hlsl-preview {
+      padding: 0.75rem;
     }
-    .hlsl-preview__editors,
-    .hlsl-preview__params {
-      grid-template-columns: 1fr;
+    .hlsl-preview__preview-row {
+      grid-template-columns: minmax(0, 1fr) minmax(12rem, 16rem);
+    }
+    .hlsl-preview__board {
+      grid-template-columns: repeat(3, minmax(14rem, 1fr));
+      overflow-x: auto;
     }
     .hlsl-preview__header {
       flex-direction: column;
     }
     .hlsl-preview__actions {
       justify-content: flex-start;
+    }
+  }
+  @media (max-width: 700px) {
+    .hlsl-preview__preview-row {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: repeat(2, minmax(0, 1fr));
     }
   }
 </style>
