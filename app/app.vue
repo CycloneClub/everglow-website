@@ -1,6 +1,8 @@
 <script setup lang="ts">
 	const { locale, t } = useI18n();
+	const route = useRoute();
 	const i18nHead = useLocaleHead();
+	const isPlayground = computed(() => route.path.endsWith('/playground'));
 
 	const i18nTitle = (titleChunk: string) => {
 		return titleChunk
@@ -68,11 +70,11 @@
 
 <template>
 	<div id="everglow">
-		<CommonHeader />
+		<CommonHeader v-if="!isPlayground" />
 		<CommonMain>
 			<NuxtPage />
 		</CommonMain>
-		<CommonFooter />
+		<CommonFooter v-if="!isPlayground" />
 	</div>
 </template>
 
