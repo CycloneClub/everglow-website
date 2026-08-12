@@ -21,9 +21,9 @@
 				/>
 
 				<OrbitControls />
-				<ThreeBox />
-				<ThreeSky />
-				<ThreeWater />
+				<PlaygroundSceneBox />
+				<PlaygroundSceneSky />
+				<PlaygroundSceneWater />
 			</TresCanvas>
 		</div>
 	</div>
