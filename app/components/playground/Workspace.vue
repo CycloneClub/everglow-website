@@ -5,7 +5,7 @@ const i18n = useI18n()
 const router = useRouter()
 const localePath = useLocalePath()
 const route = useRoute()
-const sidebarVisible = ref(false)
+const sidebarVisible = ref(true)
 const workspaces = [
   {
     id: 'scene',
