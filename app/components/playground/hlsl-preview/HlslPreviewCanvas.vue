@@ -196,7 +196,7 @@ const render = () => {
 onMounted(() => {
   if (!canvas.value) { return }
   gl = canvas.value.getContext('webgl2', { antialias: true,
-    alpha: false })
+    alpha: true })
   if (!gl) {
     emit('ready')
     return
