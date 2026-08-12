@@ -2,7 +2,10 @@
 const { locale, t } = useI18n()
 const route = useRoute()
 const i18nHead = useLocaleHead()
-const isPlayground = computed(() => route.path.split('/').includes('playground'))
+const localePath = useLocalePath()
+const isPlaygroundWorkspace = computed(
+  () => route.path.startsWith(`${localePath('/playground')}/`),
+)
 
 const i18nTitle = (titleChunk: string) => {
   return titleChunk
@@ -70,11 +73,11 @@ defineOgImage('Pergel.satori', {
 
 <template>
   <div id="everglow">
-    <CommonHeader v-if="!isPlayground" />
+    <CommonHeader v-if="!isPlaygroundWorkspace" />
     <CommonMain>
       <NuxtPage />
     </CommonMain>
-    <CommonFooter v-if="!isPlayground" />
+    <CommonFooter v-if="!isPlaygroundWorkspace" />
   </div>
 </template>
 

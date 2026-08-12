@@ -2,7 +2,6 @@
 import HlslPreview from './hlsl-preview/HlslPreview.vue'
 
 const i18n = useI18n()
-const router = useRouter()
 const localePath = useLocalePath()
 const route = useRoute()
 const sidebarVisible = ref(true)
@@ -32,12 +31,7 @@ const toggleSidebar = () => {
 }
 
 const goBack = () => {
-  if (window.history.length > 1) {
-    router.back()
-    return
-  }
-
-  navigateTo(localePath('/'))
+  navigateTo(localePath('/playground'))
 }
 
 const selectWorkspace = (workspaceId: string) => {
@@ -123,7 +117,7 @@ useHead({
         <button
           type="button"
           class="workspace-toolbar__back"
-          aria-label="Go back"
+          aria-label="Go to Playground home"
           @click="goBack"
         >
           <Icon name="lucide:arrow-left" />
