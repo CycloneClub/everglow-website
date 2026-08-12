@@ -84,8 +84,8 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
   .hlsl-editor {
     display: grid;
-    grid-template-rows: auto minmax(12rem, 1fr);
-    min-height: 20rem;
+    grid-template-rows: auto minmax(0, 1fr);
+    min-height: 0;
     overflow: hidden;
     background: #111827;
     border: 1px solid #334155;

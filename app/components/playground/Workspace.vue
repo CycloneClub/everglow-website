@@ -253,6 +253,8 @@ useHead({
   .workspace-list {
     display: grid;
     gap: 0.75rem;
+    min-height: 0;
+    overflow: auto;
     padding: 0.75rem;
   }
 
@@ -315,9 +317,12 @@ useHead({
   }
 
   .workspace-shell {
-    width: 100%;
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
     display: grid;
     grid-template-rows: 3.5rem minmax(0, 1fr);
+    overflow: hidden;
   }
 
   .workspace-toolbar {
@@ -344,6 +349,7 @@ useHead({
   .canvas-container {
     min-width: 0;
     min-height: 0;
+    overflow: hidden;
     background: #dbeafe;
   }
 
