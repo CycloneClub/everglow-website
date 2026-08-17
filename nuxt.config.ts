@@ -206,6 +206,7 @@ export default defineNuxtConfig({
       {
         name: 'Satoshi',
         provider: 'fontshare',
+        weights: [400, 500],
       },
       {
         name: 'Kode Mono',
@@ -238,6 +239,18 @@ export default defineNuxtConfig({
       {
         name: 'Public Sans',
         src: '/fonts/Public-Sans.woff',
+      },
+      {
+        name: 'Noto Sans SC',
+        provider: 'bunny',
+        weights: [400, 500],
+        subsets: ['latin', 'chinese-simplified'],
+      },
+      {
+        name: 'Noto Sans TC',
+        provider: 'bunny',
+        weights: [400, 500],
+        subsets: ['latin', 'chinese-traditional'],
       },
       {
         name: 'JetBrains Mono',

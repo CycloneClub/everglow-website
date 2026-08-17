@@ -16,7 +16,7 @@
                 aria-label="Everglow on Discord"
                 target="blank"
               >
-                <Icon name="line-md:discord" />
+                <HomeBrandIcon name="discord" />
               </NuxtLink>
             </li>
             <li class="link-list-item github">
@@ -25,7 +25,7 @@
                 aria-label="Everglow on Github"
                 target="blank"
               >
-                <Icon name="line-md:github" />
+                <HomeBrandIcon name="github" />
               </NuxtLink>
             </li>
           </ul>

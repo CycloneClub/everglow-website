@@ -47,6 +47,45 @@ export default {
   'news': {
     'chevron-text': '更多',
   },
+  'home': {
+    'hero': {
+      'getMod': '获取模组',
+      'getModDescription': '打开安装教程，在 tModLoader 中订阅游玩',
+      'github': 'GitHub',
+      'githubDescription': '查看源码、开发版与贡献方式',
+      'tmodloader': 'tModLoader',
+    },
+    'community': {
+      'discord': 'Discord',
+      'bilibili': '哔哩哔哩',
+      'qq': 'QQ 群',
+    },
+    'news': {
+      'more': '更多新闻',
+      'placeholderTitle': '半年报 · 即将发布',
+      'placeholderDescription': '新的半年报正在整理中。',
+    },
+    'showcase': {
+      'label': '内容速览',
+      'boss': {
+        'title': 'Boss',
+        'caption': '模组中的首领与强敌',
+      },
+      'weapons': {
+        'title': '武器',
+        'caption': '法器、弓弩与近战兵器',
+      },
+      'scenes': {
+        'title': '场景',
+        'caption': '生物群系与探索空间',
+      },
+    },
+    'lore': {
+      'eyebrow': '设定',
+      'title': '世界观',
+      'comingSoon': '即将公开',
+    },
+  },
   'docs': {
     'label': {
       'Getting Started': '入门',
