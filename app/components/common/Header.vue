@@ -102,7 +102,7 @@ const changeColorMode = (mode: 'light' | 'dark') => {
               aria-label="Everglow on Github"
               target="_blank"
             >
-              <Icon name="uil:github" />
+              <HomeBrandIcon name="github" />
             </NuxtLink>
           </div>
         </li>

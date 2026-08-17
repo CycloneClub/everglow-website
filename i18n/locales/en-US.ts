@@ -47,6 +47,45 @@ export default {
   'news': {
     'chevron-text': 'Read More',
   },
+  'home': {
+    hero: {
+      getMod: 'Get the mod',
+      getModDescription: 'Open the install guide and subscribe in tModLoader',
+      github: 'GitHub',
+      githubDescription: 'Source code, dev builds, and how to contribute',
+      tmodloader: 'tModLoader',
+    },
+    community: {
+      discord: 'Discord',
+      bilibili: 'Bilibili',
+      qq: 'QQ group',
+    },
+    news: {
+      more: 'More news',
+      placeholderTitle: 'Semiannual report · Coming soon',
+      placeholderDescription: 'A new report is being prepared.',
+    },
+    showcase: {
+      label: 'Content',
+      boss: {
+        title: 'Bosses',
+        caption: 'The mod’s bosses and major foes',
+      },
+      weapons: {
+        title: 'Weapons',
+        caption: 'Magic, ranged, and melee arms',
+      },
+      scenes: {
+        title: 'Biomes',
+        caption: 'Places to explore',
+      },
+    },
+    lore: {
+      eyebrow: 'Lore',
+      title: 'The world',
+      comingSoon: 'Coming soon',
+    },
+  },
   'docs': {
     'label': {
       'Getting Started': 'Get-Started',

@@ -1,13 +1,15 @@
 <script setup lang="ts">
-const { src } = defineProps<{
+defineProps<{
   src: string
+  cover?: boolean
 }>()
 </script>
 
 <template>
   <section
     class="parallex-scroll-base"
-    :style="[`background-image: url(${src});`]"
+    :class="{ 'is-cover': cover }"
+    :style="{ backgroundImage: `url(${src})` }"
   >
     <slot />
   </section>
@@ -19,9 +21,18 @@ const { src } = defineProps<{
     display: flex;
     justify-content: center;
     align-items: center;
-
     background-attachment: fixed;
     background-size: cover;
-    background-position: center center;
+    background-position: center;
+  }
+
+  .parallex-scroll-base.is-cover {
+    display: block;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .parallex-scroll-base {
+      background-attachment: scroll;
+    }
   }
 </style>

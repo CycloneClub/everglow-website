@@ -23,6 +23,7 @@
 		"@iconify-json/dashicons": "^1.2.1",
 		"@iconify-json/line-md": "^1.2.16",
 		"@iconify-json/lucide": "^1.2.121",
+		"@iconify-json/simple-icons": "^1.2.93",
 		"@iconify-json/uil": "^1.2.3",
 		"@nuxt/content": "^3.15.2",
 		"@nuxt/eslint": "^1.17.0",

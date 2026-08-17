@@ -48,6 +48,45 @@ export type I18nLocale = {
   news: {
     'chevron-text': string
   }
+  home: {
+    hero: {
+      getMod: string
+      getModDescription: string
+      github: string
+      githubDescription: string
+      tmodloader: string
+    }
+    community: {
+      discord: string
+      bilibili: string
+      qq: string
+    }
+    news: {
+      more: string
+      placeholderTitle: string
+      placeholderDescription: string
+    }
+    showcase: {
+      label: string
+      boss: {
+        title: string
+        caption: string
+      }
+      weapons: {
+        title: string
+        caption: string
+      }
+      scenes: {
+        title: string
+        caption: string
+      }
+    }
+    lore: {
+      eyebrow: string
+      title: string
+      comingSoon: string
+    }
+  }
   docs: {
     label: {
       'Getting Started': string
