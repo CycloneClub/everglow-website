@@ -19,7 +19,7 @@
 	},
 	"packageManager": "pnpm@11.20.0",
 	"devDependencies": {
-		"@eslint/markdown": "^7.5.1",
+		"@eslint/markdown": "^8.0.3",
 		"@iconify-json/dashicons": "^1.2.1",
 		"@iconify-json/line-md": "^1.2.16",
 		"@iconify-json/lucide": "^1.2.124",
@@ -39,7 +39,7 @@
 		"@tresjs/post-processing": "^2.4.0",
 		"@types/three": "^0.185.4",
 		"@typescript-eslint/parser": "^8.66.0",
-		"eslint": "^10.8.0",
+		"eslint": "^10.9.0",
 		"eslint-plugin-import-x": "^4.17.1",
 		"eslint-plugin-no-only-tests": "^3.4.0",
 		"eslint-plugin-perfectionist": "^5.10.1",
