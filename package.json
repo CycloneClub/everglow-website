@@ -50,6 +50,6 @@
 		"typescript": "^6.0.3",
 		"vite-plugin-eslint2": "5.2.0",
 		"vue-router": "^5.2.0",
-		"vue-tsc": "^3.3.9"
+		"vue-tsc": "^3.3.11"
 	}
 }
