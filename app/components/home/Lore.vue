@@ -1,49 +1,394 @@
+<script setup lang="ts">
+import { atlasCopy, atlasLayers, atlasText, unchartedLayers } from '~/data/world-atlas'
+import { atlasEase, clampAtlas, createAtlasTimeline, sampleAtlas } from '~/utils/atlas-timeline'
+
+const { locale } = useI18n()
+const text = (value: Parameters<typeof atlasText>[0]) => atlasText(value, locale.value)
+const root = ref<HTMLElement>()
+const after = ref<HTMLElement>()
+const progress = ref(0)
+const ready = ref(false)
+const reduced = ref(false)
+const manual = ref(false)
+const narrow = ref(false)
+const shortViewport = ref(false)
+const animated = computed(() => ready.value && !reduced.value && !manual.value && !shortViewport.value)
+const timeline = createAtlasTimeline(atlasLayers)
+const state = computed(() => sampleAtlas(timeline, progress.value))
+const paperVisibility = computed(() => state.value.paper)
+const camera = computed(() => {
+  const zoom = narrow.value ? 1 + (state.value.zoom - 1) * 0.8 : state.value.zoom
+  return `translate(500 600) scale(${zoom}) translate(${-state.value.x} ${-state.value.y})`
+})
+const unchartedLabel = `${unchartedLayers[0]?.numeral ?? '?'} — ${unchartedLayers.at(-1)?.numeral ?? '?'} / TERRA INCOGNITA`
+const layer = computed(() => atlasLayers[state.value.layer])
+const height = `${(timeline.units * 46) + 100}svh`
+let frame = 0
+let resize: ResizeObserver | undefined
+let motion: MediaQueryList | undefined
+let mobile: MediaQueryList | undefined
+let listening = false
+
+function update () {
+  frame = 0
+  if (!root.value || !animated.value) { return }
+  const rect = root.value.getBoundingClientRect()
+  const stage = root.value.querySelector<HTMLElement>('.atlas-stage')
+  progress.value = clampAtlas(-rect.top / Math.max(1, rect.height - (stage?.offsetHeight ?? window.innerHeight)))
+}
+function schedule () {
+  frame ||= requestAnimationFrame(update)
+}
+function preferences () {
+  const wasAnimated = animated.value
+  const activeId = layer.value?.id
+  const rect = root.value?.getBoundingClientRect()
+  const wasReading = ready.value && rect && rect.top < 0 && rect.bottom > 0
+  reduced.value = motion?.matches ?? false
+  narrow.value = mobile?.matches ?? false
+  shortViewport.value = window.innerHeight < 600
+  if (wasReading && wasAnimated !== animated.value) {
+    nextTick(() => {
+      const target = !animated.value && activeId
+        ? root.value?.querySelector<HTMLElement>(`[data-atlas-layer="${activeId}"]`)
+        : root.value
+      target?.scrollIntoView({ block: 'start', behavior: 'instant' })
+    })
+  }
+  schedule()
+}
+function start () {
+  if (listening) { return }
+  listening = true
+  motion = window.matchMedia('(prefers-reduced-motion: reduce)')
+  mobile = window.matchMedia('(max-width: 760px), (max-height: 600px)')
+  preferences()
+  ready.value = true
+  window.addEventListener('scroll', schedule, { passive: true })
+  window.addEventListener('resize', preferences)
+  motion.addEventListener('change', preferences)
+  mobile.addEventListener('change', preferences)
+  resize = new ResizeObserver(schedule)
+  if (root.value) { resize.observe(root.value) }
+  schedule()
+}
+function stop () {
+  listening = false
+  cancelAnimationFrame(frame)
+  frame = 0
+  window.removeEventListener('scroll', schedule)
+  window.removeEventListener('resize', preferences)
+  motion?.removeEventListener('change', preferences)
+  mobile?.removeEventListener('change', preferences)
+  resize?.disconnect()
+}
+function noteOpacity (index: number) {
+  if (!narrow.value) { return state.value.notes[index] }
+  const starts = [0.12, 0.3, 0.48, 0.66]
+  const start = starts[index]!
+  const end = starts[index + 1] ?? 0.98
+  return atlasEase((state.value.local - start) / 0.06) * (1 - atlasEase((state.value.local - (end - 0.06)) / 0.06))
+}
+async function toggleReading () {
+  manual.value = !manual.value
+  await nextTick()
+  root.value?.scrollIntoView({ block: 'start', behavior: 'instant' })
+  schedule()
+}
+function skip () {
+  after.value?.scrollIntoView({ block: 'start', behavior: 'instant' })
+  after.value?.focus({ preventScroll: true })
+}
+onMounted(start)
+onActivated(() => { start(); schedule() })
+onDeactivated(stop)
+onBeforeUnmount(stop)
+</script>
+
 <template>
   <section
     id="lore"
-    class="home-lore"
-    aria-labelledby="lore-title"
+    ref="root"
+    class="world-atlas"
+    :class="{ 'is-animated': animated }"
+    :style="animated ? { height } : undefined"
+    :aria-label="text(atlasCopy.subtitle)"
   >
-    <p>{{ $t('home.lore.eyebrow') }}</p>
-    <h2 id="lore-title">
-      {{ $t('home.lore.title') }}
-    </h2>
-    <p>{{ $t('home.lore.comingSoon') }}</p>
+    <div class="atlas-stage">
+      <div
+        class="atlas-paper"
+      />
+      <div
+        v-if="animated"
+        class="atlas-veil"
+        :style="{ opacity: 1 - paperVisibility }"
+        aria-hidden="true"
+      />
+      <div
+        class="atlas-grain"
+        aria-hidden="true"
+      />
+      <div
+        class="atlas-border"
+        aria-hidden="true"
+      />
+      <header class="atlas-running-head">
+        <span>EVERGLOW <i>/</i> FIELD ATLAS</span><span class="atlas-volume">YGGDRASIL · VOL. 01</span>
+      </header>
+      <div
+        class="atlas-toolbar"
+        :style="animated && paperVisibility < 0.5 ? { '--atlas-muted': '#e5d8b6' } : undefined"
+      >
+        <button
+          v-if="ready && !reduced && !shortViewport"
+          type="button"
+          @click="toggleReading"
+        >
+          {{ text(animated ? atlasCopy.static : atlasCopy.animated) }}
+        </button>
+        <button
+          type="button"
+          @click="skip"
+        >
+          {{ text(atlasCopy.skip) }} <span aria-hidden="true">↗</span>
+        </button>
+      </div>
+      <template v-if="animated">
+        <div class="atlas-drawing">
+          <HomeAtlasTree
+            :camera="camera"
+            :map="state.map"
+            :active="state.layer"
+            :focus="state.title"
+            :illustration="state.notes[0] ?? 0"
+            :unknown="state.unknown"
+          />
+        </div>
+        <div
+          class="atlas-introduction"
+          :style="{ opacity: state.intro }"
+          :aria-hidden="state.intro < 0.1"
+        >
+          <p class="atlas-kicker">
+            {{ text(atlasCopy.subtitle) }}
+          </p><h2>{{ text(atlasCopy.title) }}</h2><p class="atlas-intro-note">
+            {{ text(atlasCopy.intro) }}
+          </p><span
+            class="atlas-seal"
+            aria-hidden="true"
+          >世<br>界</span>
+        </div>
+        <div
+          class="atlas-discovery"
+          :style="{ opacity: state.map * (1 - state.title) * (1 - state.unknown) }"
+          aria-hidden="true"
+        >
+          <span>fig. 01</span><p>{{ text(atlasCopy.mapNote) }}</p><svg viewBox="0 0 140 70"><path d="M130 7Q55 -5 12 60m0 0 4-17m-4 17 18-5" /></svg>
+        </div>
+        <article
+          v-if="layer"
+          class="atlas-reading"
+          :aria-label="text(layer.name)"
+        >
+          <div
+            class="atlas-layer-title"
+            :style="{ opacity: state.title }"
+          >
+            <p class="atlas-kicker">
+              LAYER {{ layer.numeral }} <span>—</span> YGGDRASIL
+            </p><h3>{{ text(layer.name) }}</h3><p class="atlas-latin">
+              {{ layer.english }}
+            </p><p class="atlas-description">
+              {{ text(layer.description) }}
+            </p>
+          </div>
+          <p
+            class="atlas-plate-caption"
+            :style="{ opacity: state.notes[0] }"
+          >
+            {{ text(layer.place) }}
+          </p>
+          <aside
+            class="atlas-annotation atlas-note"
+            :style="{ opacity: noteOpacity(0) }"
+            :aria-hidden="(noteOpacity(0) ?? 0) < 0.1"
+          >
+            <span class="atlas-small-label">01 / {{ text(atlasCopy.observation) }}</span><p>{{ text(layer.note) }}</p><svg
+              viewBox="0 0 190 50"
+              aria-hidden="true"
+            ><path d="M6 8q90 48 170 4m0 0-19-1m19 1-9 16" /></svg>
+          </aside>
+          <aside
+            class="atlas-annotation atlas-specimen"
+            :style="{ opacity: noteOpacity(1) }"
+            :aria-hidden="(noteOpacity(1) ?? 0) < 0.1"
+          >
+            <span class="atlas-small-label">02 / {{ text(atlasCopy.specimen) }}</span><div class="atlas-specimen-study">
+              <img
+                :src="layer.specimenImage"
+                :alt="text(layer.specimen)"
+                :class="{ 'is-portrait': layer.id === 'town' }"
+                width="140"
+                height="150"
+              ><span aria-hidden="true">a.</span>
+            </div><h4>{{ text(layer.specimen) }}</h4><p>{{ text(layer.specimenNote) }}</p>
+          </aside>
+          <aside
+            class="atlas-annotation atlas-mechanism"
+            :style="{ opacity: noteOpacity(2) }"
+            :aria-hidden="(noteOpacity(2) ?? 0) < 0.1"
+          >
+            <span aria-hidden="true">※</span><p>{{ text(layer.mechanism) }}</p>
+          </aside>
+          <aside
+            class="atlas-annotation atlas-encounter"
+            :style="{ opacity: noteOpacity(3) }"
+            :aria-hidden="(noteOpacity(3) ?? 0) < 0.1"
+          >
+            <span class="atlas-small-label">03 / {{ text(atlasCopy.encounter) }}</span><img
+              v-if="layer.encounterImage"
+              :src="layer.encounterImage"
+              :alt="text(layer.encounter)"
+              class="atlas-pinned-image"
+              width="270"
+              height="150"
+            ><span
+              v-else
+              class="atlas-question"
+              aria-hidden="true"
+            >?</span><h4>{{ text(layer.encounter) }}</h4><p>{{ text(layer.encounterNote) }}</p>
+          </aside>
+        </article>
+        <div
+          class="atlas-unknown"
+          :style="{ opacity: state.unknown * (1 - state.closing) }"
+          :aria-hidden="state.unknown * (1 - state.closing) < 0.1"
+        >
+          <p class="atlas-kicker">
+            {{ unchartedLabel }}
+          </p><h3>{{ text(atlasCopy.unknown) }}</h3><p>{{ text(atlasCopy.unknownNote) }}</p>
+        </div>
+        <p
+          class="atlas-closing"
+          :style="{ opacity: state.closing }"
+          :aria-hidden="state.closing < 0.1"
+        >
+          Hang on to your dreams.
+        </p>
+        <div
+          class="atlas-location"
+          :style="{ opacity: state.map }"
+          aria-hidden="true"
+        >
+          <span>↑</span><span
+            v-for="level in [...unchartedLayers].reverse()"
+            :key="level.numeral"
+            class="is-unknown"
+          >·</span><span
+            v-for="(level, index) in [...atlasLayers].reverse()"
+            :key="level.id"
+            :class="{ 'is-current': state.layer === atlasLayers.length - index - 1 }"
+          >{{ level.numeral }}</span><span>⌁</span>
+        </div>
+        <footer class="atlas-running-foot">
+          <span>{{ text(atlasCopy.scroll) }}</span><span aria-hidden="true">↓</span><span>FOLIO / {{ layer ? layer.numeral : state.unknown > 0.5 ? '∞' : '00' }}</span>
+        </footer>
+      </template>
+      <div
+        v-else
+        class="atlas-static"
+      >
+        <div class="atlas-static-opening">
+          <h2>{{ text(atlasCopy.title) }}</h2><p>{{ text(atlasCopy.intro) }}</p><HomeAtlasTree
+            camera="translate(500 600) scale(0.88) translate(-500 -600)"
+            :map="0.3"
+            :active="-1"
+            :focus="0"
+            :illustration="0"
+            :unknown="0"
+          />
+        </div>
+        <article
+          v-for="entry in atlasLayers"
+          :key="entry.id"
+          class="atlas-static-layer"
+          :data-atlas-layer="entry.id"
+        >
+          <p class="atlas-kicker">
+            LAYER {{ entry.numeral }}
+          </p><h3>{{ text(entry.name) }}</h3><p class="atlas-latin">
+            {{ entry.english }}
+          </p><p>{{ text(entry.description) }}</p>
+          <figure>
+            <div
+              class="atlas-static-landscape"
+              :style="{ backgroundImage: `${entry.foreground ? `url(${entry.foreground}), ` : ''}url(${entry.landscape}), url(${entry.sky})` }"
+              role="img"
+              :aria-label="text(entry.place)"
+            /><figcaption>{{ text(entry.place) }}</figcaption>
+          </figure>
+          <p>{{ text(entry.note) }}</p><div class="atlas-static-specimen">
+            <img
+              :src="entry.specimenImage"
+              :alt="text(entry.specimen)"
+              width="110"
+              height="130"
+              loading="lazy"
+            ><div><h4>{{ text(entry.specimen) }}</h4><p>{{ text(entry.specimenNote) }}</p></div>
+          </div>
+          <p class="atlas-static-margin">
+            ※ {{ text(entry.mechanism) }}
+          </p><figure v-if="entry.encounterImage">
+            <img
+              :src="entry.encounterImage"
+              :alt="text(entry.encounter)"
+              width="600"
+              height="334"
+              loading="lazy"
+            >
+          </figure><h4>{{ text(entry.encounter) }}</h4><p>{{ text(entry.encounterNote) }}</p>
+        </article>
+        <div class="atlas-static-ending">
+          <p>{{ unchartedLabel }}</p><h3>{{ text(atlasCopy.unknown) }}</h3><p>{{ text(atlasCopy.unknownNote) }}</p>
+          <HomeAtlasTree
+            camera="translate(500 600) scale(0.88) translate(-500 -600)"
+            :map="1"
+            :active="-1"
+            :focus="0"
+            :illustration="0"
+            :unknown="1"
+          />
+          <p class="atlas-static-quote">
+            Hang on to your dreams.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section
+    id="after-atlas"
+    ref="after"
+    class="atlas-after"
+    tabindex="-1"
+  >
+    <p>{{ text(atlasCopy.continuation) }}</p><div>
+      <NuxtLinkLocale to="/docs/getting-started/installation">
+        {{ text(atlasCopy.download) }} <span aria-hidden="true">↗</span>
+      </NuxtLinkLocale><a
+        href="https://discord.gg/pdXvp89Dbp"
+        target="_blank"
+        rel="noopener noreferrer"
+      >Discord ↗</a><a
+        href="https://github.com/Solaestas/Everglow"
+        target="_blank"
+        rel="noopener noreferrer"
+      >GitHub ↗</a><a
+        href="https://terrariamods.wiki.gg/wiki/Everglow"
+        target="_blank"
+        rel="noopener noreferrer"
+      >Wiki ↗</a>
+    </div>
   </section>
 </template>
 
-<style lang="scss" scoped>
-  .home-lore {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100dvh;
-    padding: 6rem max(1.5rem, 7vw);
-    text-align: center;
-    color: var(--everglow-black);
-    background: var(--everglow-grey-0);
-
-    p:first-child {
-      color: var(--everglow-blue-5);
-      font-size: clamp(1rem, 1.15vw, 1.25rem);
-      font-weight: 500;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-    }
-
-    h2 {
-      margin-top: 0.75rem;
-      font-size: clamp(2.75rem, 7vw, 6rem);
-      font-weight: 500;
-      letter-spacing: 0.02em;
-      line-height: 1.12;
-    }
-
-    p:last-child {
-      margin-top: 1.15rem;
-      color: var(--everglow-font-color-1);
-      font-size: clamp(1.125rem, 1.4vw, 1.5rem);
-    }
-  }
-</style>
+<style src="~/assets/css/world-atlas.css" />
