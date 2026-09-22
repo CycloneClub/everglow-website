@@ -52,6 +52,22 @@ export function createAtlasTimeline (layers: { x?: number, y: number }[]): Atlas
   }
 }
 
+/** Reading controls target complete content, never a fade or camera transition. */
+export function createAtlasReadingStops (timeline: AtlasTimeline): number[] {
+  return [
+    0,
+    ...timeline.readings.flatMap(({ start, end }) =>
+      [0.11, 0.25, 0.405, 0.585, 0.82].map(local => start + (end - start) * local)),
+    timeline.outro + 2.5 / timeline.units,
+    1 - 1.5 / timeline.units,
+  ]
+}
+
+export function atlasReadingIndex (stops: number[], progress: number) {
+  return stops.reduce((nearest, stop, index) =>
+    Math.abs(stop - progress) < Math.abs(stops[nearest]! - progress) ? index : nearest, 0)
+}
+
 /** Pure, reversible scroll -> state mapping. No elapsed-time animations. */
 export function sampleAtlas (timeline: AtlasTimeline, progress: number, compact = false) {
   const p = clampAtlas(progress)

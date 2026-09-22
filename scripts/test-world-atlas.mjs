@@ -1,8 +1,43 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { atlasScrollProgress, createAtlasTimeline, sampleAtlas } from '../app/utils/atlas-timeline.ts'
+import { atlasReadingIndex, atlasScrollProgress, createAtlasReadingStops, createAtlasTimeline, sampleAtlas } from '../app/utils/atlas-timeline.ts'
 
 const layers = [{ y: 920 }, { y: 710 }, { y: 500 }]
+
+test('mobile reading stops land on complete titles and annotations in every layer', () => {
+  const timeline = createAtlasTimeline(layers)
+  const stops = createAtlasReadingStops(timeline)
+  assert.equal(stops.length, 18)
+  assert.equal(stops[0], 0)
+  for (let layer = 0; layer < layers.length; layer++) {
+    const title = sampleAtlas(timeline, stops[1 + layer * 5], true)
+    assert.equal(title.layer, layer)
+    assert.equal(title.title, 1)
+    for (let note = 0; note < 4; note++) {
+      const state = sampleAtlas(timeline, stops[2 + layer * 5 + note], true)
+      assert.equal(state.layer, layer)
+      assert.equal(state.notes[note], 1)
+      assert.equal(state.illustration, 1)
+      assert.equal(state.zoom, 2.65)
+    }
+  }
+  const unknown = sampleAtlas(timeline, stops.at(-2), true)
+  assert.equal(unknown.unknown, 1)
+  assert.equal(unknown.closing, 0)
+  const closing = sampleAtlas(timeline, stops.at(-1), true)
+  assert.equal(closing.closing, 1)
+  assert.equal(closing.paper, 1)
+  assert.equal(closing.zoom, sampleAtlas(timeline, 0).zoom)
+  assert.ok(stops.every((stop, index) => !index || stop > stops[index - 1]))
+})
+
+test('manual scrolling resolves to the nearest reading stop for forward and back controls', () => {
+  const stops = [0, 0.2, 0.4, 0.6, 0.9]
+  assert.equal(atlasReadingIndex(stops, 0.22), 1)
+  assert.equal(atlasReadingIndex(stops, 0.38), 2)
+  assert.equal(atlasReadingIndex(stops, -0.1), 0)
+  assert.equal(atlasReadingIndex(stops, 1), 4)
+})
 
 test('reading progress depends on stable composition height, not browser toolbar height', () => {
   const timeline = createAtlasTimeline(layers.slice(0, 2))

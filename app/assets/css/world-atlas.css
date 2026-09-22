@@ -38,6 +38,10 @@
 .atlas-running-head { top: calc(var(--header-height) + 2.4rem); }
 .atlas-running-head i { padding: 0 1em; font-style: normal; opacity: 0.5; }
 .atlas-running-foot { bottom: 2.6rem; }.atlas-running-foot > span:nth-child(2) { font-size: 22px; }
+.atlas-running-foot.atlas-paging { bottom: 0.65rem; }
+.atlas-paging button { min-height: 44px; min-width: 88px; padding: 0.4rem 0.6rem; border: 0; background: none; color: var(--atlas-ink); font: 12px/1.5 Georgia, 'Noto Serif SC', serif; cursor: pointer; touch-action: manipulation; }
+.atlas-paging button:disabled { opacity: 0.3; cursor: default; }
+.atlas-running-foot.atlas-paging > span { font-size: 8px; letter-spacing: 0.1em; }
 .atlas-toolbar { position: absolute; z-index: 8; right: 4.5%; top: calc(var(--header-height) + 4.5rem); display: flex; gap: 1.4rem; }
 .atlas-toolbar button { color: var(--atlas-muted); font-family: inherit; font-size: 11px; line-height: 1.8; border: none; border-bottom: 1px solid #74664e60; background: none; cursor: pointer; padding: 0.25rem 0; }
 .atlas-toolbar button:hover { color: var(--atlas-red); }
