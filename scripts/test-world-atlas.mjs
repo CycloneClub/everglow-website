@@ -1,8 +1,19 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { atlasReadingIndex, atlasScrollProgress, createAtlasReadingStops, createAtlasTimeline, sampleAtlas } from '../app/utils/atlas-timeline.ts'
+import { atlasReadingIndex, atlasScrollProgress, atlasTurnDuration, createAtlasReadingStops, createAtlasTimeline, sampleAtlas } from '../app/utils/atlas-timeline.ts'
 
 const layers = [{ y: 920 }, { y: 710 }, { y: 500 }]
+
+test('turn duration distinguishes local annotations from large camera movements in both directions', () => {
+  const timeline = createAtlasTimeline(layers)
+  const stops = createAtlasReadingStops(timeline)
+  for (const [from, to, duration] of [[1, 2, 1500], [2, 3, 1500], [5, 6, 3000], [0, 1, 3000], [15, 16, 3000], [16, 17, 3000]]) {
+    assert.equal(atlasTurnDuration(timeline, stops[from], stops[to]), duration)
+    assert.equal(atlasTurnDuration(timeline, stops[to], stops[from]), duration)
+  }
+  const betweenLayers = (timeline.readings[0].end + timeline.readings[1].start) / 2
+  assert.equal(atlasTurnDuration(timeline, betweenLayers, stops[6]), 3000)
+})
 
 test('mobile reading stops land on complete titles and annotations in every layer', () => {
   const timeline = createAtlasTimeline(layers)

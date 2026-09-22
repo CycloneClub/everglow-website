@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { atlasCopy, atlasLayers, atlasText, unchartedLayers } from '~/data/world-atlas'
-import { atlasReadingIndex, atlasScrollProgress, createAtlasReadingStops, createAtlasTimeline, sampleAtlas } from '~/utils/atlas-timeline'
+import { createAtlasScroll } from '~/utils/atlas-scroll'
+import { atlasReadingIndex, atlasScrollProgress, atlasTurnDuration, createAtlasReadingStops, createAtlasTimeline, sampleAtlas } from '~/utils/atlas-timeline'
 
 const { locale } = useI18n()
 const text = (value: Parameters<typeof atlasText>[0]) => atlasText(value, locale.value)
@@ -34,20 +35,17 @@ let motion: MediaQueryList | undefined
 let mobile: MediaQueryList | undefined
 let listening = false
 let pagingHeight = 0
+let pageTurn: ReturnType<typeof createAtlasScroll> | undefined
 
 function update () {
   frame = 0
   if (!root.value || !animated.value) { return }
   const rect = root.value.getBoundingClientRect()
   progress.value = atlasScrollProgress(rect.top, stableHeight(), timeline.units)
-  if (pendingStop.value !== undefined && Math.abs(progress.value - readingStops[pendingStop.value]!) < 0.0001) {
-    pendingStop.value = undefined
-  }
 }
 function cancelPaging () {
-  if (pendingStop.value === undefined) { return }
+  pageTurn?.cancel()
   pendingStop.value = undefined
-  window.scrollTo({ top: window.scrollY, behavior: 'instant' })
 }
 function interruptPaging (event: Event) {
   const pagingControl = event.target instanceof Element && event.target.closest('.atlas-paging')
@@ -62,7 +60,11 @@ function turnNote (direction: -1 | 1) {
   pendingStop.value = index
   pagingHeight = stableHeight()
   const top = root.value.getBoundingClientRect().top + window.scrollY
-  window.scrollTo({ top: top + readingStops[index]! * pagingHeight * timeline.units * 0.46, behavior: 'smooth' })
+  const target = readingStops[index]!
+  pageTurn?.start(top + target * pagingHeight * timeline.units * 0.46, () => {
+    pendingStop.value = undefined
+    schedule()
+  }, atlasTurnDuration(timeline, progress.value, target))
 }
 function stableHeight () {
   return composition.value ? Number.parseFloat(getComputedStyle(composition.value).minHeight) : 0
@@ -93,6 +95,13 @@ function preferences () {
 function start () {
   if (listening) { return }
   listening = true
+  pageTurn = createAtlasScroll({
+    position: () => window.scrollY,
+    now: () => performance.now(),
+    scroll: top => window.scrollTo({ top, behavior: 'instant' }),
+    request: callback => requestAnimationFrame(callback),
+    cancel: id => cancelAnimationFrame(id),
+  })
   motion = window.matchMedia('(prefers-reduced-motion: reduce)')
   mobile = window.matchMedia('(max-width: 760px), (max-height: 600px)')
   preferences()

@@ -68,6 +68,11 @@ export function atlasReadingIndex (stops: number[], progress: number) {
     Math.abs(stop - progress) < Math.abs(stops[nearest]! - progress) ? index : nearest, 0)
 }
 
+export function atlasTurnDuration (timeline: AtlasTimeline, from: number, to: number) {
+  const reading = timeline.readings.find(({ start, end }) => from >= start && from <= end)
+  return reading && to >= reading.start && to <= reading.end ? 1500 : 3000
+}
+
 /** Pure, reversible scroll -> state mapping. No elapsed-time animations. */
 export function sampleAtlas (timeline: AtlasTimeline, progress: number, compact = false) {
   const p = clampAtlas(progress)
