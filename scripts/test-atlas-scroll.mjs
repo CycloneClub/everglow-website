@@ -76,3 +76,17 @@ test('large camera movements use 3000ms while preserving the same easing', () =>
   assert.equal(scene.position(), 1000)
   assert.equal(scene.completed(), 1)
 })
+
+test('a fast exit follows a changing viewport boundary and finishes in 700ms', () => {
+  const scene = setup()
+  let viewportHeight = 700
+  // The boundary is at document y=1400; toolbar collapse exposes more height.
+  scene.start(() => 1400 - viewportHeight, 700)
+  assert.equal(scene.position(), 0, 'the exit must not jump immediately')
+  scene.tick(350)
+  assert.equal(scene.position(), 350)
+  viewportHeight = 800
+  scene.tick(700)
+  assert.equal(scene.position(), 600, 'the boundary finishes at the new viewport bottom')
+  assert.equal(scene.completed(), 1)
+})

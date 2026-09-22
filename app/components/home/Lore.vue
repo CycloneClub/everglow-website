@@ -80,7 +80,7 @@ function preferences () {
   reduced.value = motion?.matches ?? false
   narrow.value = mobile?.matches ?? false
   shortViewport.value = stableHeight() < 600
-  if (!narrow.value || Math.abs(stableHeight() - pagingHeight) > 0.5) { cancelPaging() }
+  if (pendingStop.value !== undefined && (!narrow.value || Math.abs(stableHeight() - pagingHeight) > 0.5)) { cancelPaging() }
   if (wasReading && wasAnimated !== animated.value) {
     cancelPaging()
     nextTick(() => {
@@ -148,8 +148,20 @@ async function toggleReading () {
 }
 function skip () {
   cancelPaging()
-  after.value?.scrollIntoView({ block: 'start', behavior: 'instant' })
-  after.value?.focus({ preventScroll: true })
+  const destination = after.value
+  if (!destination) { return }
+  const target = () => {
+    const viewport = window.visualViewport
+    const viewportBottom = viewport ? viewport.offsetTop + viewport.height : window.innerHeight
+    return Math.max(0, window.scrollY + destination.getBoundingClientRect().bottom - viewportBottom)
+  }
+  const complete = () => destination.focus({ preventScroll: true })
+  if (reduced.value) {
+    window.scrollTo({ top: target(), behavior: 'instant' })
+    complete()
+    return
+  }
+  pageTurn?.start(target, complete, 700)
 }
 onMounted(start)
 onActivated(() => { start(); schedule() })

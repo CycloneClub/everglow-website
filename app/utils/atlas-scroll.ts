@@ -13,7 +13,7 @@ export function createAtlasScroll (host: AtlasScrollHost) {
     if (frame !== undefined) { host.cancel(frame) }
     frame = undefined
   }
-  function start (target: number, complete: () => void, duration = 1500) {
+  function start (target: number | (() => number), complete: () => void, duration = 1500) {
     cancel()
     const from = host.position()
     const started = host.now()
@@ -21,7 +21,8 @@ export function createAtlasScroll (host: AtlasScrollHost) {
       const t = Math.min(1, Math.max(0, (time - started) / duration))
       // Quintic smootherstep: zero velocity and acceleration at both ends.
       const eased = t * t * t * (t * (t * 6 - 15) + 10)
-      host.scroll(from + (target - from) * eased)
+      const destination = typeof target === 'function' ? target() : target
+      host.scroll(from + (destination - from) * eased)
       if (t < 1) {
         frame = host.request(tick)
       } else {
