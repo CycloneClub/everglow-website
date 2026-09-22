@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { atlasCopy, atlasLayers, atlasText, unchartedLayers } from '~/data/world-atlas'
-import { atlasEase, clampAtlas, createAtlasTimeline, sampleAtlas } from '~/utils/atlas-timeline'
+import { clampAtlas, createAtlasTimeline, sampleAtlas } from '~/utils/atlas-timeline'
 
 const { locale } = useI18n()
 const text = (value: Parameters<typeof atlasText>[0]) => atlasText(value, locale.value)
@@ -14,7 +14,7 @@ const narrow = ref(false)
 const shortViewport = ref(false)
 const animated = computed(() => ready.value && !reduced.value && !manual.value && !shortViewport.value)
 const timeline = createAtlasTimeline(atlasLayers)
-const state = computed(() => sampleAtlas(timeline, progress.value))
+const state = computed(() => sampleAtlas(timeline, progress.value, narrow.value))
 const paperVisibility = computed(() => state.value.paper)
 const camera = computed(() => {
   const zoom = narrow.value ? 1 + (state.value.zoom - 1) * 0.8 : state.value.zoom
@@ -83,11 +83,7 @@ function stop () {
   resize?.disconnect()
 }
 function noteOpacity (index: number) {
-  if (!narrow.value) { return state.value.notes[index] }
-  const starts = [0.12, 0.3, 0.48, 0.66]
-  const start = starts[index]!
-  const end = starts[index + 1] ?? 0.98
-  return atlasEase((state.value.local - start) / 0.06) * (1 - atlasEase((state.value.local - (end - 0.06)) / 0.06))
+  return state.value.notes[index]
 }
 async function toggleReading () {
   manual.value = !manual.value
@@ -160,7 +156,7 @@ onBeforeUnmount(stop)
             :map="state.map"
             :active="state.layer"
             :focus="state.title"
-            :illustration="state.notes[0] ?? 0"
+            :illustration="state.illustration"
             :unknown="state.unknown"
           />
         </div>
@@ -204,7 +200,7 @@ onBeforeUnmount(stop)
           </div>
           <p
             class="atlas-plate-caption"
-            :style="{ opacity: state.notes[0] }"
+            :style="{ opacity: state.illustration }"
           >
             {{ text(layer.place) }}
           </p>

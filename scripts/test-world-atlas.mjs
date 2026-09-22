@@ -72,3 +72,22 @@ test('a newly charted side branch becomes the camera target', () => {
   const reading = timeline.readings[1]
   assert.equal(sampleAtlas(timeline, (reading.start + reading.end) / 2).x, 335)
 })
+
+test('compact notes retain gradual fades and overlap the next entrance with the previous exit', () => {
+  const timeline = createAtlasTimeline(layers)
+  const { start, end } = timeline.readings[0]
+  const at = local => sampleAtlas(timeline, start + (end - start) * local, true)
+  assert.ok(Math.abs(at(0.15).notes[0] - 0.5) < 0.001, 'the original gradual entrance must be retained')
+  for (const middle of [0.315, 0.495, 0.675]) {
+    const state = at(middle)
+    const visible = state.notes.filter(value => value > 0.1)
+    assert.equal(visible.length, 2, 'two neighboring notes should share the handoff')
+    assert.ok(visible.every(value => Math.abs(value - 0.15625) < 0.001), 'only the tails overlap, not two half-visible text blocks')
+    assert.equal(state.illustration, 1, 'the region remains visible during handoffs')
+  }
+  for (let step = 180; step <= 920; step++) {
+    const state = at(step / 1000)
+    assert.ok(state.notes.reduce((sum, value) => sum + value, 0) >= 0.3124, 'handoffs must never be blank')
+  }
+  assert.ok(Math.abs(at(0.95).notes[3] - 0.5) < 0.001, 'the final fade also retains its length')
+})
