@@ -1,8 +1,21 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { createAtlasTimeline, sampleAtlas } from '../app/utils/atlas-timeline.ts'
+import { atlasScrollProgress, createAtlasTimeline, sampleAtlas } from '../app/utils/atlas-timeline.ts'
 
 const layers = [{ y: 920 }, { y: 710 }, { y: 500 }]
+
+test('reading progress depends on stable composition height, not browser toolbar height', () => {
+  const timeline = createAtlasTimeline(layers.slice(0, 2))
+  // 32 units at 46% of a 700px small viewport = 10304px of reading.
+  const offset = -5152
+  const progress = atlasScrollProgress(offset, 700, timeline.units)
+  assert.equal(progress, 0.5)
+  assert.equal(atlasScrollProgress(-2576, 350, timeline.units), progress, 'a true resize uses the new composition height')
+  assert.equal(atlasScrollProgress(100, 700, timeline.units), 0)
+  assert.equal(atlasScrollProgress(-10304, 700, timeline.units), 1)
+  assert.equal(atlasScrollProgress(-12000, 700, timeline.units), 1)
+  assert.equal(atlasScrollProgress(0, 0, timeline.units), 0)
+})
 
 test('the first short scroll starts the camera instead of holding a still overview', () => {
   const timeline = createAtlasTimeline(layers)

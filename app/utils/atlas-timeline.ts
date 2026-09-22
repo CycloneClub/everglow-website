@@ -7,6 +7,10 @@ export type AtlasTimeline = {
 }
 
 export const clampAtlas = (value: number) => Math.min(1, Math.max(0, value))
+/** Toolbar expansion changes the paper's coverage, never the reading distance. */
+export const atlasScrollProgress = (top: number, compositionHeight: number, units: number) =>
+  clampAtlas(-top / Math.max(1, compositionHeight * units * 0.46))
+
 export const atlasEase = (value: number) => {
   const t = clampAtlas(value)
   return t * t * (3 - 2 * t)

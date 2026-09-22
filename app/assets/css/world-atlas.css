@@ -10,7 +10,9 @@
   font-family: Georgia, 'Noto Serif SC', 'Songti SC', SimSun, serif;
 }
 .atlas-stage { position: relative; isolation: isolate; padding: 0; background: var(--atlas-paper); }
-.is-animated .atlas-stage { position: sticky; top: 0; height: 100svh; overflow: hidden; background: #191e1b; }
+.is-animated .atlas-stage { position: sticky; top: 0; height: 100dvh; overflow: hidden; background: #191e1b; }
+.atlas-composition { position: relative; min-height: 100svh; }
+.is-animated .atlas-composition { height: 100svh; }
 .atlas-paper, .atlas-grain, .atlas-border { position: absolute; pointer-events: none; }
 .atlas-veil { position: absolute; inset: 0; z-index: 7; background: #191e1b; pointer-events: none; }
 .atlas-paper {
