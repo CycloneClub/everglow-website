@@ -1,4 +1,7 @@
 <script setup lang="ts">
+// The home page translates reactively; retain its camera and reading mode.
+definePageMeta({ key: 'home' })
+
 const { locale } = useI18n()
 const isCjk = computed(() => locale.value.startsWith('zh'))
 const page = ref<HTMLElement>()
