@@ -47,6 +47,17 @@ export function useAtlasEntrance (page: Ref<HTMLElement | undefined>) {
   }
   function touchend () { touch = undefined }
   function cancel () { snap?.cancel() }
+  function enter () {
+    const atlas = page.value?.querySelector<HTMLElement>('#lore')
+    if (!atlas) { return }
+    if (!snap?.advance(0, 1)) {
+      window.scrollTo({
+        top: atlas.getBoundingClientRect().top + window.scrollY,
+        behavior: motion?.matches ? 'instant' : 'smooth',
+      })
+    }
+    atlas.focus({ preventScroll: true })
+  }
   function start () {
     if (listening) { return }
     listening = true
@@ -95,4 +106,5 @@ export function useAtlasEntrance (page: Ref<HTMLElement | undefined>) {
   onActivated(start)
   onDeactivated(stop)
   onBeforeUnmount(stop)
+  return { enter }
 }

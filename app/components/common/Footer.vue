@@ -2,11 +2,17 @@
   <footer class="common-footer">
     <div class="footer-container">
       <div class="content">
-        Hang on to your dreams.
+        The official website of the Everglow Mod for
+        <a
+          href="https://terraria.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Terraria</a>.
+        Terraria and all its content is copyrighted by Re-Logic.
       </div>
       <div class="info">
         <div class="copyright">
-          Copyright © 2024 Dream Chaser Group All rights reserved.
+          Copyright © 2026 Dream Chaser Group All rights reserved.
         </div>
         <div class="links">
           <ul class="link-list">
@@ -46,10 +52,17 @@
     }
 
     .content {
+      line-height: 1.7;
       padding-top: 3rem;
       margin-bottom: 1.5rem;
       padding-bottom: 2rem;
       border-bottom: 1px solid var(--everglow-trans-black-3);
+
+      a {
+        color: inherit;
+        text-decoration: underline;
+        text-underline-offset: 0.2em;
+      }
     }
 
     .info {

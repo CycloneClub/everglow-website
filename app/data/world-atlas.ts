@@ -7,6 +7,7 @@ export const atlasCopy = {
   subtitle: words('天穹树 · 世界考察手记', '天穹樹 · 世界考察手記', 'YGGDRASIL · FIELD NOTES'),
   intro: words('顺着根系，读向未知。', '順著根系，讀向未知。', 'Follow the roots. Read into the unknown.'),
   scroll: words('向下翻阅 · 向上探索', '向下翻閱 · 向上探索', 'SCROLL TO READ · ASCEND TO EXPLORE'),
+  enter: words('进入世界树手记', '進入世界樹手記', 'Enter the world atlas'),
   previous: words('上一则', '上一則', 'Previous'),
   next: words('下一则', '下一則', 'Next'),
   continue: words('继续旅程', '繼續旅程', 'Continue'),

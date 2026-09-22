@@ -173,6 +173,7 @@ onBeforeUnmount(stop)
   <section
     id="lore"
     ref="root"
+    tabindex="-1"
     class="world-atlas"
     :class="{ 'is-animated': animated }"
     :style="animated ? { height } : undefined"
