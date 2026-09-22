@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { atlasCopy, atlasLayers, atlasText, unchartedLayers } from '~/data/world-atlas'
-import { atlasScrollProgress, createAtlasTimeline, sampleAtlas } from '~/utils/atlas-timeline'
+import { createAtlasScroll } from '~/utils/atlas-scroll'
+import { atlasReadingIndex, atlasScrollProgress, atlasTurnDuration, createAtlasReadingStops, createAtlasTimeline, sampleAtlas } from '~/utils/atlas-timeline'
 
 const { locale } = useI18n()
 const text = (value: Parameters<typeof atlasText>[0]) => atlasText(value, locale.value)
@@ -15,6 +16,10 @@ const narrow = ref(false)
 const shortViewport = ref(false)
 const animated = computed(() => ready.value && !reduced.value && !manual.value && !shortViewport.value)
 const timeline = createAtlasTimeline(atlasLayers)
+const readingStops = createAtlasReadingStops(timeline)
+const pendingStop = ref<number>()
+const readingIndex = computed(() => pendingStop.value ?? atlasReadingIndex(readingStops, progress.value))
+const atEnding = computed(() => progress.value >= readingStops.at(-1)! - 0.0001 && pendingStop.value === undefined)
 const state = computed(() => sampleAtlas(timeline, progress.value, narrow.value))
 const paperVisibility = computed(() => state.value.paper)
 const camera = computed(() => {
@@ -29,12 +34,37 @@ let resize: ResizeObserver | undefined
 let motion: MediaQueryList | undefined
 let mobile: MediaQueryList | undefined
 let listening = false
+let pagingHeight = 0
+let pageTurn: ReturnType<typeof createAtlasScroll> | undefined
 
 function update () {
   frame = 0
   if (!root.value || !animated.value) { return }
   const rect = root.value.getBoundingClientRect()
   progress.value = atlasScrollProgress(rect.top, stableHeight(), timeline.units)
+}
+function cancelPaging () {
+  pageTurn?.cancel()
+  pendingStop.value = undefined
+}
+function interruptPaging (event: Event) {
+  const pagingControl = event.target instanceof Element && event.target.closest('.atlas-paging')
+  if (pagingControl && ['pointerdown', 'touchstart'].includes(event.type)) { return }
+  if (pagingControl && event instanceof KeyboardEvent && ['Enter', ' '].includes(event.key)) { return }
+  cancelPaging()
+}
+function turnNote (direction: -1 | 1) {
+  if (!root.value || !animated.value) { return }
+  if (direction === 1 && atEnding.value) { skip(); return }
+  const index = Math.max(0, Math.min(readingStops.length - 1, readingIndex.value + direction))
+  pendingStop.value = index
+  pagingHeight = stableHeight()
+  const top = root.value.getBoundingClientRect().top + window.scrollY
+  const target = readingStops[index]!
+  pageTurn?.start(top + target * pagingHeight * timeline.units * 0.46, () => {
+    pendingStop.value = undefined
+    schedule()
+  }, atlasTurnDuration(timeline, progress.value, target))
 }
 function stableHeight () {
   return composition.value ? Number.parseFloat(getComputedStyle(composition.value).minHeight) : 0
@@ -50,7 +80,9 @@ function preferences () {
   reduced.value = motion?.matches ?? false
   narrow.value = mobile?.matches ?? false
   shortViewport.value = stableHeight() < 600
+  if (pendingStop.value !== undefined && (!narrow.value || Math.abs(stableHeight() - pagingHeight) > 0.5)) { cancelPaging() }
   if (wasReading && wasAnimated !== animated.value) {
+    cancelPaging()
     nextTick(() => {
       const target = !animated.value && activeId
         ? root.value?.querySelector<HTMLElement>(`[data-atlas-layer="${activeId}"]`)
@@ -63,12 +95,24 @@ function preferences () {
 function start () {
   if (listening) { return }
   listening = true
+  pageTurn = createAtlasScroll({
+    position: () => window.scrollY,
+    now: () => performance.now(),
+    scroll: top => window.scrollTo({ top, behavior: 'instant' }),
+    request: callback => requestAnimationFrame(callback),
+    cancel: id => cancelAnimationFrame(id),
+  })
   motion = window.matchMedia('(prefers-reduced-motion: reduce)')
   mobile = window.matchMedia('(max-width: 760px), (max-height: 600px)')
   preferences()
   ready.value = true
   window.addEventListener('scroll', schedule, { passive: true })
   window.addEventListener('resize', preferences)
+  window.addEventListener('wheel', interruptPaging, { passive: true })
+  window.addEventListener('touchstart', interruptPaging, { passive: true })
+  window.addEventListener('touchmove', interruptPaging, { passive: true })
+  window.addEventListener('pointerdown', interruptPaging)
+  window.addEventListener('keydown', interruptPaging)
   motion.addEventListener('change', preferences)
   mobile.addEventListener('change', preferences)
   resize = new ResizeObserver(preferences)
@@ -78,10 +122,16 @@ function start () {
 }
 function stop () {
   listening = false
+  cancelPaging()
   cancelAnimationFrame(frame)
   frame = 0
   window.removeEventListener('scroll', schedule)
   window.removeEventListener('resize', preferences)
+  window.removeEventListener('wheel', interruptPaging)
+  window.removeEventListener('touchstart', interruptPaging)
+  window.removeEventListener('touchmove', interruptPaging)
+  window.removeEventListener('pointerdown', interruptPaging)
+  window.removeEventListener('keydown', interruptPaging)
   motion?.removeEventListener('change', preferences)
   mobile?.removeEventListener('change', preferences)
   resize?.disconnect()
@@ -90,14 +140,28 @@ function noteOpacity (index: number) {
   return state.value.notes[index]
 }
 async function toggleReading () {
+  cancelPaging()
   manual.value = !manual.value
   await nextTick()
   root.value?.scrollIntoView({ block: 'start', behavior: 'instant' })
   schedule()
 }
 function skip () {
-  after.value?.scrollIntoView({ block: 'start', behavior: 'instant' })
-  after.value?.focus({ preventScroll: true })
+  cancelPaging()
+  const destination = after.value
+  if (!destination) { return }
+  const target = () => {
+    const viewport = window.visualViewport
+    const viewportBottom = viewport ? viewport.offsetTop + viewport.height : window.innerHeight
+    return Math.max(0, window.scrollY + destination.getBoundingClientRect().bottom - viewportBottom)
+  }
+  const complete = () => destination.focus({ preventScroll: true })
+  if (reduced.value) {
+    window.scrollTo({ top: target(), behavior: 'instant' })
+    complete()
+    return
+  }
+  pageTurn?.start(target, complete, 700)
 }
 onMounted(start)
 onActivated(() => { start(); schedule() })
@@ -109,6 +173,7 @@ onBeforeUnmount(stop)
   <section
     id="lore"
     ref="root"
+    tabindex="-1"
     class="world-atlas"
     :class="{ 'is-animated': animated }"
     :style="animated ? { height } : undefined"
@@ -294,8 +359,29 @@ onBeforeUnmount(stop)
               :class="{ 'is-current': state.layer === atlasLayers.length - index - 1 }"
             >{{ level.numeral }}</span><span>⌁</span>
           </div>
-          <footer class="atlas-running-foot">
-            <span>{{ text(atlasCopy.scroll) }}</span><span aria-hidden="true">↓</span><span>FOLIO / {{ layer ? layer.numeral : state.unknown > 0.5 ? '∞' : '00' }}</span>
+          <footer
+            class="atlas-running-foot"
+            :class="{ 'atlas-paging': narrow }"
+          >
+            <template v-if="narrow">
+              <button
+                type="button"
+                :disabled="readingIndex === 0"
+                @click="turnNote(-1)"
+              >
+                <span aria-hidden="true">←</span> {{ text(atlasCopy.previous) }}
+              </button>
+              <span aria-hidden="true">FOLIO / {{ layer ? layer.numeral : state.unknown > 0.5 ? '∞' : '00' }}</span>
+              <button
+                type="button"
+                @click="turnNote(1)"
+              >
+                {{ text(atEnding ? atlasCopy.continue : atlasCopy.next) }} <span aria-hidden="true">→</span>
+              </button>
+            </template>
+            <template v-else>
+              <span>{{ text(atlasCopy.scroll) }}</span><span aria-hidden="true">↓</span><span>FOLIO / {{ layer ? layer.numeral : state.unknown > 0.5 ? '∞' : '00' }}</span>
+            </template>
           </footer>
         </template>
         <div

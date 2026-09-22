@@ -65,21 +65,6 @@ export default {
       placeholderTitle: 'Semiannual report · Coming soon',
       placeholderDescription: 'A new report is being prepared.',
     },
-    showcase: {
-      label: 'Content',
-      boss: {
-        title: 'Bosses',
-        caption: 'The mod’s bosses and major foes',
-      },
-      weapons: {
-        title: 'Weapons',
-        caption: 'Magic, ranged, and melee arms',
-      },
-      scenes: {
-        title: 'Biomes',
-        caption: 'Places to explore',
-      },
-    },
     lore: {
       eyebrow: 'Lore',
       title: 'The world',

@@ -65,21 +65,6 @@ export default {
       'placeholderTitle': '半年报 · 即将发布',
       'placeholderDescription': '新的半年报正在整理中。',
     },
-    'showcase': {
-      'label': '内容速览',
-      'boss': {
-        'title': 'Boss',
-        'caption': '模组中的首领与强敌',
-      },
-      'weapons': {
-        'title': '武器',
-        'caption': '法器、弓弩与近战兵器',
-      },
-      'scenes': {
-        'title': '场景',
-        'caption': '生物群系与探索空间',
-      },
-    },
     'lore': {
       'eyebrow': '设定',
       'title': '世界观',

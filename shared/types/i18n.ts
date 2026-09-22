@@ -66,21 +66,6 @@ export type I18nLocale = {
       placeholderTitle: string
       placeholderDescription: string
     }
-    showcase: {
-      label: string
-      boss: {
-        title: string
-        caption: string
-      }
-      weapons: {
-        title: string
-        caption: string
-      }
-      scenes: {
-        title: string
-        caption: string
-      }
-    }
     lore: {
       eyebrow: string
       title: string
