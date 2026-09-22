@@ -36,7 +36,7 @@ const hreflangLinks = [
   },
 ] as const
 
-useHead({
+useHead(() => ({
   titleTemplate: i18nTitle,
   title: '',
   htmlAttrs: {
@@ -55,7 +55,7 @@ useHead({
     },
   ],
   meta: [...(i18nHead.value.meta || [])],
-})
+}))
 
 useSeoMeta({
   twitterCard: 'summary_large_image',

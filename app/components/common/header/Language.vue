@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import type { Langs } from '#shared/types'
 
-const { availableLocales, setLocale } = useI18n()
+const { availableLocales } = useI18n()
+const app = useNuxtApp()
 
 const isShowOptions = ref(false)
 
-const setLanguage = (code: Langs) => {
-  setLocale(code)
+const setLanguage = async (code: Langs) => {
   isShowOptions.value = false
+  await app.$switchLocalePreservingPosition(code)
 }
 </script>
 
