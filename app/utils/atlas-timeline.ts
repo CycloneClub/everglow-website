@@ -49,7 +49,7 @@ export function createAtlasTimeline (layers: { x?: number, y: number }[]): Atlas
 }
 
 /** Pure, reversible scroll -> state mapping. No elapsed-time animations. */
-export function sampleAtlas (timeline: AtlasTimeline, progress: number) {
+export function sampleAtlas (timeline: AtlasTimeline, progress: number, compact = false) {
   const p = clampAtlas(progress)
   const nextIndex = timeline.points.findIndex(point => point.at >= p)
   const to = timeline.points[Math.max(1, nextIndex)]!
@@ -59,6 +59,16 @@ export function sampleAtlas (timeline: AtlasTimeline, progress: number) {
   const reading = timeline.readings[layer]
   const local = reading ? clampAtlas((p - reading.start) / (reading.end - reading.start)) : 0
   const fade = 1 - atlasEase((local - 0.9) / 0.1)
+  const notes = [0.12, 0.29, 0.46, 0.64].map(start => reading ? atlasEase((local - start) / 0.12) * fade : 0)
+  // Keep the original compact fade lengths. Only overlap the outgoing
+  // tail with the incoming head to avoid two strong text blocks colliding.
+  const compactStarts = [0.12, 0.3, 0.48, 0.66]
+  const compactNotes = compactStarts.map((start, index) => {
+    if (!reading) { return 0 }
+    const next = compactStarts[index + 1]
+    const exitStart = next === undefined ? 0.92 : next - 0.03
+    return atlasEase((local - start) / 0.06) * (1 - atlasEase((local - exitStart) / 0.06))
+  })
   return {
     x: (from.x ?? 500) + ((to.x ?? 500) - (from.x ?? 500)) * mix,
     y: from.y + (to.y - from.y) * mix,
@@ -66,7 +76,8 @@ export function sampleAtlas (timeline: AtlasTimeline, progress: number) {
     layer,
     local,
     title: reading ? atlasEase(local / 0.1) * fade : 0,
-    notes: [0.12, 0.29, 0.46, 0.64].map(start => reading ? atlasEase((local - start) / 0.12) * fade : 0),
+    illustration: notes[0] ?? 0,
+    notes: compact ? compactNotes : notes,
     map: atlasEase((p * timeline.units - 0.35) / 2.65),
     intro: 1 - atlasEase(p * timeline.units / 1.2),
     unknown: atlasEase((p - timeline.outro) * timeline.units / 2),
