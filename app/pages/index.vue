@@ -20,7 +20,6 @@ useAtlasEntrance(page)
       </div>
     </div>
     <HomeLore />
-    <HomeShowcase />
     <HomeNews />
   </div>
 </template>
