@@ -1,6 +1,6 @@
 import { createAtlasEntrance } from '~/utils/atlas-entrance'
 
-export function useAtlasEntrance (page: Ref<HTMLElement | undefined>) {
+export function useAtlasEntrance (page: Ref<HTMLElement | undefined>, chapterWheel?: (event: WheelEvent) => boolean) {
   let snap: ReturnType<typeof createAtlasEntrance> | undefined
   let motion: MediaQueryList | undefined
   let listening = false
@@ -19,7 +19,10 @@ export function useAtlasEntrance (page: Ref<HTMLElement | undefined>) {
   function wheel (event: WheelEvent) {
     // An unrelated target or an uncancellable packet must not abort a snap.
     if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.shiftKey || blocked(event.target)) { return }
-    snap?.wheel(event)
+    // A running cover owns its whole gesture, including uncancellable packets.
+    // Otherwise the chapter gets first refusal before returning to the hero.
+    if (snap?.active()) { snap.wheel(event); return }
+    if (!chapterWheel?.(event)) { snap?.wheel(event) }
   }
   function keydown (event: KeyboardEvent) {
     if (event.ctrlKey || event.metaKey || event.altKey || blocked(event.target, true)) { snap?.cancel(); return }

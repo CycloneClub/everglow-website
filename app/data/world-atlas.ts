@@ -1,4 +1,4 @@
-/** Editorial copy; proper names and layer order follow Yggdrasil/README.md. */
+/** Editorial copy based on the terrain plans; sources and naming decisions are recorded in docs/world-atlas.md. */
 type Text = { 'zh-cn': string, 'zh-hk': string, 'en-us': string }
 const words = (cn: string, hk: string, en: string): Text => ({ 'zh-cn': cn, 'zh-hk': hk, 'en-us': en })
 
@@ -42,12 +42,12 @@ export const atlasLayers = [
     id: 'town',
     name: words('天穹镇', '天穹鎮', 'Yggdrasil Town'),
     english: 'Yggdrasil Town',
-    description: words('巨树之下，灯火汇成聚落。向上的旅程，从这里开始。', '巨樹之下，燈火匯成聚落。向上的旅程，從這裡開始。', 'At the foot of the great tree, lights gather into a town. The ascent begins here.'),
-    place: words('聚落建筑 · 灯火与石桥', '聚落建築 · 燈火與石橋', 'Town study · lanterns & stone bridges'),
-    note: words('灯木森林、幽暗的水岸……城镇并不是这一层的全部。', '燈木森林、幽暗的水岸……城鎮並不是這一層的全部。', 'Lampwood forest, shadowed shores… the town is only part of this layer.'),
+    description: words('巨型晶塔悬在沼泽之上，残存的石桥通向层层叠起的天穹镇。攀升者在这里整装，向树中更高处出发。', '巨型晶塔懸在沼澤之上，殘存的石橋通向層層疊起的天穹鎮。攀升者在這裡整裝，向樹中更高處出發。', 'A vast crystal pylon hangs above the swamp. An ancient bridge leads to the terraced town, where climbers prepare for the ascent.'),
+    place: words('聚落摹写 · 层叠的天穹镇', '聚落摹寫 · 層疊的天穹鎮', 'Town study · terraces of Yggdrasil'),
+    note: words('石桥下是黑沉沼泽，镇外还有灯木森林。灯火照亮的，只是这一层的一角。', '石橋下是黑沉沼澤，鎮外還有燈木森林。燈火照亮的，只是這一層的一角。', 'Dark swamp lies beneath the bridge; lampwood forest grows beyond the town. Lanterns light only a corner of this layer.'),
     specimen: words('关口保安', '關口保安', 'Guard of Yggdrasil Town'),
     specimenNote: words('抵达关口时，别忘了留意这里的居民。', '抵達關口時，別忘了留意這裡的居民。', 'At the gate, take a moment to meet the people who live here.'),
-    mechanism: words('另记：镇中的竞技场，值得再访。', '另記：鎮中的競技場，值得再訪。', 'A note for later: return to the town arena.'),
+    mechanism: words('行路记：缆车环线串起高低街区，城镇本身也是一段向上的路。', '行路記：纜車環線串起高低街區，城鎮本身也是一段向上的路。', 'Route note: a cable car loop links the upper and lower streets. Even the town is an ascent.'),
     encounter: words('龙鳞古壳', '龍鱗古殼', 'Squamous Shell'),
     encounterNote: words('在灯木之间，记下这道庞大的身影。', '在燈木之間，記下這道龐大的身影。', 'Among the lampwood, a vast silhouette enters the record.'),
     specimenImage: '/images/atlas/guard.png',
@@ -58,14 +58,14 @@ export const atlasLayers = [
     id: 'kelp',
     name: words('苍苔帘幕', '蒼苔簾幕', 'Kelp Curtain'),
     english: 'Kelp Curtain',
-    description: words('离开灯火，沿巨树向上。枝蔓垂落，另一重世界在苍绿之中展开。', '離開燈火，沿巨樹向上。枝蔓垂落，另一重世界在蒼綠之中展開。', 'Leave the lanterns below. Hanging growth opens onto another world, folded in green.'),
-    place: words('地貌摹写 · 交错的枝蔓', '地貌摹寫 · 交錯的枝蔓', 'Terrain study · interwoven boughs'),
-    note: words('枝条遮住的地方，是否还藏着另一条路？', '枝條遮住的地方，是否還藏著另一條路？', 'Where the branches obscure the page, could there be another path?'),
+    description: words('苔藓沿洞壁垂落，远古巨植的筛管化作向上的通道。亡碧湖之外，苔原、王庭与幽谷藏在苍绿深处。', '苔蘚沿洞壁垂落，遠古巨植的篩管化作向上的通道。亡碧湖之外，苔原、王庭與幽谷藏在蒼綠深處。', 'Moss drapes the caves; ancient plant vessels form climbing passages. Beyond Death Jade Lake lie mosslands, a decaying court and misty valleys.'),
+    place: words('地貌摹写 · 垂苔与爬升洞穴', '地貌摹寫 · 垂苔與爬升洞穴', 'Terrain study · hanging moss & climbing caves'),
+    note: words('沿亡碧湖岸记下去：碧绿苔原、朽木王庭、森雨幽谷。连洞穴深处，也有植被蔓生。', '沿亡碧湖岸記下去：碧綠苔原、朽木王庭、森雨幽谷。連洞穴深處，也有植被蔓生。', 'Beyond the lake: Green Tundra, Town of Decaying Wood, Valley of Lush and Moist. Greenery reaches even into the caves.'),
     specimen: words('巨树人', '巨樹人', 'Giant Tree Man'),
     specimenNote: words('刺苔庭园的稀有敌怪。一株巨大树人的残骸。', '刺苔庭園的稀有敵怪。一株巨大樹人的殘骸。', 'A rare enemy of Spiny Moss Court: the remains of an enormous tree being.'),
     mechanism: words('观察：重击落下后，拳头会短暂陷入地面。', '觀察：重擊落下後，拳頭會短暫陷入地面。', 'Observed: after a heavy strike, its fist remains lodged in the ground.'),
-    encounter: words('尚未写尽的见闻', '尚未寫盡的見聞', 'An unfinished field record'),
-    encounterNote: words('湖岸、庭园、枝蔓深处……这一页，仍有许多空白。', '湖岸、庭園、枝蔓深處……這一頁，仍有許多空白。', 'The lakeshore, the court, the tangled depths… much of this page remains unwritten.'),
+    encounter: words('湖中一页 · 夭华洲', '湖中一頁 · 夭華洲', 'Isle of Bloom'),
+    encounterNote: words('竹林围住湖中小洲，桃枝探向洞口。垂苔之下，洞内藏着宗派旧址。', '竹林圍住湖中小洲，桃枝探向洞口。垂苔之下，洞內藏著宗派舊址。', 'Bamboo encloses the lake isle; peach branches lean over a cave entrance. Beneath the moss lie the remains of a sect settlement.'),
     specimenImage: '/images/atlas/giant-tree-man.png',
     encounterImage: '',
     landscape: '/images/atlas/kelp.png', sky: '/images/atlas/kelp-sky.png', foreground: '/images/atlas/kelp-close.png',

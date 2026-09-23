@@ -8,7 +8,7 @@ type EntranceHost = {
 
 type EntranceWheel = Pick<WheelEvent, 'deltaX' | 'deltaY' | 'cancelable' | 'preventDefault'>
 
-/** Bidirectional cover transition; scrolling within the atlas stays native. */
+/** Bidirectional cover transition; chapter paging is handled separately. */
 export function createAtlasEntrance (host: EntranceHost) {
   let frame: number | undefined
   let phase: 'idle' | 'moving' | 'settling' = 'idle'
@@ -77,5 +77,5 @@ export function createAtlasEntrance (host: EntranceHost) {
     if (handled && event.cancelable) { event.preventDefault() }
     return handled
   }
-  return { advance, wheel, cancel }
+  return { advance, wheel, cancel, active: () => phase !== 'idle' }
 }
