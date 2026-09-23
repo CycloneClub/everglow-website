@@ -26,10 +26,20 @@
 - `KelpCurtain/Background/KelpCurtainSky.png` → `public/images/atlas/kelp-sky.png`。
 - `KelpCurtain/Background/KelpCurtainClose.png` → `public/images/atlas/kelp-close.png`。
 - `KelpCurtain/NPCs/GiantDandelion.png` → `public/images/atlas/giant-tree-man.png`。
-- 巨树人描述及重击后的停顿来自 `KelpCurtain/NPCs/GiantDandelion.cs`；竞技场来自 `YggdrasilTown/Biomes/YggdrasilTownBiome.cs`。
+- 巨树人描述、刺苔庭园归属及重击后的停顿来自 `KelpCurtain/NPCs/GiantDandelion.cs`。
 - 龙鳞古壳采用网站已有的 `public/images/news/2024-11-16_SquamousShell.png`，对应模组 `YggdrasilTown/NPCs/SquamousShell/`。
 
-这些素材均为原样复制；没有修改模组目录。场景图片由游戏背景原图在网页中叠放，并非游戏实录截图。衔接文案与疑问式边注为网站编辑文案，不作为新增官方设定。
+这些素材均为原样复制；没有修改模组目录。场景图片由游戏背景原图在网页中叠放，并非游戏实录截图。手记中的衔接语为网站编辑文案，不作为新增官方设定。
+
+### 地形文案依据（2026-09-23）
+
+本次仅更新 `app/data/world-atlas.ts` 中的简体中文、繁体中文及英文文案，沿用现有插图、节点和滚动节奏。
+
+- [地形策划案——第一层](https://kan2skhz3dv.feishu.cn/wiki/NwPIwCHeMiHJbjkkhTecOsicnzf)：巨型晶塔位于第一层底部右侧；遗迹石桥跨过沼泽，向左通往天穹镇；城镇垂直叠起，内部有缆车环线。用于第一层导语、图注、边注与行路记。灯木森林名称同时依据模组 `Sources/Everglow/Localization/zh-Hans/Mods.Everglow.Biomes.hjson`，沼泽及森林对应 `WorldGeneration/YggdrasilTownGeneration.cs`。
+- [地形策划案——第二层](https://kan2skhz3dv.feishu.cn/wiki/DA6Gw7bcliKc0tkcB2wcXDyXnHr)：综述中的亡碧湖、碧绿苔原、朽木王庭、森雨幽谷；“爬升洞穴”中的远古巨植筛管结构；“夭华洲”中的地表竹林、洞口桃树、洞内宗派旧址。用于第二层导语、地貌边注及夭华洲见闻，替换原来的疑问式占位文案。
+- 层序继续采用当前模组 `README.md`，不采用第二层策划综述中将飓风迷宫称作第三层的旧顺序。地貌边注使用地形策划的“朽木王庭”，巨树人条目沿用其当前代码中的“刺苔庭园”；不推断两者完全等同。英文区域名沿用策划提供的名称，主层名称仍为当前的 `Kelp Curtain`。
+
+这些文字是基于策划的世界导览，不代表全部内容已在发布版实现。未写入尚有分歧的剧情背景、阵法修复、乘船效果、奖励或战斗数值；未新增或替换素材。
 
 ## 扩展
 
