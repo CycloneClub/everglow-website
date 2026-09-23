@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { createHeroFollower } from '~/utils/hero-parallax'
+import { createHeroFrameLoop } from '~/utils/hero-frame-loop'
 import { type MenuSkyRenderer, createMenuSky, loadMenuSkyAssets } from '~/utils/menu-sky'
 import { type MenuWater, createMenuWater } from '~/utils/menu-water'
 
@@ -22,6 +23,13 @@ const sceneCanvas = ref<HTMLCanvasElement>()
 const waterCanvas = ref<HTMLCanvasElement>()
 const debug = ref('')
 const debugging = ref(false)
+let activateScene = () => {}
+let deactivateScene = () => {}
+let cleanupScene = () => {}
+
+onActivated(() => activateScene())
+onDeactivated(() => deactivateScene())
+onBeforeUnmount(() => cleanupScene())
 
 onMounted(() => {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -32,26 +40,28 @@ onMounted(() => {
   let renderer: MenuSkyRenderer | undefined
   let water: MenuWater | undefined
   let ctx: CanvasRenderingContext2D | null = null
-  let frame = 0
   let last = 0
   let visible = true
+  let active = true
   let disposed = false
 
   function resize () {
-    if (!root.value || !sceneCanvas.value) { return }
+    if (!active || !root.value || !sceneCanvas.value) { return }
     const rect = root.value.getBoundingClientRect()
+    if (rect.width <= 0 || rect.height <= 0) { return }
     const ratio = Math.min(1.75, window.devicePixelRatio || 1)
     sceneCanvas.value.width = Math.round(rect.width * ratio)
     sceneCanvas.value.height = Math.round(rect.height * ratio)
     ctx = sceneCanvas.value.getContext('2d')
     water?.resize(rect.width, rect.height, ratio)
-    // Resizing clears the canvas; the static scene has no loop to repaint it.
-    if (reduced.matches) { paint(performance.now()) }
+    // Setting canvas dimensions clears it, so restore a frame immediately.
+    paint(performance.now())
   }
 
   function paint (now: number) {
-    if (!renderer || !root.value || !ctx) { return }
+    if (!active || !renderer || !root.value || !ctx) { return }
     const rect = root.value.getBoundingClientRect()
+    if (rect.width <= 0 || rect.height <= 0) { return }
     const frames = reduced.matches ? 0 : Math.min(4, last ? (now - last) / (1000 / 60) : 1)
     last = now
     const c = reduced.matches ? { x: 0, y: 0 } : follower.tick(now)
@@ -84,6 +94,27 @@ onMounted(() => {
   const observer = new IntersectionObserver((entries) => {
     visible = entries.some(entry => entry.isIntersecting)
   })
+  const loop = createHeroFrameLoop({
+    request: callback => requestAnimationFrame(callback),
+    cancel: id => cancelAnimationFrame(id),
+    bounds: () => {
+      const rect = root.value?.getBoundingClientRect()
+      return { width: rect?.width ?? 0, height: rect?.height ?? 0, visible: active && visible }
+    },
+    paint,
+  })
+  activateScene = () => {
+    active = true
+    visible = true
+    last = 0
+    if (!renderer) { return }
+    resize()
+    if (!reduced.matches) { loop.start() }
+  }
+  deactivateScene = () => {
+    active = false
+    loop.stop()
+  }
   if (root.value) { observer.observe(root.value) }
 
   resize()
@@ -106,23 +137,20 @@ onMounted(() => {
         window.addEventListener('pointermove', onPointerMove, { passive: true })
         document.documentElement.addEventListener('pointerleave', onPointerLeave)
       }
-      frame = requestAnimationFrame(function tick (now) {
-        if (visible) { paint(now) }
-        if (!disposed) { frame = requestAnimationFrame(tick) }
-      })
+      if (active) { loop.start() }
     }
   }).catch(() => {
     // The solid night-sky color remains as the fallback.
   })
 
-  onBeforeUnmount(() => {
+  cleanupScene = () => {
     disposed = true
+    deactivateScene()
     observer.disconnect()
-    cancelAnimationFrame(frame)
     window.removeEventListener('resize', resize)
     window.removeEventListener('pointermove', onPointerMove)
     document.documentElement.removeEventListener('pointerleave', onPointerLeave)
-  })
+  }
 })
 </script>
 
