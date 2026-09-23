@@ -7,7 +7,7 @@ const layers = [{ y: 920 }, { y: 710 }, { y: 500 }]
 test('turn duration distinguishes local annotations from large camera movements in both directions', () => {
   const timeline = createAtlasTimeline(layers)
   const stops = createAtlasReadingStops(timeline)
-  for (const [from, to, duration] of [[1, 2, 1500], [2, 3, 1500], [5, 6, 3000], [0, 1, 3000], [15, 16, 3000], [16, 17, 3000]]) {
+  for (const [from, to, duration] of [[1, 2, 1500], [2, 3, 1500], [3, 4, 1500], [6, 7, 3000], [0, 1, 3000], [16, 17, 3000], [17, 18, 3000]]) {
     assert.equal(atlasTurnDuration(timeline, stops[from], stops[to]), duration)
     assert.equal(atlasTurnDuration(timeline, stops[to], stops[from]), duration)
   }
@@ -18,14 +18,14 @@ test('turn duration distinguishes local annotations from large camera movements 
 test('mobile reading stops land on complete titles and annotations in every layer', () => {
   const timeline = createAtlasTimeline(layers)
   const stops = createAtlasReadingStops(timeline)
-  assert.equal(stops.length, 18)
+  assert.equal(stops.length, 19)
   assert.equal(stops[0], 0)
   for (let layer = 0; layer < layers.length; layer++) {
-    const title = sampleAtlas(timeline, stops[1 + layer * 5], true)
+    const title = sampleAtlas(timeline, stops[2 + layer * 5], true)
     assert.equal(title.layer, layer)
     assert.equal(title.title, 1)
     for (let note = 0; note < 4; note++) {
-      const state = sampleAtlas(timeline, stops[2 + layer * 5 + note], true)
+      const state = sampleAtlas(timeline, stops[3 + layer * 5 + note], true)
       assert.equal(state.layer, layer)
       assert.equal(state.notes[note], 1)
       assert.equal(state.illustration, 1)
@@ -40,6 +40,16 @@ test('mobile reading stops land on complete titles and annotations in every laye
   assert.equal(closing.paper, 1)
   assert.equal(closing.zoom, sampleAtlas(timeline, 0).zoom)
   assert.ok(stops.every((stop, index) => !index || stop > stops[index - 1]))
+})
+
+test('the first wheel stop shows the map inscription before the first layer title', () => {
+  const timeline = createAtlasTimeline(layers)
+  const stops = createAtlasReadingStops(timeline)
+  const inscription = sampleAtlas(timeline, stops[1])
+  const title = sampleAtlas(timeline, stops[2])
+  assert.equal(inscription.intro, 0)
+  assert.equal(inscription.map * (1 - inscription.title) * (1 - inscription.unknown), 1)
+  assert.equal(title.title, 1)
 })
 
 test('manual scrolling resolves to the nearest reading stop for forward and back controls', () => {

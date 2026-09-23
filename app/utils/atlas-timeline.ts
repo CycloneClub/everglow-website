@@ -56,6 +56,7 @@ export function createAtlasTimeline (layers: { x?: number, y: number }[]): Atlas
 export function createAtlasReadingStops (timeline: AtlasTimeline): number[] {
   return [
     0,
+    timeline.readings[0]!.start,
     ...timeline.readings.flatMap(({ start, end }) =>
       [0.11, 0.25, 0.405, 0.585, 0.82].map(local => start + (end - start) * local)),
     timeline.outro + 2.5 / timeline.units,
