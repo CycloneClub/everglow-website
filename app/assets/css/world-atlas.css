@@ -6,11 +6,17 @@
   position: relative;
   z-index: 1;
   color: var(--atlas-ink);
-  background: #191e1b;
+  background: transparent;
   font-family: Georgia, 'Noto Serif SC', 'Songti SC', SimSun, serif;
 }
+.atlas-sheet { position: relative; }
+.is-animated .atlas-sheet { position: sticky; top: 0; height: 100dvh; }
+.has-paper-cover .atlas-sheet {
+  transform: translateY(calc((var(--cover-progress, 1) - 1) * 100svh));
+  visibility: var(--cover-atlas-visibility, visible);
+}
 .atlas-stage { position: relative; isolation: isolate; padding: 0; background: var(--atlas-paper); }
-.is-animated .atlas-stage { position: sticky; top: 0; height: 100dvh; overflow: hidden; background: #191e1b; }
+.is-animated .atlas-stage { height: 100dvh; overflow: hidden; background: #191e1b; }
 .atlas-composition { position: relative; min-height: 100svh; }
 .is-animated .atlas-composition { height: 100svh; }
 .atlas-paper, .atlas-grain, .atlas-border { position: absolute; pointer-events: none; }

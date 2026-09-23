@@ -44,7 +44,7 @@ export function createAtlasEntrance (host: EntranceHost) {
     if (Math.abs(bounds.y - target) <= 2) { return false }
     const from = bounds.y
     // A mid-flight reversal only travels the remaining portion of the cover.
-    const duration = Math.max(180, 700 * Math.min(1, Math.abs(target - from) / Math.max(1, bounds.end - bounds.start)))
+    const duration = Math.max(180, 1500 * Math.min(1, Math.abs(target - from) / Math.max(1, bounds.end - bounds.start)))
     direction = intent
     phase = 'moving'
     const settle = (time: number) => {
@@ -58,7 +58,8 @@ export function createAtlasEntrance (host: EntranceHost) {
     const tick = (time: number) => {
       if (!host.bounds().enabled) { cancel(); return }
       const progress = Math.min(1, Math.max(0, (time - now) / duration))
-      const eased = progress * progress * (3 - 2 * progress)
+      // Zero velocity and acceleration at each end let the paper lift and settle.
+      const eased = progress ** 3 * (progress * (progress * 6 - 15) + 10)
       host.scroll(from + (target - from) * eased)
       if (progress < 1) {
         frame = host.request(tick)

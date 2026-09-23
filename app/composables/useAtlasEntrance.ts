@@ -1,10 +1,24 @@
 import { createAtlasEntrance } from '~/utils/atlas-entrance'
 
 export function useAtlasEntrance (page: Ref<HTMLElement | undefined>, chapterWheel?: (event: WheelEvent) => boolean) {
+  const coverProgress = ref(0)
+  let visualFrame = 0
+  let resize: ResizeObserver | undefined
   let snap: ReturnType<typeof createAtlasEntrance> | undefined
   let motion: MediaQueryList | undefined
   let listening = false
   let touch: { x: number, y: number } | undefined
+
+  function updateCover () {
+    visualFrame = 0
+    const atlas = page.value?.querySelector<HTMLElement>('#lore')
+    if (!page.value || !atlas || motion?.matches) { coverProgress.value = 0; return }
+    const start = page.value.getBoundingClientRect().top
+    const distance = atlas.getBoundingClientRect().top - start
+    coverProgress.value = Math.min(1, Math.max(0, -start / Math.max(1, distance)))
+  }
+  function scheduleCover () { visualFrame ||= requestAnimationFrame(updateCover) }
+  function refreshCover () { cancel(); scheduleCover() }
 
   function blocked (target: EventTarget | null, keyboard = false) {
     if (!(target instanceof HTMLElement)) { return false }
@@ -88,8 +102,12 @@ export function useAtlasEntrance (page: Ref<HTMLElement | undefined>, chapterWhe
     window.addEventListener('touchend', touchend)
     window.addEventListener('touchcancel', touchend)
     window.addEventListener('pointerdown', cancel)
-    window.addEventListener('resize', cancel)
-    motion.addEventListener('change', cancel)
+    window.addEventListener('scroll', scheduleCover, { passive: true })
+    window.addEventListener('resize', refreshCover)
+    motion.addEventListener('change', refreshCover)
+    resize = new ResizeObserver(scheduleCover)
+    if (page.value) { resize.observe(page.value) }
+    scheduleCover()
   }
   function stop () {
     listening = false
@@ -102,12 +120,16 @@ export function useAtlasEntrance (page: Ref<HTMLElement | undefined>, chapterWhe
     window.removeEventListener('touchend', touchend)
     window.removeEventListener('touchcancel', touchend)
     window.removeEventListener('pointerdown', cancel)
-    window.removeEventListener('resize', cancel)
-    motion?.removeEventListener('change', cancel)
+    window.removeEventListener('scroll', scheduleCover)
+    window.removeEventListener('resize', refreshCover)
+    motion?.removeEventListener('change', refreshCover)
+    resize?.disconnect()
+    cancelAnimationFrame(visualFrame)
+    visualFrame = 0
   }
   onMounted(start)
   onActivated(start)
   onDeactivated(stop)
   onBeforeUnmount(stop)
-  return { enter }
+  return { enter, coverProgress }
 }
