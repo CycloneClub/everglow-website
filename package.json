@@ -7,7 +7,7 @@
 		"dev": "nuxt dev",
 		"generate": "nuxt generate",
 		"preview": "nuxt preview",
-		"test:atlas": "node --test scripts/test-world-atlas.mjs scripts/test-atlas-entrance.mjs scripts/test-atlas-scroll.mjs scripts/test-parchment-fold.mjs",
+		"test:atlas": "node --test scripts/test-world-atlas.mjs scripts/test-atlas-entrance.mjs scripts/test-atlas-scroll.mjs scripts/test-parchment-fold.mjs scripts/test-hero-frame-loop.mjs",
 		"test:locale": "node --test scripts/test-locale-reading.mjs",
 		"postinstall": "nuxt prepare",
 		"typecheck": "nuxt prepare && vue-tsc -b --noEmit",
