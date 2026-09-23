@@ -7,7 +7,8 @@ definePageMeta({ key: 'home' })
 const { locale } = useI18n()
 const isCjk = computed(() => locale.value.startsWith('zh'))
 const page = ref<HTMLElement>()
-const { enter } = useAtlasEntrance(page)
+const lore = ref<{ wheel: (event: WheelEvent) => boolean }>()
+const { enter } = useAtlasEntrance(page, event => lore.value?.wheel(event) ?? false)
 </script>
 
 <template>
@@ -40,7 +41,7 @@ const { enter } = useAtlasEntrance(page)
         </a>
       </div>
     </div>
-    <HomeLore />
+    <HomeLore ref="lore" />
     <HomeNews />
   </div>
 </template>
