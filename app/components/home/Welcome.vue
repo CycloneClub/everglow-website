@@ -1,12 +1,18 @@
 <script setup lang="ts">
+import { HomeHeroScene, HomeParallexScrollBase } from '#components'
+
 const colorMode = useColorMode()
 const { t, locale } = useI18n()
 const isCjk = computed(() => locale.value.startsWith('zh'))
 
-const bg = computed(() =>
-  colorMode.value === 'light'
-    ? '/images/light-sky.jpg'
-    : '/images/star-sky.jpg',
+// The parallax scene is designed for the dark theme; the light theme
+// keeps the static sky photograph.
+const heroWrapper = computed(() =>
+  colorMode.value === 'light' ? HomeParallexScrollBase : HomeHeroScene,
+)
+
+const heroProps = computed(() =>
+  colorMode.value === 'light' ? { src: '/images/light-sky.jpg' } : {},
 )
 
 const heroActions = computed(() => [
@@ -56,8 +62,9 @@ const communityLinks = computed(() => [
 </script>
 
 <template>
-  <HomeParallexScrollBase
-    :src="bg"
+  <component
+    :is="heroWrapper"
+    v-bind="heroProps"
     cover
   >
     <div
@@ -82,7 +89,15 @@ const communityLinks = computed(() => [
         <p class="home-welcome__eyebrow">
           {{ $t('meta.team') }}
         </p>
-        <h1>{{ $t('head.title') }}</h1>
+        <h1>
+          <img
+            class="home-welcome__logo"
+            src="/images/hero/menu/logo.png"
+            :alt="$t('head.title')"
+            width="588"
+            height="396"
+          >
+        </h1>
         <p class="home-welcome__tagline">
           {{ $t('nuxtSiteConfig.description') }}
         </p>
@@ -176,7 +191,7 @@ const communityLinks = computed(() => [
         </li>
       </ul>
     </div>
-  </HomeParallexScrollBase>
+  </component>
 </template>
 
 <style lang="scss" scoped>
@@ -215,7 +230,7 @@ const communityLinks = computed(() => [
     right: max(1.5rem, 6vw);
     z-index: 2;
     display: block;
-    width: 5.5rem;
+    width: clamp(4.5rem, calc(3rem + 6vw), 11rem);
     overflow: hidden;
     line-height: 0;
     border-radius: 0.85rem;
@@ -237,6 +252,26 @@ const communityLinks = computed(() => [
     max-width: 52rem;
   }
 
+  .home-welcome__tml,
+  .home-welcome__copy > *,
+  .home-welcome__community {
+    animation: home-welcome-rise 0.85s cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+  }
+
+  .home-welcome__tml { animation-delay: 0.55s; }
+  .home-welcome__eyebrow { animation-delay: 0.08s; }
+  .home-welcome__copy h1 { animation-delay: 0.18s; }
+  .home-welcome__tagline { animation-delay: 0.3s; }
+  .home-welcome__actions { animation-delay: 0.42s; }
+  .home-welcome__community { animation-delay: 0.6s; }
+
+  @keyframes home-welcome-rise {
+    from {
+      opacity: 0;
+      transform: translateY(1.1rem);
+    }
+  }
+
   .home-welcome__eyebrow {
     color: var(--everglow-blue-5);
     font-size: 0.875rem;
@@ -251,6 +286,12 @@ const communityLinks = computed(() => [
     font-weight: 500;
     letter-spacing: 0.02em;
     line-height: 1.08;
+  }
+
+  .home-welcome__logo {
+    display: block;
+    width: clamp(14rem, 26vw, 24rem);
+    height: auto;
   }
 
   .home-welcome__tagline {
@@ -417,7 +458,6 @@ const communityLinks = computed(() => [
 
     .home-welcome__tml {
       right: max(1.25rem, 5vw);
-      width: 3.75rem;
     }
   }
 
@@ -429,6 +469,12 @@ const communityLinks = computed(() => [
       &:hover {
         transform: none;
       }
+    }
+
+    .home-welcome__tml,
+    .home-welcome__copy > *,
+    .home-welcome__community {
+      animation: none;
     }
   }
 </style>
