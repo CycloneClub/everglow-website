@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { atlasCopy, atlasText } from '~/data/world-atlas'
+import { paperHandoff } from '~/utils/parchment-fold'
 
 // The home page translates reactively; retain its camera and reading mode.
 definePageMeta({ key: 'home' })
@@ -7,15 +8,28 @@ definePageMeta({ key: 'home' })
 const { locale } = useI18n()
 const isCjk = computed(() => locale.value.startsWith('zh'))
 const page = ref<HTMLElement>()
-const lore = ref<{ wheel: (event: WheelEvent) => boolean }>()
-const { enter } = useAtlasEntrance(page, event => lore.value?.wheel(event) ?? false)
+const lore = ref<{ wheel: (event: WheelEvent) => boolean, stage?: HTMLElement }>()
+const coverReady = ref(false)
+const { enter, coverProgress } = useAtlasEntrance(page, event => lore.value?.wheel(event) ?? false)
+const coverStyle = computed(() => {
+  const progress = coverProgress.value
+  const opacity = paperHandoff(progress)
+  return {
+    '--cover-progress': progress,
+    '--cover-atlas-visibility': opacity.paper > 0 ? 'visible' : 'hidden',
+    '--cover-hero-scale': 1 - progress * 0.018,
+    '--cover-hero-shade': progress * 0.2,
+    '--cover-hero-rise': (progress * -12) + 'px',
+  }
+})
 </script>
 
 <template>
   <div
     ref="page"
     class="home-page"
-    :class="{ 'is-cjk': isCjk }"
+    :style="coverStyle"
+    :class="{ 'is-cjk': isCjk, 'has-paper-cover': coverReady }"
   >
     <div class="home-opening">
       <div class="home-opening__hero">
@@ -42,6 +56,11 @@ const { enter } = useAtlasEntrance(page, event => lore.value?.wheel(event) ?? fa
       </div>
     </div>
     <HomeLore ref="lore" />
+    <HomeParchmentCover
+      :source="lore?.stage"
+      :progress="coverProgress"
+      @ready="coverReady = $event"
+    />
     <HomeNews />
   </div>
 </template>
@@ -58,8 +77,22 @@ const { enter } = useAtlasEntrance(page, event => lore.value?.wheel(event) ?? fa
     position: sticky;
     top: 0;
     height: 100svh;
+    overflow: clip;
+    background: #111a20;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      background: #111a20;
+      opacity: var(--cover-hero-shade, 0);
+      pointer-events: none;
+    }
 
     :deep(.parallex-scroll-base) {
+      transform: translateY(var(--cover-hero-rise, 0px)) scale(var(--cover-hero-scale, 1));
+      transform-origin: 50% 35%;
       height: 100svh;
     }
 
@@ -113,6 +146,9 @@ const { enter } = useAtlasEntrance(page, event => lore.value?.wheel(event) ?? fa
 
     .home-opening__hero {
       position: relative;
+
+      &::after { display: none; }
+      :deep(.parallex-scroll-base) { transform: none; }
     }
   }
 
