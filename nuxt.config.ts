@@ -59,22 +59,22 @@ export default defineNuxtConfig({
         {
           rel: 'alternate',
           hreflang: 'zh-cn',
-          href: 'https://everglow.cloudea.work/zh-cn/',
+          href: 'https://everglowmod.com/zh-cn/',
         },
         {
           rel: 'alternate',
           hreflang: 'en-us',
-          href: 'https://everglow.cloudea.work/en-us/',
+          href: 'https://everglowmod.com/en-us/',
         },
         {
           rel: 'alternate',
           hreflang: 'zh-hk',
-          href: 'https://everglow.cloudea.work/zh-hk/',
+          href: 'https://everglowmod.com/zh-hk/',
         },
         {
           rel: 'alternate',
           hreflang: 'x-default',
-          href: 'https://everglow.cloudea.work/',
+          href: 'https://everglowmod.com/',
         },
       ],
       noscript: [
@@ -97,7 +97,7 @@ export default defineNuxtConfig({
   },
   site: {
     name: 'Everglow',
-    url: 'https://everglow.cloudea.work',
+    url: 'https://everglowmod.com',
   },
   colorMode: {
     preference: 'dark',
@@ -322,8 +322,8 @@ export default defineNuxtConfig({
     identity: {
       type: 'Organization',
       name: 'Dream Chaser Group',
-      url: 'https://everglow.cloudea.work',
-      logo: 'https://everglow.cloudea.work/logo.png',
+      url: 'https://everglowmod.com',
+      logo: 'https://everglowmod.com/logo.png',
     },
   },
   sitemap: {

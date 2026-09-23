@@ -17,22 +17,22 @@ const hreflangLinks = [
   {
     rel: 'alternate',
     hreflang: 'zh-cn',
-    href: 'https://everglow.cloudea.work/zh-cn/',
+    href: 'https://everglowmod.com/zh-cn/',
   },
   {
     rel: 'alternate',
     hreflang: 'en-us',
-    href: 'https://everglow.cloudea.work/en-us/',
+    href: 'https://everglowmod.com/en-us/',
   },
   {
     rel: 'alternate',
     hreflang: 'zh-hk',
-    href: 'https://everglow.cloudea.work/zh-hk/',
+    href: 'https://everglowmod.com/zh-hk/',
   },
   {
     rel: 'alternate',
     hreflang: 'x-default',
-    href: 'https://everglow.cloudea.work/',
+    href: 'https://everglowmod.com/',
   },
 ] as const
 
