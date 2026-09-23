@@ -18,13 +18,17 @@ const { name, link, visible } = defineProps({
 
 const emit = defineEmits(['navigate', 'showMenu', 'hideMenu'])
 
-const handleClickItem = () => {
-  if (name !== 'docs') {
-    emit('navigate')
-  } else {
-    subMenuVisible.value = true
-    emit('hideMenu')
+const handleClickItem = (event: MouseEvent) => {
+  if (name === 'docs') {
+    if (window.matchMedia('(max-width: 833px)').matches) {
+      event.preventDefault()
+      subMenuVisible.value = true
+      emit('hideMenu')
+    }
+    return
   }
+
+  emit('navigate')
 }
 
 const handleReturnToMenu = () => {
@@ -40,7 +44,7 @@ const handleReturnToMenu = () => {
         :to="link"
         :target="link[0] !== '/' ? '_blank' : '_self'"
         style="width: 100%"
-        @click="handleClickItem"
+        @click.capture="handleClickItem"
       >
         <div class="text">
           {{ $t(`body.header.${name}`) }}
