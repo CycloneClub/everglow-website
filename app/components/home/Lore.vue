@@ -274,10 +274,7 @@ onBeforeUnmount(stop)
                 {{ text(atlasCopy.subtitle) }}
               </p><h2>{{ text(atlasCopy.title) }}</h2><p class="atlas-intro-note">
                 {{ text(atlasCopy.intro) }}
-              </p><span
-                class="atlas-seal"
-                aria-hidden="true"
-              >世<br>界</span>
+              </p>
             </div>
             <div
               class="atlas-discovery"

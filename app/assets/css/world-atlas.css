@@ -57,7 +57,6 @@
 .atlas-kicker { font-size: 10px; letter-spacing: 0.18em; line-height: 1.8; color: var(--atlas-muted); text-transform: uppercase; }
 .atlas-introduction h2 { font-size: clamp(2.5rem, 4.4vw, 5rem); font-weight: 400; line-height: 1.3; letter-spacing: -0.04em; margin: 1.1rem 0 1.6rem; text-wrap: balance; }
 .atlas-intro-note { font-size: 14px; color: var(--atlas-muted); line-height: 1.9; }
-.atlas-seal { display: grid; place-content: center; width: 2.2rem; height: 2.8rem; border: 2px solid var(--atlas-red); outline: 1px solid var(--atlas-red); outline-offset: 3px; color: var(--atlas-red); margin: 2.7rem 0 0 0.3rem; font-size: 14px; line-height: 1.15; transform: rotate(-8deg); opacity: 0.8; }
 .atlas-discovery { position: absolute; right: 8%; top: 49%; width: 15%; color: var(--atlas-muted); transform: rotate(-5deg); font-size: 14px; line-height: 1.8; pointer-events: none; }
 .atlas-discovery span { font-style: italic; font-size: 11px; }.atlas-discovery svg { width: 80%; margin: 0.5rem 0 0 -45%; }
 .world-atlas aside svg, .atlas-discovery svg { fill: none; stroke: #95634a; stroke-width: 1; }
@@ -108,7 +107,7 @@
   .atlas-running-head { top: calc(var(--header-height) + 1.2rem); left: 6%; right: 6%; font-size: 8px; letter-spacing: 0.08em; }
   .atlas-volume { display: none; }.atlas-toolbar { top: calc(var(--header-height) + 1rem); right: 6%; gap: 1rem; }.atlas-toolbar button { font-size: 10px; }
   .atlas-drawing { left: -12%; width: 124%; top: 23%; height: 62%; }
-  .atlas-introduction { left: 8%; top: 23%; width: 75%; }.atlas-introduction h2 { font-size: clamp(2rem, 8vw, 3rem); margin: 0.5rem 0; }.atlas-kicker { font-size: 9px; }.atlas-intro-note { font-size: 12px; }.atlas-seal { position: absolute; top: 0; right: -4%; margin: 0; transform: scale(0.75) rotate(-8deg); }
+  .atlas-introduction { left: 8%; top: 23%; width: 75%; }.atlas-introduction h2 { font-size: clamp(2rem, 8vw, 3rem); margin: 0.5rem 0; }.atlas-kicker { font-size: 9px; }.atlas-intro-note { font-size: 12px; }
   .atlas-introduction + .atlas-discovery { right: 8%; top: 74%; width: 30%; font-size: 11px; }
   .atlas-layer-title { left: 8%; top: 22%; width: 84%; }.atlas-layer-title h3 { font-size: 1.9rem; margin: 0.2rem 0; }.atlas-latin { font-size: 11px; }.atlas-description { max-width: 36em; margin-top: 0.6rem; font-size: 12px; line-height: 1.8; }
   .atlas-plate-caption { top: 67%; left: 8%; width: 84%; font-size: 9px; }
