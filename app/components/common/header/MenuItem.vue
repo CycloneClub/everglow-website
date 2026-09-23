@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { activateHeaderMenuItem } from '~/utils/header-menu'
+
 const subMenuVisible = ref(false)
 
 const { name, link, visible } = defineProps({
@@ -18,13 +20,14 @@ const { name, link, visible } = defineProps({
 
 const emit = defineEmits(['navigate', 'showMenu', 'hideMenu'])
 
-const handleClickItem = () => {
-  if (name !== 'docs') {
-    emit('navigate')
-  } else {
-    subMenuVisible.value = true
-    emit('hideMenu')
-  }
+const handleClickItem = (event: MouseEvent) => {
+  activateHeaderMenuItem(name, window.matchMedia('(max-width: 833px)').matches, event, {
+    openDocs: () => {
+      subMenuVisible.value = true
+      emit('hideMenu')
+    },
+    navigate: () => emit('navigate'),
+  })
 }
 
 const handleReturnToMenu = () => {
@@ -40,7 +43,7 @@ const handleReturnToMenu = () => {
         :to="link"
         :target="link[0] !== '/' ? '_blank' : '_self'"
         style="width: 100%"
-        @click="handleClickItem"
+        @click.capture="handleClickItem"
       >
         <div class="text">
           {{ $t(`body.header.${name}`) }}
