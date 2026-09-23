@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { activateHeaderMenuItem } from '~/utils/header-menu'
-
 const subMenuVisible = ref(false)
 
 const { name, link, visible } = defineProps({
@@ -21,13 +19,16 @@ const { name, link, visible } = defineProps({
 const emit = defineEmits(['navigate', 'showMenu', 'hideMenu'])
 
 const handleClickItem = (event: MouseEvent) => {
-  activateHeaderMenuItem(name, window.matchMedia('(max-width: 833px)').matches, event, {
-    openDocs: () => {
+  if (name === 'docs') {
+    if (window.matchMedia('(max-width: 833px)').matches) {
+      event.preventDefault()
       subMenuVisible.value = true
       emit('hideMenu')
-    },
-    navigate: () => emit('navigate'),
-  })
+    }
+    return
+  }
+
+  emit('navigate')
 }
 
 const handleReturnToMenu = () => {

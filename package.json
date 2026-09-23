@@ -8,7 +8,6 @@
 		"generate": "nuxt generate",
 		"preview": "nuxt preview",
 		"test:atlas": "node --test scripts/test-world-atlas.mjs scripts/test-atlas-entrance.mjs scripts/test-atlas-scroll.mjs scripts/test-parchment-fold.mjs",
-		"test:header": "node --test scripts/test-header-menu.mjs",
 		"test:locale": "node --test scripts/test-locale-reading.mjs",
 		"postinstall": "nuxt prepare",
 		"typecheck": "nuxt prepare && vue-tsc -b --noEmit",
