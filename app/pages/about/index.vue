@@ -1,8 +1,11 @@
 <script setup lang="ts">
 const route = useRoute()
 const i18n = useI18n()
-useHead({
+useHead(() => ({
   title: i18n.t('head.subtitles.about'),
+}))
+useSeoMeta({
+  description: () => i18n.t('head.descriptions.about'),
 })
 
 const { data: page } = await useAsyncData(route.path, () =>

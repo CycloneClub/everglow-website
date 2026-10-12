@@ -2,9 +2,6 @@
 import type { TocLink } from '@nuxt/content'
 
 const i18n = useI18n()
-useHead({
-  title: i18n.t('head.subtitles.news'),
-})
 
 const route = useRoute()
 const { locale } = useI18n()
@@ -21,6 +18,12 @@ if (!page.value) {
 }
 
 const { title = null, image = null, date = null } = page.value ?? {}
+useHead(() => ({
+  title: page.value?.title || i18n.t('head.subtitles.news'),
+}))
+useSeoMeta({
+  description: () => page.value?.description?.trim() || i18n.t('head.descriptions.news'),
+})
 const links: TocLink[] = page.value?.body.toc?.links ?? []
 
 const clearPageAnchor = () => {

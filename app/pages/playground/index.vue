@@ -16,8 +16,11 @@ const workspaces = [
   },
 ]
 
-useHead({
+useHead(() => ({
   title: i18n.t('head.subtitles.playground'),
+}))
+useSeoMeta({
+  description: () => i18n.t('head.descriptions.playground'),
 })
 </script>
 

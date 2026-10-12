@@ -13,6 +13,12 @@ export default {
     'fulltitle': '流光无际 - 泰拉瑞亚模组',
     'fulltitle2': '官方网站',
     'title': '流光无际',
+    'descriptions': {
+      news: '阅读流光无际模组的开发日志、版本动态和内容预览，了解逐梦孤舟制作组的最新进展。',
+      docs: '查阅流光无际模组的安装指南、开发文档和代码示例，开始探索与创作。',
+      playground: '在流光无际 Playground 中体验实时 3D 场景，尝试着色器与图形开发工具。',
+      about: '了解流光无际背后的逐梦孤舟制作组，查看团队介绍、联系方式、社区入口和参与方式。',
+    },
     'subtitles': {
       'news': '新闻',
       'wiki': '百科',
@@ -22,6 +28,11 @@ export default {
     },
   },
   'body': {
+    'footer': {
+      introduction: '流光无际是 {game} 的扩展模组，本网站为其官方网站。',
+      gameCopyright: 'Terraria 及其所有内容的版权归 Re-Logic 所有。',
+      copyright: '© {year} 逐梦孤舟制作组',
+    },
     'header': {
       'name': '流光无际',
       'home': '主页',

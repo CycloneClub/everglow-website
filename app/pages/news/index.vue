@@ -1,7 +1,10 @@
 <script setup lang="ts">
 const { t, locale } = useI18n()
-useHead({
+useHead(() => ({
   title: t('head.subtitles.news'),
+}))
+useSeoMeta({
+  description: () => t('head.descriptions.news'),
 })
 
 const { path } = useRoute()

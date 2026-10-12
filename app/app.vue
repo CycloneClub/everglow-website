@@ -13,28 +13,34 @@ const i18nTitle = (titleChunk: string) => {
     : `${t('head.fulltitle')} | ${t('head.fulltitle2')}`
 }
 
-const hreflangLinks = [
-  {
-    rel: 'alternate',
-    hreflang: 'zh-cn',
-    href: 'https://everglowmod.com/zh-cn/',
-  },
-  {
-    rel: 'alternate',
-    hreflang: 'en-us',
-    href: 'https://everglowmod.com/en-us/',
-  },
-  {
-    rel: 'alternate',
-    hreflang: 'zh-hk',
-    href: 'https://everglowmod.com/zh-hk/',
-  },
-  {
-    rel: 'alternate',
-    hreflang: 'x-default',
-    href: 'https://everglowmod.com/',
-  },
-] as const
+const site = useSiteConfig()
+const websiteUrl = () => new URL(localePath('index'), site.url).href
+// Match the localized node created by nuxt-schema-org, preserving its publisher
+// and translation relationships instead of creating a second website.
+useSchemaOrg([
+  defineWebSite({
+    '@id': () => `${websiteUrl()}#website`,
+    'url': websiteUrl,
+    'alternateName': ['Everglow', '流光无际', '流光無際', 'Everglow Mod'],
+  }),
+])
+
+// The router knows each locale's catch-all route even when its translation
+// does not exist. Keep alternate links limited to actual content pages.
+const { data: contentPaths } = await useAsyncData('seo-content-paths', async () => {
+  const collections = ['news', 'news_en', 'news_hk', 'docs', 'docs_en', 'docs_hk'] as const
+  const pages = await Promise.all(collections.map(collection =>
+    queryCollection(collection).select('path').all(),
+  ))
+  return pages.flat().map(page => page.path)
+})
+const localeHeadLinks = computed(() => (i18nHead.value.link || []).filter((link) => {
+  if (!('hreflang' in link) || !/^(?:\/(?:zh-cn|zh-hk|en-us))?\/(?:news|docs)\/.+/.test(route.path)) {
+    return true
+  }
+  const path = new URL(link.href, site.url).pathname.replace(/^\/zh-cn(?=\/)/, '').replace(/\/$/, '')
+  return contentPaths.value?.includes(path) ?? false
+}))
 
 useHead(() => ({
   titleTemplate: i18nTitle,
@@ -43,8 +49,7 @@ useHead(() => ({
     lang: locale.value,
   },
   link: [
-    ...(i18nHead.value.link || []),
-    ...hreflangLinks,
+    ...localeHeadLinks.value,
     {
       rel: 'me',
       href: 'https://github.com/Solaestas/Everglow',
