@@ -57,26 +57,6 @@ export default defineNuxtConfig({
           href: '/icon.png',
           sizes: '80x80',
         },
-        {
-          rel: 'alternate',
-          hreflang: 'zh-cn',
-          href: 'https://everglowmod.com/zh-cn/',
-        },
-        {
-          rel: 'alternate',
-          hreflang: 'en-us',
-          href: 'https://everglowmod.com/en-us/',
-        },
-        {
-          rel: 'alternate',
-          hreflang: 'zh-hk',
-          href: 'https://everglowmod.com/zh-hk/',
-        },
-        {
-          rel: 'alternate',
-          hreflang: 'x-default',
-          href: 'https://everglowmod.com/',
-        },
       ],
       noscript: [
         {
@@ -288,7 +268,7 @@ export default defineNuxtConfig({
     },
   },
   i18n: {
-    baseUrl: process.env.BASE_URL,
+    baseUrl: process.env.BASE_URL || 'https://everglowmod.com',
     // langDir: './lang', // @BreakingChanges
     locales: [
       {
@@ -326,9 +306,6 @@ export default defineNuxtConfig({
       url: 'https://everglowmod.com',
       logo: 'https://everglowmod.com/logo.png',
     },
-  },
-  sitemap: {
-    // strictNuxtContentPaths: true, // Unavailable in @nuxt/content v3 @BreakingChanges
   },
   tres: {
     devtools: true,

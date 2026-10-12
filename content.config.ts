@@ -1,12 +1,15 @@
 import { defineCollection, defineContentConfig, z } from '@nuxt/content'
+import { defineSitemapSchema } from '@nuxtjs/seo/content'
 
 const newsSchema = z.object({
+  sitemap: defineSitemapSchema({ z }),
   date: z.string(),
   author: z.string().optional(),
   image: z.string().optional(),
 })
 
 const docsSchema = z.object({
+  sitemap: defineSitemapSchema({ z }),
   date: z.string(),
   author: z.string().optional(),
   icon: z.string().optional(),
@@ -21,6 +24,7 @@ export default defineContentConfig({
         exclude: ['**/news/**', '**/docs/**'],
       },
       schema: z.object({
+        sitemap: defineSitemapSchema({ z }),
         date: z.string(),
         author: z.string(),
         icon: z.string(),

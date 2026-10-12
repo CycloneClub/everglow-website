@@ -1,8 +1,5 @@
 <script setup lang="ts">
 const { t, locale } = useI18n()
-useHead({
-  title: t('head.subtitles.docs'),
-})
 
 const route = useRoute()
 const { data: page } = await useAsyncData(route.path, () =>
@@ -13,6 +10,10 @@ const title = computed(() => page.value?.title ?? t('docs.empty.title'))
 const description = computed(
   () => page.value?.description ?? t('docs.empty.description'),
 )
+useHead(() => ({ title: title.value }))
+useSeoMeta({
+  description: () => page.value?.description?.trim() || t('head.descriptions.docs'),
+})
 
 const { data: navigation } = await useDocsNav()
 const navLinks = computed(() => {

@@ -2,17 +2,26 @@
   <footer class="common-footer">
     <div class="footer-container">
       <div class="content">
-        The official website of the Everglow Mod for
-        <a
-          href="https://terraria.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >Terraria</a>.
-        Terraria and all its content is copyrighted by Re-Logic.
+        <i18n-t
+          keypath="body.footer.introduction"
+          tag="span"
+        >
+          <template #game>
+            <a
+              href="https://terraria.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >Terraria</a>
+          </template>
+        </i18n-t>
+        <span data-nosnippet> {{ $t('body.footer.gameCopyright') }}</span>
       </div>
       <div class="info">
-        <div class="copyright">
-          Copyright © 2026 Dream Chaser Group All rights reserved.
+        <div
+          class="copyright"
+          data-nosnippet
+        >
+          {{ $t('body.footer.copyright', { year: 2026 }) }}
         </div>
         <div class="links">
           <ul class="link-list">

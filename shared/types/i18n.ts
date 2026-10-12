@@ -14,6 +14,12 @@ export type I18nLocale = {
     fulltitle: string
     fulltitle2: string
     title: string
+    descriptions: {
+      news: string
+      docs: string
+      playground: string
+      about: string
+    }
     subtitles: {
       news: string
       wiki: string
@@ -23,6 +29,11 @@ export type I18nLocale = {
     }
   }
   body: {
+    footer: {
+      introduction: string
+      gameCopyright: string
+      copyright: string
+    }
     header: {
       name: string
       home: string

@@ -13,6 +13,12 @@ export default {
     fulltitle: 'Everglow - Terraria Mod',
     fulltitle2: 'Official Website',
     title: 'Everglow',
+    descriptions: {
+      news: 'Read Everglow development logs, release news, and content previews for the latest updates from Dream Chaser Group.',
+      docs: 'Explore installation guides, development documentation, and code examples for the Everglow mod.',
+      playground: 'Explore real-time 3D scenes and experiment with shaders and graphics development tools in the Everglow Playground.',
+      about: 'Meet Dream Chaser Group, the team behind Everglow, and find contact details, community links, and ways to contribute.',
+    },
     subtitles: {
       news: 'News',
       wiki: 'Wiki',
@@ -22,6 +28,11 @@ export default {
     },
   },
   'body': {
+    footer: {
+      introduction: 'The official website of the Everglow Mod for {game}.',
+      gameCopyright: 'Terraria and all its content is copyrighted by Re-Logic.',
+      copyright: '© {year} Dream Chaser Group',
+    },
     header: {
       name: 'Everglow',
       home: 'Home',

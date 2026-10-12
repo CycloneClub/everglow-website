@@ -13,6 +13,12 @@ export default {
     'fulltitle': '流光無際 - 泰拉瑞亚模組',
     'fulltitle2': '官方網站',
     'title': '流光無際',
+    'descriptions': {
+      news: '閱讀流光無際模組的開發日誌、版本動態與內容預覽，了解逐夢孤舟製作組的最新進展。',
+      docs: '查閱流光無際模組的安裝指南、開發文件與程式碼範例，開始探索與創作。',
+      playground: '在流光無際 Playground 中體驗即時 3D 場景，嘗試著色器與圖形開發工具。',
+      about: '了解流光無際背後的逐夢孤舟製作組，查看團隊介紹、聯絡方式、社群入口與參與方式。',
+    },
     'subtitles': {
       'news': '新聞',
       'wiki': '百科',
@@ -22,6 +28,11 @@ export default {
     },
   },
   'body': {
+    'footer': {
+      introduction: '流光無際是 {game} 的擴展模組，本網站為其官方網站。',
+      gameCopyright: 'Terraria 及其所有內容的版權歸 Re-Logic 所有。',
+      copyright: '© {year} 逐夢孤舟製作組',
+    },
     'header': {
       'name': '流光無際',
       'home': '主頁',
