@@ -19,7 +19,7 @@ export default defineNuxtConfig({
     componentInspector: false,
   },
   app: {
-    baseURL: '',
+    baseURL: '/',
     head: {
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
@@ -54,7 +54,8 @@ export default defineNuxtConfig({
         {
           rel: 'icon',
           type: 'image/png',
-          href: '/favicon.ico',
+          href: '/icon.png',
+          sizes: '80x80',
         },
         {
           rel: 'alternate',
