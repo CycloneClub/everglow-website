@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { TocLink } from '@nuxt/content'
+import { articleDate, seoPath } from '#shared/utils/seo'
 
 const i18n = useI18n()
 
@@ -24,6 +25,26 @@ useHead(() => ({
 useSeoMeta({
   description: () => page.value?.description?.trim() || i18n.t('head.descriptions.news'),
 })
+const site = useSiteConfig()
+const localePath = useLocalePath()
+const modifiedDates = useRuntimeConfig().public.seoModifiedAt as Record<string, string>
+useSchemaOrg([
+  defineArticle(computed(() => ({
+    '@type': 'BlogPosting',
+    'headline': page.value?.title,
+    'description': page.value?.description,
+    'datePublished': articleDate(page.value?.date),
+    'dateModified': modifiedDates[seoPath(route.path)],
+    'image': page.value?.image ? new URL(page.value.image, site.url).href : undefined,
+    'inLanguage': locale.value,
+    'mainEntityOfPage': { '@id': `${new URL(seoPath(route.path), site.url).href}#webpage` },
+    'author': {
+      '@type': 'Organization',
+      'name': i18n.t('meta.team'),
+      'url': new URL(localePath('/about'), site.url).href,
+    },
+  }))),
+])
 const links: TocLink[] = page.value?.body.toc?.links ?? []
 
 const clearPageAnchor = () => {

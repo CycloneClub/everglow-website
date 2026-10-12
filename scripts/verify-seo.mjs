@@ -22,6 +22,23 @@ export async function verifySeo (baseUrl) {
     assert.equal(response.status, 200, path)
     return response.text()
   }
+  await check('homepage stays stable across language preferences', async () => {
+    for (const language of ['en-US', 'zh-HK', 'zh-CN']) {
+      const response = await fetch(new URL('/', baseUrl), {
+        redirect: 'manual', headers: { 'accept-language': language, 'cookie': 'i18n_redirected=en-us' },
+      })
+      assert.equal(response.status, 200, `${language}: root must not redirect`)
+      assert.match(await response.text(), /<html[^>]*lang="zh-cn"/i)
+    }
+  })
+  let manifest
+  await check('IndexNow deployment manifest and ownership proof', async () => {
+    manifest = JSON.parse(await fetchText('/indexnow-manifest.json'))
+    assert.equal(manifest.site, siteOrigin)
+    assert.match(manifest.revision, /^[a-f0-9]{40}$/)
+    assert.match((await fetchText('/indexnow-key.txt')).trim(), /^[a-z0-9-]{8,128}$/i)
+    assert.ok(Object.keys(manifest.pages).length > 12)
+  })
   for (const [prefix, locale] of [['', 'zh-CN'], ['/en-us', 'en-US'], ['/zh-hk', 'zh-HK']]) {
     const home = await fetchText(`${prefix}/`)
     const description = html => (html.match(/<meta\b[^>]*>/g) || []).map(attributes).find(tag => tag.name === 'description')?.content
@@ -71,6 +88,27 @@ export async function verifySeo (baseUrl) {
       assert.ok(paths.includes(`${prefix}/docs/getting-started/introduction`), 'documentation must be listed')
       assert.equal(new Set(paths).size, paths.length, 'no duplicate URLs')
       if (prefix) { assert.ok(!paths.includes(`${prefix}/docs/templates/fish`), 'do not invent untranslated docs') }
+      for (const match of xml.matchAll(/<url>([\s\S]*?)<\/url>/g)) {
+        const url = new URL(match[1].match(/<loc>([^<]+)<\/loc>/)[1])
+        const lastmod = match[1].match(/<lastmod>([^<]+)<\/lastmod>/)?.[1]
+        const expected = manifest?.pages[url.pathname]?.lastmod
+        assert.ok(expected, `${url.pathname}: tracked source date`)
+        assert.equal(Date.parse(lastmod), Date.parse(expected), `${url.pathname}: sitemap must use source date`)
+      }
+    })
+    await check(`${locale} article structured data`, async () => {
+      const path = `${prefix}/news/2025-06-30`
+      const html = await fetchText(path)
+      const graph = [...html.matchAll(/<script\b[^>]+type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].flatMap(match => JSON.parse(match[1])['@graph'] || [])
+      const articles = graph.filter(node => [node['@type']].flat().includes('BlogPosting'))
+      assert.equal(articles.length, 1)
+      const article = articles[0]
+      assert.ok(article.headline?.includes('2025'))
+      assert.ok(Number.isFinite(Date.parse(article.datePublished)))
+      assert.equal(Date.parse(article.dateModified), Date.parse(manifest?.pages[path]?.lastmod))
+      assert.ok(article.author, 'article must identify its author')
+      assert.ok(article.image, 'article cover must be represented')
+      assert.ok(html.includes('2025-06-30_FurnaceArea.png'))
     })
   }
   await check('untranslated documentation has no invented language alternatives', async () => {
