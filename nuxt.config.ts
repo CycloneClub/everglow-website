@@ -1,4 +1,12 @@
 import process from 'node:process'
+import { mkdirSync, writeFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+import { createSeoManifest } from './scripts/seo-metadata.mjs'
+
+const seoManifest = createSeoManifest(process.cwd(), process.env.BASE_URL || 'https://everglowmod.com')
+const seoPublicDir = resolve('.data/seo-public')
+mkdirSync(seoPublicDir, { recursive: true })
+writeFileSync(resolve(seoPublicDir, 'indexnow-manifest.json'), JSON.stringify(seoManifest))
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -136,11 +144,17 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       colorModeStorageKey: process.env.COLOR_MODE_STORAGE_KEY,
+      seoModifiedAt: Object.fromEntries(Object.entries(seoManifest.pages).filter(([, page]) => page.lastmod).map(([path, page]) => [path, page.lastmod])),
     },
+  },
+  routeRules: {
+    '/indexnow-manifest.json': { headers: { 'cache-control': 'no-store', 'x-robots-tag': 'noindex' }, sitemap: false },
+    '/indexnow-key.txt': { headers: { 'cache-control': 'no-store', 'x-robots-tag': 'noindex' }, sitemap: false },
   },
   compatibilityDate: '2026-08-03',
   nitro: {
     // preset: 'node-server',
+    publicAssets: [{ dir: seoPublicDir, maxAge: 0 }],
   },
   vite: {
     css: {
@@ -289,12 +303,7 @@ export default defineNuxtConfig({
     ],
     defaultLocale: 'zh-cn',
     strategy: 'prefix_and_default',
-    detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: process.env.LANGUAGE_STORAGE_KEY,
-      redirectOn: 'root',
-      alwaysRedirect: false,
-    },
+    detectBrowserLanguage: false,
   },
   robots: {
     allow: '/',

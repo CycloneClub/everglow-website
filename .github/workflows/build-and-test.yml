@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - name: Set up pnpm, Node.js, and dependencies
         uses: pnpm/setup@v3
@@ -29,6 +31,9 @@ jobs:
 
       - name: Lint
         run: pnpm lint
+
+      - name: Test SEO dates and IndexNow
+        run: node --test scripts/test-seo-metadata.mjs scripts/test-indexnow.mjs
 
       - name: Build
         run: pnpm build

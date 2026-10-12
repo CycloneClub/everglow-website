@@ -40,6 +40,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - name: Set up pnpm, Node.js, and dependencies
         uses: pnpm/setup@v3
@@ -49,6 +51,26 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      - name: Restore last acknowledged IndexNow checkpoint
+        id: indexnow-checkpoint
+        uses: actions/cache/restore@v4
+        with:
+          path: .data/indexnow-checkpoint.json
+          key: indexnow-ack-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            indexnow-ack-
+            indexnow-baseline-
+
+      - name: Prepare IndexNow checkpoint
+        run: node scripts/indexnow.mjs snapshot .data/indexnow-checkpoint.json
+
+      - name: Preserve initial checkpoint before deployment
+        if: steps.indexnow-checkpoint.outputs.cache-matched-key == ''
+        uses: actions/cache/save@v4
+        with:
+          path: .data/indexnow-checkpoint.json
+          key: indexnow-baseline-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Verify restart command
         env:
@@ -78,3 +100,12 @@ jobs:
           script: |
             set -e
             ${{ vars.RESTART_COMMAND }}
+
+      - name: Notify IndexNow after deployment
+        run: node scripts/indexnow.mjs submit .data/indexnow-checkpoint.json
+
+      - name: Save acknowledged IndexNow checkpoint
+        uses: actions/cache/save@v4
+        with:
+          path: .data/indexnow-checkpoint.json
+          key: indexnow-ack-${{ github.run_id }}-${{ github.run_attempt }}
