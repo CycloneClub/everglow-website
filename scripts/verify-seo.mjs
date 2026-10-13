@@ -87,7 +87,7 @@ export async function verifySeo (baseUrl) {
       assert.ok(paths.includes(`${prefix}/news/2025-06-30`), 'news detail must be listed')
       assert.ok(paths.includes(`${prefix}/docs/getting-started/introduction`), 'documentation must be listed')
       assert.equal(new Set(paths).size, paths.length, 'no duplicate URLs')
-      if (prefix) { assert.ok(!paths.includes(`${prefix}/docs/templates/fish`), 'do not invent untranslated docs') }
+      if (prefix) { assert.ok(!paths.includes(`${prefix}/docs/mechanics/biome-label`), 'do not invent untranslated docs') }
       for (const match of xml.matchAll(/<url>([\s\S]*?)<\/url>/g)) {
         const url = new URL(match[1].match(/<loc>([^<]+)<\/loc>/)[1])
         const lastmod = match[1].match(/<lastmod>([^<]+)<\/lastmod>/)?.[1]
@@ -112,7 +112,7 @@ export async function verifySeo (baseUrl) {
     })
   }
   await check('untranslated documentation has no invented language alternatives', async () => {
-    const html = await fetchText('/docs/templates/fish')
+    const html = await fetchText('/docs/mechanics/biome-label')
     const links = (html.match(/<link\b[^>]*>/g) || []).map(attributes).filter(tag => tag.hreflang)
     assert.ok(links.some(link => link.hreflang === 'zh-CN'))
     assert.ok(!links.some(link => /^(?:en(?:-US)?|zh-HK)$/i.test(link.hreflang)))
