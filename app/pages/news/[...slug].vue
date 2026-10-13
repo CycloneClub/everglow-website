@@ -143,6 +143,10 @@ const clearPageAnchor = () => {
             display: flex;
             flex-direction: column;
 
+            .article-body :deep(img) {
+              object-fit: cover;
+            }
+
             .article-title {
               height: 25rem;
               width: 100%;
