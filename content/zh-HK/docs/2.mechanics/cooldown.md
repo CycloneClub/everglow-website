@@ -22,4 +22,4 @@ Everglow 會為部分裝備效果與技能顯示冷卻提示，方便你判斷�
 
 打開背包時，這組冷卻提示會暫時隱藏；關閉背包後，可以繼續查看尚未結束的冷卻。
 
-<!-- 配圖佔位：冷卻提示在螢幕左上方的位置，以及滑鼠懸停時的說明。保留增益圖示作為位置參照，圖註標明冷卻圖示、圓形進度與剩餘時間。 -->
+<img src="/images/docs/cooldown-ui.png" alt="冷卻圖示的圓形進度、剩餘 3 秒的文字及滑鼠懸停時的名稱提示" width="401" height="109" style="display: block; max-width: 100%; height: auto; margin: 1.5rem auto; border-radius: 5px; image-rendering: pixelated;">

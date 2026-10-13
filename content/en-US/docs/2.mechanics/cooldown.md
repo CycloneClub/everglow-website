@@ -22,4 +22,4 @@ Hover over an icon to view its name and description. The icon gradually brighten
 
 Opening your inventory temporarily hides these indicators. Close it to see any cooldowns that are still active.
 
-<!-- Image placeholder: Show the cooldown indicators in the upper-left corner and a tooltip on hover. Keep the buff icons visible as a location reference, and label the cooldown icon, circular progress indicator, and remaining time. -->
+<img src="/images/docs/cooldown-ui.png" alt="Cooldown icon with circular progress, 3 seconds remaining, and its name shown on hover" width="401" height="109" style="display: block; max-width: 100%; height: auto; margin: 1.5rem auto; border-radius: 5px; image-rendering: pixelated;">
