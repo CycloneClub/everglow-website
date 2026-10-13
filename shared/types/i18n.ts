@@ -86,7 +86,6 @@ export type I18nLocale = {
   docs: {
     label: {
       'Getting Started': string
-      'Guide': string
       'Netcode': string
       'Mechanics': string
       'Drawcode': string

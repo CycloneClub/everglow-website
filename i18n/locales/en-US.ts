@@ -85,7 +85,6 @@ export default {
   'docs': {
     'label': {
       'Getting Started': 'Get-Started',
-      'Guide': 'Guide',
       'Netcode': 'Netcode',
       'Mechanics': 'Mechanics',
       'Drawcode': 'Drawcode',
