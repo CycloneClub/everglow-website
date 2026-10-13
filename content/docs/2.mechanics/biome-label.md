@@ -1,35 +1,33 @@
 ---
 title: '环境提示'
-description: '游戏中，当玩家进入新环境时，会在屏幕上方显示的环境提示'
-date: '2025-08-13 19:00:00'
+description: '本页面介绍探索时出现的环境提示。'
+date: '2026-10-13'
 navigation:
   icon: 'lucide:signpost'
 ---
 
-### 使用方法
+Everglow 会在你进入新环境时显示提示，帮助你辨认当前所在的区域。
 
-在模组中创建新的`ModBiome`，并重写其`BestiaryIcon`属性即可自动实现，对于无`BestiaryIcon`的`ModBiome`，提示将使用默认图标显示。该系统支持外部模组，通过`Mod.Code`扫描外部模组的程序集，获取所有`ModBiome`。
+## 概述
 
-<div align="center" >
+探索世界、进入新的环境时，屏幕上方会自动出现对应的环境名称与图标。你可以通过这条提示了解刚刚进入了什么环境。
 
-![<img src="image.png" width="250" height="20"/>](/images/docs/biome-label-preview2.png)
+### 环境提示 UI
 
-<br/>
+提示的左侧是环境图标，右侧是环境名称。例如，进入冰雪环境时，会显示冰雪生物群落的名称与图标。
 
-![](/images/docs/biome-label-preview3.png)
+<img src="/images/docs/biome-label-preview1.png" alt="冰雪生物群落的环境提示，左侧为图标，右侧为名称" width="456" height="165" style="display: block; max-width: 100%; height: auto; margin: 1.5rem auto; border-radius: 5px; image-rendering: pixelated;">
 
-</div >
+## 显示范围
 
-### 原版适配
+### 模组环境
 
-通过`Player`中的Zone相关字段区分环境，图标使用经统一处理的原版图标。由于兼容性问题，仅在原版大世界生效，子世界内不生效。
+环境提示支持 Everglow 和其他模组添加的环境。不同环境可以显示各自的图标；没有专属图标时，会使用默认图标。
 
-<div align="center" >
+<img src="/images/docs/biome-label-preview2.png" alt="模组环境提示示例，显示环境图标与名称" width="390" height="158" style="display: block; max-width: 100%; height: auto; margin: 1.5rem auto; border-radius: 5px; image-rendering: pixelated;">
 
-![](/images/docs/biome-label-preview1.png)
+<img src="/images/docs/biome-label-preview3.png" alt="另一种模组环境的提示，使用不同的环境图标与名称" width="394" height="112" style="display: block; max-width: 100%; height: auto; margin: 1.5rem auto; border-radius: 5px; image-rendering: pixelated;">
 
-</div >
+### 原版环境
 
-### 源码位置
-
-本系统的相关代码位于`Everglow.Function/Mechanics/BiomesText`路径下。
+原版环境也有对应的名称提示，并使用统一风格的图标。这部分提示仅在主世界中显示，进入子世界后不会显示原版环境提示。
