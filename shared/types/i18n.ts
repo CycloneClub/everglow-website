@@ -89,7 +89,7 @@ export type I18nLocale = {
       'Netcode': string
       'Mechanics': string
       'Drawcode': string
-      'Templates': string
+      'Game Content': string
       'Weapons': string
     }
     empty: {
