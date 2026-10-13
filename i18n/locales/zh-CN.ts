@@ -85,11 +85,10 @@ export default {
   'docs': {
     'label': {
       'Getting Started': '入门',
-      'Guide': '指南',
       'Netcode': '网络同步',
       'Mechanics': '游戏机制',
       'Drawcode': '图形绘制',
-      'Templates': '内容模板',
+      'Game Content': '游戏内容',
       'Weapons': '武器',
     },
     'empty': {
