@@ -14,6 +14,8 @@ Everglow 引入了元素傷害系統，參考自[_明日方舟_](https://prts.wi
 
 不同元素分別累積，不互相影響，因此，一個敵人身上可以同時出現多種元素的狀態提示。
 
+<img src="/images/docs/elemental-debuff/ElementalDebuff.gif" alt="元素累積與爆發的遊戲內演示" width="350" height="346" style="display: block; max-width: 100%; height: auto; margin: 1.5rem auto; border-radius: 5px; image-rendering: pixelated;">
+
 ### 元素 UI
 
 敵人累積了元素值後，身體附近會顯示對應元素的進度條，提示各元素的狀態。
@@ -52,10 +54,10 @@ Everglow 引入了元素傷害系統，參考自[_明日方舟_](https://prts.wi
 
 克蘇魯之吻是一把遠程武器，每次開火有機率額外射出特殊射彈。特殊射彈命中時，會為目標累積侵蝕元素值；累積達到閾值後，目標身上會長出紫色觸鬚，觸鬚還能傷及附近敵人累積侵蝕。
 
-<!-- 配圖佔位：克蘇魯之吻的特殊彈丸命中，以及侵蝕爆發後的紫色觸鬚。圖註區分武器彈丸與爆發產生的觸鬚。 -->
+<img src="/images/docs/elemental-debuff/KissOfCthulhu.gif" alt="克蘇魯之吻造成侵蝕累積與爆發的演示" width="500" height="400" style="display: block; max-width: 100%; height: auto; margin: 1.5rem auto; border-radius: 5px; image-rendering: pixelated;">
 
 ### 魔律殘章
 
 魔律殘章是一件召喚武器，射彈擊敗敵人後召喚僕從。當僕從命中敵人時，會為目標累積神經損傷元素值；累積達到閾值後，目標會陷入混亂狀態。
 
-<!-- 配圖佔位：魔律殘章的僕從命中敵人，以及神經損傷爆發後的表現，保留僕從與元素進度條；選擇會受到困惑影響的敵人展示。 -->
+<img src="/images/docs/elemental-debuff/EvilScoreRemains.gif" alt="魔律殘章僕從造成神經損傷的演示" width="336" height="320" style="display: block; max-width: 100%; height: auto; margin: 1.5rem auto; border-radius: 5px; image-rendering: pixelated;">

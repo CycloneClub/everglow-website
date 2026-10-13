@@ -14,6 +14,8 @@ Certain attacks cause elemental buildup on enemies. When an element reaches its 
 
 Each element builds up independently, so an enemy can display several elemental status indicators at the same time.
 
+<img src="/images/docs/elemental-debuff/ElementalDebuff.gif" alt="Gameplay demonstration of elemental buildup and bursts" width="350" height="346" style="display: block; max-width: 100%; height: auto; margin: 1.5rem auto; border-radius: 5px; image-rendering: pixelated;">
+
 ### Elemental UI
 
 Once an enemy starts accumulating an element, a progress indicator appears near its body to show that element's status.
@@ -52,10 +54,10 @@ Some enemies have elemental resistance that reduces effective buildup, but choos
 
 Kiss of Cthulhu is a ranged weapon with a chance to fire an additional special projectile each time you shoot. This projectile causes Corrosion buildup on hit. Once the threshold is reached, purple tentacles grow from the target. These tentacles can also hit nearby enemies and cause Corrosion buildup on them.
 
-<!-- Image placeholder: Show Kiss of Cthulhu's special projectile hitting an enemy and the purple tentacles after a Corrosion burst. Distinguish the weapon's projectile from the tentacles created by the burst in the caption. -->
+<img src="/images/docs/elemental-debuff/KissOfCthulhu.gif" alt="Kiss of Cthulhu causing Corrosion buildup and bursts" width="500" height="400" style="display: block; max-width: 100%; height: auto; margin: 1.5rem auto; border-radius: 5px; image-rendering: pixelated;">
 
 ### Evil Score Remains
 
 Evil Score Remains is a summon weapon whose projectiles summon minions when they defeat enemies. When a minion hits an enemy, it causes Nervous Impairment buildup. Once the threshold is reached, the target becomes Confused.
 
-<!-- Image placeholder: Show a minion summoned by Evil Score Remains hitting an enemy and the effects of a Nervous Impairment burst. Keep the minion and elemental progress bar visible, and choose an enemy that can be affected by Confused. -->
+<img src="/images/docs/elemental-debuff/EvilScoreRemains.gif" alt="Evil Score Remains minions causing Nervous Impairment" width="336" height="320" style="display: block; max-width: 100%; height: auto; margin: 1.5rem auto; border-radius: 5px; image-rendering: pixelated;">
