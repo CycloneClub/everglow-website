@@ -29,28 +29,14 @@ export default defineNuxtConfig({
   app: {
     baseURL: '/',
     head: {
-      charset: 'utf-8',
-      viewport: 'width=device-width, initial-scale=1',
       meta: [
-        {
-          name: 'viewport',
-          content: 'width=device-width, initial-scale=1',
-        },
         {
           name: 'author',
           content: 'Dream Chaser Group',
         },
         {
           name: 'keywords',
-          content: 'Everglow,流光无际',
-        },
-        {
-          name: 'keywords',
-          content: 'tmodloader-mod',
-        },
-        {
-          name: 'keywords',
-          content: 'Terraria,泰拉瑞亚',
+          content: 'Everglow,流光无际,tmodloader-mod,Terraria,泰拉瑞亚',
         },
       ],
       link: [

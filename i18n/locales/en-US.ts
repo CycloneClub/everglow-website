@@ -4,7 +4,7 @@ export default {
   'nuxtSiteConfig': {
     name: 'Everglow',
     description:
-      'Welcome to Everglow no Sekai! The Everglow Mod is a vast content mod with stunning visuals that creates a new and refreshing experience for Terrarians!',
+      'Download Everglow, a visually stunning new adventure for Terraria.',
   },
   'meta': {
     'team': 'Dream Chaser Group',
@@ -60,6 +60,7 @@ export default {
   },
   'home': {
     hero: {
+      description: 'Welcome to Everglow no Sekai! The Everglow Mod is a vast content mod with stunning visuals that creates a new and refreshing experience for Terrarians!',
       getMod: 'Get the mod',
       getModDescription: 'Open the install guide and subscribe in tModLoader',
       github: 'GitHub',

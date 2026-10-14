@@ -61,6 +61,7 @@ export type I18nLocale = {
   }
   home: {
     hero: {
+      description: string
       getMod: string
       getModDescription: string
       github: string

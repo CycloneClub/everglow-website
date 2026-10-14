@@ -99,7 +99,7 @@ const communityLinks = computed(() => [
           >
         </h1>
         <p class="home-welcome__tagline">
-          {{ $t('nuxtSiteConfig.description') }}
+          {{ $t('home.hero.description') }}
         </p>
         <div class="home-welcome__actions">
           <template
