@@ -22,6 +22,25 @@ export async function verifySeo (baseUrl) {
     assert.equal(response.status, 200, path)
     return response.text()
   }
+  await check('legacy Simplified Chinese URLs redirect to unprefixed pages', async () => {
+    for (const [from, to] of [
+      ['/zh-cn', '/'],
+      ['/zh-cn/', '/'],
+      ['/zh-cn/about', '/about'],
+      ['/zh-cn/news/2025-06-30', '/news/2025-06-30'],
+      ['/zh-cn/docs/getting-started/introduction', '/docs/getting-started/introduction'],
+      ['/zh-cn/docs/mechanics/biome-label?ref=search&value=%2F', '/docs/mechanics/biome-label?ref=search&value=%2F'],
+    ]) {
+      const response = await fetch(new URL(from, baseUrl), { redirect: 'manual' })
+      assert.equal(response.status, 301, `${from}: permanent redirect`)
+      assert.equal(response.headers.get('location'), to, `${from}: preserve path and query`)
+      const target = await fetch(new URL(to, baseUrl), { redirect: 'manual' })
+      assert.equal(target.status, 200, `${to}: no redirect loop`)
+      const html = await target.text()
+      assert.match(html, /<html[^>]*lang="zh-cn"/i)
+      assert.ok(!/<title>未知领域/.test(html), `${to}: render the actual page`)
+    }
+  })
   await check('homepage stays stable across language preferences', async () => {
     for (const language of ['en-US', 'zh-HK', 'zh-CN']) {
       const response = await fetch(new URL('/', baseUrl), {
@@ -66,6 +85,9 @@ export async function verifySeo (baseUrl) {
           const matches = links.filter(link => link.hreflang.toLowerCase() === language.toLowerCase())
           assert.equal(matches.length, 1, `${path}: one alternate for ${language}`)
           assert.ok(new URL(matches[0].href).pathname.replace(/\/$/, '').endsWith(path), `${path}: alternate must refer to the same content`)
+          if (language === 'zh-CN') {
+            assert.equal(new URL(matches[0].href).pathname.replace(/\/$/, ''), path, 'Simplified Chinese links have no locale prefix')
+          }
         }
         assert.ok(!/<title>[^<]*head\./.test(html), `${path}: translated title`)
         if (path.includes('/2025-') || path.includes('/introduction')) {

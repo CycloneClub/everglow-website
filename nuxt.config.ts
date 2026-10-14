@@ -302,7 +302,7 @@ export default defineNuxtConfig({
       },
     ],
     defaultLocale: 'zh-cn',
-    strategy: 'prefix_and_default',
+    strategy: 'prefix_except_default',
     detectBrowserLanguage: false,
   },
   robots: {
