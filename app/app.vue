@@ -66,9 +66,7 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
 })
 
-defineOgImage('Everglow.satori', {
-  description: 'Download Everglow, a visually stunning new adventure for Terraria.',
-}, {
+defineOgImage('Everglow.satori', {}, {
   width: 1200,
   height: 630,
   alt: 'Everglow — a Terraria adventure beneath a moonlit sky',
