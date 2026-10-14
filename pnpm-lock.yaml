@@ -70,6 +70,9 @@ importers:
       '@nuxtjs/seo':
         specifier: 5.3.16
         version: 5.3.16(e79fece3144928e9a10f2154ffb7fa99)
+      '@resvg/resvg-js':
+        specifier: 2.6.2
+        version: 2.6.2
       '@tresjs/cientos':
         specifier: ^5.8.1
         version: 5.8.1(@tresjs/core@5.8.3(three@0.185.1)(vue@3.5.43(typescript@6.0.3)))(three@0.185.1)(vue@3.5.43(typescript@6.0.3))

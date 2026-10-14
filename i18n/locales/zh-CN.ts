@@ -4,7 +4,7 @@ export default {
   'nuxtSiteConfig': {
     'name': '流光无际',
     'description':
-      '欢迎来到流光无际的世界！流光无际是一个内容丰富的模组，拥有绝妙的视觉表现，为泰拉人们带来令人耳目一新的体验！',
+      '下载流光无际（Everglow），踏入绚丽的泰拉瑞亚新世界。',
   },
   'meta': {
     'team': '逐梦孤舟制作组',
@@ -60,6 +60,7 @@ export default {
   },
   'home': {
     'hero': {
+      'description': '欢迎来到流光无际的世界！流光无际是一个内容丰富的模组，拥有绝妙的视觉表现，为泰拉人们带来令人耳目一新的体验！',
       'getMod': '获取模组',
       'getModDescription': '打开安装教程，在 tModLoader 中订阅游玩',
       'github': 'GitHub',

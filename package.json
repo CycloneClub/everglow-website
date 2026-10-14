@@ -37,6 +37,7 @@
 		"@nuxtjs/color-mode": "^4.0.1",
 		"@nuxtjs/i18n": "^10.6.0",
 		"@nuxtjs/seo": "5.3.16",
+		"@resvg/resvg-js": "2.6.2",
 		"@tresjs/cientos": "^5.8.1",
 		"@tresjs/nuxt": "^5.6.3",
 		"@tresjs/post-processing": "^3.7.4",
