@@ -66,13 +66,12 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
 })
 
-defineOgImage('Pergel.satori', {
-  title: 'Everglow',
-  description: 'Welcome to Everglow no Sekai!',
-  headline: 'terraria mod',
-  siteName: 'Everglow',
-  siteLogo: '/icon.png',
-  theme: '#212121',
+defineOgImage('Everglow.satori', {
+  description: 'Download Everglow, a visually stunning new adventure for Terraria.',
+}, {
+  width: 1200,
+  height: 630,
+  alt: 'Everglow — a Terraria adventure beneath a moonlit sky',
 })
 </script>
 
