@@ -1,49 +1,31 @@
 .markdown .weapon-gallery {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
-	gap: 10px;
+	--weapon-gap: clamp(2px, 1vw, 10px);
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: var(--weapon-gap);
 	margin: 1.5rem 0 2rem;
 }
 
 .markdown .weapon-card {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 8px;
+	position: relative;
+	flex: 0 0 calc((100% - 11 * var(--weapon-gap)) / 12);
+	aspect-ratio: 1;
 	min-width: 0;
-	padding: 12px 8px;
-	border: 1px solid color-mix(in srgb, var(--crepe-color-outline) 18%, transparent);
-	border-radius: 10px;
-	background: var(--crepe-color-surface);
 
 	.weapon-card-art {
+		position: absolute;
+		inset: clamp(1px, 0.35vw, 4px);
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 100%;
-		height: 80px;
 	}
 
 	img {
 		display: block;
 		max-width: 100%;
-		max-height: 80px;
+		max-height: 100%;
 		object-fit: contain;
 		image-rendering: pixelated;
-	}
-
-	figcaption {
-		color: var(--crepe-color-on-surface-variant);
-		font-size: 12px;
-		line-height: 1.5;
-		text-align: center;
-		text-wrap: balance;
-	}
-}
-
-@media (max-width: 480px) {
-	.markdown .weapon-gallery {
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: 8px;
 	}
 }
