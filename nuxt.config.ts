@@ -293,6 +293,12 @@ export default defineNuxtConfig({
   },
   robots: {
     allow: '/',
+    groups: [
+      {
+        userAgent: '*',
+        contentSignal: 'ai-train=no, search=yes, ai-input=no',
+      },
+    ],
   },
   schemaOrg: {
     identity: {
