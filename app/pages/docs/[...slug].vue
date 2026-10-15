@@ -6,6 +6,14 @@ const { data: page } = await useAsyncData(route.path, () =>
   queryCollection(docsCollectionKey(locale.value)).path(route.path).first(),
 )
 
+if (!page.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Page not found',
+    fatal: true,
+  })
+}
+
 const title = computed(() => page.value?.title ?? t('docs.empty.title'))
 const description = computed(
   () => page.value?.description ?? t('docs.empty.description'),

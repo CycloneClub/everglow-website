@@ -6,6 +6,25 @@ function attributes (tag) {
   return Object.fromEntries([...tag.matchAll(/([\w:-]+)="([^"]*)"/g)].map(([, name, value]) => [name, value.replaceAll('&amp;', '&')]))
 }
 
+// Exercise the HTTP contract: missing content must not become indexable empty pages.
+export async function verifyDocumentationStatus (baseUrl) {
+  for (const prefix of ['', '/en-us', '/zh-hk']) {
+    const validPath = prefix + '/docs/getting-started/installation'
+    const valid = await fetch(new URL(validPath, baseUrl), { signal: AbortSignal.timeout(30_000) })
+    assert.equal(valid.status, 200, validPath + ': existing installation guide remains available')
+    assert.ok((await valid.text()).includes('2906178094'), validPath + ': render the installation content')
+    for (const suffix of ['/docs/guide/recipes', '/docs/seo-missing-document']) {
+      const path = prefix + suffix
+      const response = await fetch(new URL(path, baseUrl), { signal: AbortSignal.timeout(30_000) })
+      assert.equal(response.status, 404, path + ': missing documentation must return HTTP 404')
+    }
+  }
+  for (const path of ['/en-us/docs/mechanics/mission', '/zh-hk/docs/mechanics/mission', '/zh-cn/docs/guide/recipes']) {
+    const response = await fetch(new URL(path, baseUrl), { signal: AbortSignal.timeout(30_000) })
+    assert.equal(response.status, 404, path + ': missing translations and legacy URLs must not serve empty pages')
+  }
+}
+
 export async function verifySeo (baseUrl) {
   const siteOrigin = new URL(process.env.SEO_SITE_URL || 'https://everglowmod.com').origin
   const failures = []
@@ -50,6 +69,7 @@ export async function verifySeo (baseUrl) {
       assert.match(await response.text(), /<html[^>]*lang="zh-cn"/i)
     }
   })
+  await check('documentation returns real HTTP status codes', () => verifyDocumentationStatus(baseUrl))
   let manifest
   await check('IndexNow deployment manifest and ownership proof', async () => {
     manifest = JSON.parse(await fetchText('/indexnow-manifest.json'))
