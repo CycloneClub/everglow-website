@@ -23,12 +23,12 @@ const focusPanel = () => {
 }
 
 const leavePanel = (element: Element) => {
-  if (element.contains(document.activeElement)) emit('focusTrigger')
+  if (element.contains(document.activeElement)) { emit('focusTrigger') }
   element.setAttribute('inert', '')
 }
 
 const resetPanelScroll = () => {
-  if (menu.value) menu.value.scrollTop = 0
+  if (menu.value) { menu.value.scrollTop = 0 }
 }
 
 watch(() => state, async (current, previous) => {
@@ -62,7 +62,11 @@ watch(() => state, async (current, previous) => {
         @return="emit('back')"
         @navigate="emit('close')"
       />
-      <ul v-else key="main" class="main-menu">
+      <ul
+        v-else
+        key="main"
+        class="main-menu"
+      >
         <CommonHeaderMenuItem
           v-for="item in menuList"
           :key="item.name"

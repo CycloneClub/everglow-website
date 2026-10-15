@@ -1,13 +1,17 @@
 import assert from 'node:assert/strict'
 import { createRequire } from 'node:module'
 import process from 'node:process'
+
 const { chromium } = createRequire(import.meta.url)('playwright-core')
 // Run against a dev/preview server with MENU_TEST_URL set.
 // MENU_TEST_BROWSER selects an installed browser channel (default: chrome).
 // MENU_TEST_REDUCED_MOTION=1 also exercises the no-animation path.
 const baseURL = process.env.MENU_TEST_URL
-if (!baseURL) throw new Error('Set MENU_TEST_URL to the local dev/preview server URL.')
-;(async () => {
+if (!baseURL) {
+  throw new Error('Set MENU_TEST_URL to the local dev/preview server URL.')
+}
+
+async function main () {
   const browser = await chromium.launch({ channel: process.env.MENU_TEST_BROWSER || 'chrome', headless: true })
   try {
     const reducedMotion = process.env.MENU_TEST_REDUCED_MOTION === '1'
@@ -26,7 +30,7 @@ if (!baseURL) throw new Error('Set MENU_TEST_URL to the local dev/preview server
     const toggle = page.locator('.main-menu-trigger button')
     const docs = page.locator('.docs-trigger')
     const back = page.locator('.return-btn')
-    const state = async expected => {
+    const state = async (expected) => {
       await page.waitForFunction(expected => document.querySelector('#header-menu')?.dataset.state === expected, expected)
       await page.waitForFunction(() => !document.querySelector('#header-menu [class*="-enter-active"], #header-menu [class*="-leave-active"]'))
     }
@@ -98,7 +102,7 @@ if (!baseURL) throw new Error('Set MENU_TEST_URL to the local dev/preview server
     await state('main')
     await docs.tap()
     await state('docs')
-    await menu.evaluate(e => { e.scrollTop = e.scrollHeight })
+    await menu.evaluate((e) => { e.scrollTop = e.scrollHeight })
     assert.equal(await menu.evaluate(e => e.scrollTop > 0), true, 'Short mobile viewport must scroll the docs panel')
     assert.equal(await page.locator('#header-docs-menu a').last().isVisible(), true)
     await page.setViewportSize({ width: 834, height: 900 })
@@ -116,8 +120,10 @@ if (!baseURL) throw new Error('Set MENU_TEST_URL to the local dev/preview server
     await page.locator('.docs-link').click()
     await page.waitForURL(/\/docs\/getting-started\/introduction$/)
     assert.deepEqual(errors, [])
-    console.log('PASS: panel switching, group toggles, link navigation, reset on reopen, focus, Escape, scroll restore, short viewport scrolling, breakpoints and desktop link')
+    console.debug('PASS: panel switching, group toggles, link navigation, reset on reopen, focus, Escape, scroll restore, short viewport scrolling, breakpoints and desktop link')
   } finally {
     await browser.close()
   }
-})().catch(error => { console.error(error); process.exitCode = 1 })
+}
+
+main().catch((error) => { console.error(error); process.exitCode = 1 })

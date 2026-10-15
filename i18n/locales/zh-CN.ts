@@ -34,9 +34,9 @@ export default {
       copyright: '© {year} 逐梦孤舟制作组',
     },
     'header': {
-      openMenu: '打开菜单',
-      closeMenu: '关闭菜单',
-      backToMenu: '返回主菜单',
+      'openMenu': '打开菜单',
+      'closeMenu': '关闭菜单',
+      'backToMenu': '返回主菜单',
       'name': '流光无际',
       'home': '主页',
       'news': '新闻',

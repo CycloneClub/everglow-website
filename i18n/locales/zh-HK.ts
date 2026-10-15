@@ -34,9 +34,9 @@ export default {
       copyright: '© {year} 逐夢孤舟製作組',
     },
     'header': {
-      openMenu: '開啟選單',
-      closeMenu: '關閉選單',
-      backToMenu: '返回主選單',
+      'openMenu': '開啟選單',
+      'closeMenu': '關閉選單',
+      'backToMenu': '返回主選單',
       'name': '流光無際',
       'home': '主頁',
       'news': '新聞',

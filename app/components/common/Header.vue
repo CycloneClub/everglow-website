@@ -20,7 +20,7 @@ const dismissMenu = () => {
 }
 
 const trapMenuFocus = (event: KeyboardEvent) => {
-  if (!menuOpen.value) return
+  if (!menuOpen.value) { return }
   const header = event.currentTarget as HTMLElement
   const controls = Array.from(header.querySelectorAll<HTMLElement>(
     'a[href], button:not(:disabled), [tabindex]:not([tabindex="-1"])',
@@ -37,7 +37,7 @@ const trapMenuFocus = (event: KeyboardEvent) => {
 }
 
 watch(menuOpen, (open, _, onCleanup) => {
-  if (!open) return
+  if (!open) { return }
   const previousOverflow = document.body.style.overflow
   document.body.style.overflow = 'hidden'
   onCleanup(() => { document.body.style.overflow = previousOverflow })

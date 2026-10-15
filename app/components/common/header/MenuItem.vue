@@ -16,7 +16,10 @@ const emit = defineEmits(['navigate', 'openDocs'])
       @click="emit('navigate')"
     >
       <span class="text">{{ $t(`body.header.${name}`) }}</span>
-      <Icon class="chevron" name="line-md:chevron-small-right" />
+      <Icon
+        class="chevron"
+        name="line-md:chevron-small-right"
+      />
     </NuxtLinkLocale>
     <button
       v-if="name === 'docs'"
@@ -26,7 +29,10 @@ const emit = defineEmits(['navigate', 'openDocs'])
       @click="emit('openDocs')"
     >
       <span class="text">{{ $t('body.header.docs') }}</span>
-      <Icon class="chevron" name="line-md:chevron-small-right" />
+      <Icon
+        class="chevron"
+        name="line-md:chevron-small-right"
+      />
     </button>
   </li>
 </template>
