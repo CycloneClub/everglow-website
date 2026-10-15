@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { NavigationGroup, NavigationTree } from '#shared/types'
 
+const emit = defineEmits(['navigate'])
+
 const { level, links, defaultOpen } = defineProps({
   level: {
     type: Number,
@@ -61,10 +63,12 @@ const groups = computed<NavigationGroup[]>(() => {
         :level="level"
         :links="group.children"
         :default-open="defaultOpen"
+        @navigate="emit('navigate')"
       />
       <CommonContentNavigationLinks
         v-else
         :links="group.children"
+        @navigate="emit('navigate')"
       />
     </template>
   </nav>

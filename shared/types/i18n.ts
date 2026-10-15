@@ -35,6 +35,9 @@ export type I18nLocale = {
       copyright: string
     }
     header: {
+      openMenu: string
+      closeMenu: string
+      backToMenu: string
       name: string
       home: string
       news: string

@@ -1,72 +1,45 @@
 <script setup lang="ts">
-const subMenuVisible = ref(false)
+const { name, link } = defineProps<{
+  name: string
+  link: string
+}>()
 
-const { name, link, visible } = defineProps({
-  name: {
-    type: String,
-    default: '',
-  },
-  link: {
-    type: String,
-    default: '',
-  },
-  visible: {
-    type: Boolean,
-    default: true,
-  },
-})
-
-const emit = defineEmits(['navigate', 'showMenu', 'hideMenu'])
-
-const handleClickItem = (event: MouseEvent) => {
-  if (name === 'docs') {
-    if (window.matchMedia('(max-width: 833px)').matches) {
-      event.preventDefault()
-      subMenuVisible.value = true
-      emit('hideMenu')
-    }
-    return
-  }
-
-  emit('navigate')
-}
-
-const handleReturnToMenu = () => {
-  subMenuVisible.value = false
-  emit('showMenu')
-}
+const emit = defineEmits(['navigate', 'openDocs'])
 </script>
 
 <template>
-  <li :class="['main-menu-item', visible ? '' : 'hide']">
-    <div class="main-menu-item-content">
-      <NuxtLinkLocale
-        :to="link"
-        :target="link[0] !== '/' ? '_blank' : '_self'"
-        style="width: 100%"
-        @click.capture="handleClickItem"
-      >
-        <div class="text">
-          {{ $t(`body.header.${name}`) }}
-        </div>
-      </NuxtLinkLocale>
-      <div class="chevron">
-        <Icon name="line-md:chevron-small-right" />
-      </div>
-    </div>
-    <CommonHeaderSubMenuDocs
-      v-if="name == 'docs'"
-      :sub-menu-visible="subMenuVisible"
-      @return="handleReturnToMenu"
-      @navigate="emit('navigate')"
-    />
+  <li class="main-menu-item">
+    <NuxtLinkLocale
+      :to="link"
+      :target="link.startsWith('/') ? '_self' : '_blank'"
+      :class="['main-menu-item-content', { 'docs-link': name === 'docs' }]"
+      @click="emit('navigate')"
+    >
+      <span class="text">{{ $t(`body.header.${name}`) }}</span>
+      <Icon class="chevron" name="line-md:chevron-small-right" />
+    </NuxtLinkLocale>
+    <button
+      v-if="name === 'docs'"
+      type="button"
+      class="main-menu-item-content docs-trigger"
+      aria-controls="header-docs-menu"
+      @click="emit('openDocs')"
+    >
+      <span class="text">{{ $t('body.header.docs') }}</span>
+      <Icon class="chevron" name="line-md:chevron-small-right" />
+    </button>
   </li>
 </template>
 
 <style lang="scss" scoped>
-  .main-menu-item {
-    line-height: 1.5rem;
+  .main-menu-item-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
+    line-height: 1.5rem;
+    color: inherit;
+    text-align: left;
 
     .text {
       transition: color 0.3s;
@@ -74,72 +47,47 @@ const handleReturnToMenu = () => {
 
     .chevron {
       display: none;
-      align-items: center;
-      opacity: 0;
-      transform-origin: center;
-      animation: globalnav-chevron-hover-off 0.24s cubic-bezier(0.4, 0, 0.6, 1)
-        both;
     }
 
-    &:hover {
-      cursor: pointer;
+    &:hover .text {
+      color: var(--everglow-blue-5);
+    }
 
-      .text {
-        color: var(--everglow-blue-5) !important;
-      }
+    &:focus-visible {
+      outline: 2px solid var(--everglow-blue-5);
+      outline-offset: 2px;
     }
   }
+
+  .docs-trigger {
+    display: none;
+  }
+
   @media only screen and (max-width: 833px) {
-    .main-menu-item {
-      &.hide {
-        visibility: hidden;
-        pointer-events: none;
+    .main-menu-item-content {
+      min-height: var(--header-height);
+      font-size: 2rem;
+
+      .chevron {
+        display: block;
+        opacity: 0;
+        transform: translateX(-4px);
+        transition: opacity 0.24s, transform 0.24s;
       }
 
-      .main-menu-item-content {
-        height: var(--header-height);
-        line-height: var(--header-height);
-        font-size: 2rem;
-
-        display: flex;
-        justify-content: space-between;
-
-        .chevron {
-          display: flex;
-        }
-
-        &:hover {
-          .chevron {
-            opacity: 1;
-            animation: globalnav-chevron-slide-in-hover 0.24s
-              cubic-bezier(0.4, 0, 0.6, 1) both;
-          }
-        }
+      &:hover .chevron,
+      &:focus-visible .chevron {
+        opacity: 1;
+        transform: translateX(0);
       }
     }
-  }
 
-  @keyframes globalnav-chevron-slide-in-hover {
-    0% {
-      opacity: 0;
-      transform: translate(-4px);
+    .docs-link {
+      display: none;
     }
 
-    to {
-      opacity: 1;
-      transform: translate(0);
-    }
-  }
-
-  @keyframes globalnav-chevron-hover-off {
-    0% {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    100% {
-      opacity: 0;
-      transform: scale(0.8);
+    .docs-trigger {
+      display: flex;
     }
   }
 </style>

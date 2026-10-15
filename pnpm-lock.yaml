@@ -106,6 +106,9 @@ importers:
       nuxt:
         specifier: ^4.5.2
         version: 4.5.2(bf023ec77f464417ab9d027ed6074c2c)
+      playwright-core:
+        specifier: 1.62.1
+        version: 1.62.1
       sass-embedded:
         specifier: ^1.104.0
         version: 1.104.0
