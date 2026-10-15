@@ -34,6 +34,9 @@ export default {
       copyright: '© {year} Dream Chaser Group',
     },
     header: {
+      openMenu: 'Open menu',
+      closeMenu: 'Close menu',
+      backToMenu: 'Back to main menu',
       name: 'Everglow',
       home: 'Home',
       news: 'News',

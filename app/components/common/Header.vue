@@ -1,16 +1,57 @@
 <script setup lang="ts">
+import type { HeaderMenuState } from '#shared/types'
+
 const blurMaskVisible = () => true
-const menuListVisible = ref<boolean>(false)
+const menuState = ref<HeaderMenuState>('closed')
+const menuOpen = computed(() => menuState.value !== 'closed')
+const menuTrigger = ref<HTMLButtonElement>()
 
 const openMenu = () => {
-  menuListVisible.value = true
-  document.body.style.overflow = 'hidden'
+  menuState.value = 'main'
 }
 
 const closeMenu = () => {
-  menuListVisible.value = false
-  document.body.style.overflow = 'auto'
+  menuState.value = 'closed'
 }
+
+const dismissMenu = () => {
+  closeMenu()
+  menuTrigger.value?.focus()
+}
+
+const trapMenuFocus = (event: KeyboardEvent) => {
+  if (!menuOpen.value) { return }
+  const header = event.currentTarget as HTMLElement
+  const controls = Array.from(header.querySelectorAll<HTMLElement>(
+    'a[href], button:not(:disabled), [tabindex]:not([tabindex="-1"])',
+  )).filter(element => element.getClientRects().length && getComputedStyle(element).visibility !== 'hidden')
+  const first = controls[0]
+  const last = controls[controls.length - 1]
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault()
+    last?.focus()
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault()
+    first?.focus()
+  }
+}
+
+watch(menuOpen, (open, _, onCleanup) => {
+  if (!open) { return }
+  const previousOverflow = document.body.style.overflow
+  document.body.style.overflow = 'hidden'
+  onCleanup(() => { document.body.style.overflow = previousOverflow })
+})
+
+const route = useRoute()
+watch(() => route.fullPath, closeMenu)
+
+onMounted(() => {
+  const mobileViewport = window.matchMedia('(max-width: 833px)')
+  const handleViewportChange = () => closeMenu()
+  mobileViewport.addEventListener('change', handleViewportChange)
+  onBeforeUnmount(() => mobileViewport.removeEventListener('change', handleViewportChange))
+})
 
 const mainMenuItemList = [
   {
@@ -53,6 +94,8 @@ const changeColorMode = (mode: 'light' | 'dark') => {
       'transparent',
       blurMaskVisible() ? 'blur-mask' : '',
     ]"
+    @keydown.esc="dismissMenu"
+    @keydown.tab="trapMenuFocus"
   >
     <div class="common-header-nav">
       <h1 class="logo">
@@ -64,9 +107,12 @@ const changeColorMode = (mode: 'light' | 'dark') => {
         </NuxtLinkLocale>
       </h1>
       <CommonHeaderMenu
-        :menu-list-visible="menuListVisible"
+        :state="menuState"
         :menu-list="mainMenuItemList"
-        @close="closeMenu()"
+        @open-docs="menuState = 'docs'"
+        @back="menuState = 'main'"
+        @focus-trigger="menuTrigger?.focus()"
+        @close="closeMenu"
       />
       <ul class="user-actions">
         <li class="user-actions-item language">
@@ -107,20 +153,17 @@ const changeColorMode = (mode: 'light' | 'dark') => {
           </div>
         </li>
         <li class="user-actions-item main-menu-trigger">
-          <div
-            v-show="!menuListVisible"
+          <button
+            ref="menuTrigger"
+            type="button"
             class="icon-button"
-            @click="openMenu()"
+            :aria-label="$t(menuOpen ? 'body.header.closeMenu' : 'body.header.openMenu')"
+            :aria-expanded="menuOpen"
+            aria-controls="header-menu"
+            @click="menuOpen ? closeMenu() : openMenu()"
           >
-            <Icon name="line-md:menu-fold-left" />
-          </div>
-          <div
-            v-show="menuListVisible"
-            class="icon-button"
-            @click="closeMenu()"
-          >
-            <Icon name="line-md:close" />
-          </div>
+            <Icon :name="menuOpen ? 'line-md:close' : 'line-md:menu-fold-left'" />
+          </button>
         </li>
       </ul>
     </div>
@@ -235,6 +278,7 @@ const changeColorMode = (mode: 'light' | 'dark') => {
           cursor: pointer;
 
           .icon-button {
+            color: inherit;
             display: inline-flex;
             padding: 0.5rem;
             border-radius: 8px;
@@ -248,6 +292,11 @@ const changeColorMode = (mode: 'light' | 'dark') => {
 
             &:hover {
               background-color: var(--everglow-trans-black-3);
+            }
+
+            &:focus-visible {
+              outline: 2px solid var(--everglow-blue-5);
+              outline-offset: 2px;
             }
           }
         }

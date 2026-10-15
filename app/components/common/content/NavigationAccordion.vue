@@ -2,6 +2,7 @@
 import type { NavigationTree } from '#shared/types'
 
 const route = useRoute()
+const emit = defineEmits(['navigate'])
 
 const { level, links, defaultOpen } = defineProps({
   level: {
@@ -50,6 +51,7 @@ const items = computed(() =>
           :level="level + 1"
           :links="item.children"
           :default-open="defaultOpen"
+          @navigate="emit('navigate')"
         />
       </template>
     </CommonContentNavigationAccordionItem>

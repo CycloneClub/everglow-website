@@ -1,3 +1,5 @@
+export type HeaderMenuState = 'closed' | 'main' | 'docs'
+
 export interface NavigationLink {
   icon: string
   label: string

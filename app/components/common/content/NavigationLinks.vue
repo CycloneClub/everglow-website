@@ -4,6 +4,7 @@ import type { NavigationTree } from '#shared/types'
 const { links } = defineProps<{ links: NavigationTree[] }>()
 
 const route = useRoute()
+const emit = defineEmits(['navigate'])
 </script>
 
 <template>
@@ -13,6 +14,7 @@ const route = useRoute()
       :key="index"
       :to="link.to"
       :class="['navigation-link', route.path !== link.to || 'active']"
+      @click="emit('navigate')"
     >
       <Icon
         v-if="link.icon"
