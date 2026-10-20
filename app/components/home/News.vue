@@ -218,8 +218,10 @@ const cards = computed(() => {
   }
 
   .home-news__visual {
+    position: relative;
     flex: 1 1 48%;
     min-height: 6.5rem;
+    overflow: hidden;
     background:
       linear-gradient(180deg, var(--everglow-trans-blue-0), var(--everglow-trans-blue-1));
     background-size: cover;
@@ -227,6 +229,26 @@ const cards = computed(() => {
 
     &.has-image {
       background-color: var(--everglow-grey-0);
+
+      &::before {
+        position: absolute;
+        inset: 0;
+        content: '';
+        background: inherit;
+      }
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .home-news__visual.has-image::before {
+      transition: transform 0.4s ease;
+    }
+
+    .home-news__card:not(.home-news__card--placeholder):hover,
+    .home-news__card:not(.home-news__card--placeholder):focus-visible {
+      .home-news__visual.has-image::before {
+        transform: scale(1.06);
+      }
     }
   }
 
