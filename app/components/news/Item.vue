@@ -88,11 +88,20 @@ const handleClickLink = () => {
     }
 
     .news-item-img {
+      position: relative;
       height: 150px;
       width: 100%;
+      overflow: hidden;
       background-size: cover;
       background-position: center;
       cursor: pointer;
+
+      &::before {
+        position: absolute;
+        inset: 0;
+        content: '';
+        background: inherit;
+      }
     }
 
     .news-item-content {
@@ -169,6 +178,19 @@ const handleClickLink = () => {
             transform: scale(1.2);
           }
         }
+      }
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .news-item-img::before {
+      transition: transform 0.4s ease;
+    }
+
+    .news-item:hover,
+    .news-item:focus-within {
+      .news-item-img::before {
+        transform: scale(1.06);
       }
     }
   }
