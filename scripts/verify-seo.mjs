@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict'
+import { get as httpGet } from 'node:http'
+import { get as httpsGet } from 'node:https'
 import process from 'node:process'
 import { pathToFileURL } from 'node:url'
 
@@ -70,6 +72,38 @@ export async function verifySeo (baseUrl) {
     }
   })
   await check('documentation returns real HTTP status codes', () => verifyDocumentationStatus(baseUrl))
+  await check('localized homepage aliases permanently redirect to their canonical pages', async () => {
+    for (const locale of ['en-us', 'zh-hk']) {
+      const response = await fetch(new URL(`/${locale}/?ref=search&value=%2F`, baseUrl), { redirect: 'manual' })
+      assert.equal(response.status, 301)
+      assert.equal(response.headers.get('location'), `/${locale}?ref=search&value=%2F`)
+      const target = await fetch(new URL(response.headers.get('location'), baseUrl), { redirect: 'manual' })
+      assert.equal(target.status, 200, 'canonical homepage must not redirect again')
+      const canonical = ((await target.text()).match(/<link\b[^>]*>/g) || []).map(attributes).filter(tag => tag.rel === 'canonical')
+      assert.deepEqual(canonical.map(tag => tag.href), [`${siteOrigin}/${locale}`])
+    }
+  })
+  await check('www aliases redirect directly to the canonical host', async () => {
+    for (const [path, target] of [
+      ['/', '/'],
+      ['/docs/getting-started/installation', '/docs/getting-started/installation'],
+      ['/en-us/', '/en-us'],
+      ['/zh-hk/', '/zh-hk'],
+      ['/zh-cn/about?ref=search&value=%2F', '/about?ref=search&value=%2F'],
+    ]) {
+      // fetch does not preserve a custom Host header; send it over HTTP directly.
+      const url = new URL(path, baseUrl)
+      const get = url.protocol === 'https:' ? httpsGet : httpGet
+      const response = await new Promise((resolve, reject) => {
+        get(url, { headers: { host: 'www.everglowmod.com' }, signal: AbortSignal.timeout(30_000) }, (res) => {
+          res.resume()
+          resolve(res)
+        }).on('error', reject)
+      })
+      assert.equal(response.statusCode, 301, path)
+      assert.equal(response.headers.location, `https://everglowmod.com${target}`, path)
+    }
+  })
   let manifest
   await check('IndexNow deployment manifest and ownership proof', async () => {
     manifest = JSON.parse(await fetchText('/indexnow-manifest.json'))

@@ -13,3 +13,17 @@ export function articleDate (value?: string): string | undefined {
 export function seoPath (path: string): string {
   return path.replace(/^\/zh-cn(?=\/|$)/, '').replace(/\/$/, '') || '/'
 }
+
+export function canonicalRedirect (url: URL): string | undefined {
+  const isWww = url.hostname === 'www.everglowmod.com'
+  let path = url.pathname
+  if (/^\/zh-cn(?:\/|$)/.test(path)) {
+    // Keep historical Chinese links local, including paths with extra slashes.
+    path = path.slice('/zh-cn'.length).replace(/^\/+/, '/') || '/'
+  }
+  if (/^\/(?:en-us|zh-hk)\/+$/.test(path)) {
+    path = path.replace(/\/+$/, '')
+  }
+  if (isWww) { return `https://everglowmod.com${path}${url.search}` }
+  if (path !== url.pathname) { return `${path}${url.search}` }
+}

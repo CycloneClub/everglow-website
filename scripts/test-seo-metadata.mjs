@@ -6,6 +6,43 @@ import { join } from 'node:path'
 import test from 'node:test'
 import { contentRoute, createSeoManifest } from './seo-metadata.mjs'
 import { articleDate } from '../shared/utils/seo.ts'
+import * as seo from '../shared/utils/seo.ts'
+
+test('duplicate hosts and localized homepages resolve to one canonical URL', () => {
+  assert.equal(typeof seo.canonicalRedirect, 'function', 'canonical redirect resolver must exist')
+  for (const [from, to] of [
+    ['https://www.everglowmod.com/', 'https://everglowmod.com/'],
+    ['https://www.everglowmod.com/docs/getting-started/installation', 'https://everglowmod.com/docs/getting-started/installation'],
+    ['https://www.everglowmod.com/en-us/news/2025-06-30?ref=search&value=%2F', 'https://everglowmod.com/en-us/news/2025-06-30?ref=search&value=%2F'],
+    ['https://everglowmod.com/en-us/', '/en-us'],
+    ['https://everglowmod.com/zh-hk/', '/zh-hk'],
+    ['https://www.everglowmod.com/en-us/', 'https://everglowmod.com/en-us'],
+    ['https://www.everglowmod.com/zh-cn/about?ref=search', 'https://everglowmod.com/about?ref=search'],
+    ['https://everglowmod.com/zh-cn/', '/'],
+    ['https://everglowmod.com/zh-cn//example.com', '/example.com'],
+  ]) {
+    const target = seo.canonicalRedirect(new URL(from))
+    assert.equal(target, to, from)
+    assert.equal(seo.canonicalRedirect(new URL(target, from)), undefined, `${from}: no redirect chain or loop`)
+  }
+})
+
+test('canonical redirects leave canonical pages, assets and preview hosts alone', () => {
+  assert.equal(typeof seo.canonicalRedirect, 'function', 'canonical redirect resolver must exist')
+  for (const url of [
+    'https://everglowmod.com/',
+    'https://everglowmod.com/en-us',
+    'https://everglowmod.com/zh-hk',
+    'https://everglowmod.com/docs/getting-started/installation',
+    'https://everglowmod.com/api/example/',
+    'https://everglowmod.com/images/example.png',
+    'https://everglowmod.com/zh-cn-example',
+    'http://localhost:3000/',
+    'https://preview.example.com/about',
+  ]) {
+    assert.equal(seo.canonicalRedirect(new URL(url)), undefined, url)
+  }
+})
 
 test('content routes match the canonical localized Nuxt Content paths', () => {
   assert.equal(contentRoute('content/en-US/docs/1.getting-started/2.installation.md'), '/en-us/docs/getting-started/installation')
