@@ -25,14 +25,14 @@ useSchemaOrg([
 // The router knows each locale's catch-all route even when its translation
 // does not exist. Keep alternate links limited to actual content pages.
 const { data: contentPaths } = await useAsyncData('seo-content-paths', async () => {
-  const collections = ['news', 'news_en', 'news_hk', 'news_ja', 'news_ko', 'docs', 'docs_en', 'docs_hk', 'docs_ja', 'docs_ko'] as const
+  const collections = ['news', 'news_en', 'news_hk', 'news_ja', 'news_ko', 'news_ru', 'docs', 'docs_en', 'docs_hk', 'docs_ja', 'docs_ko', 'docs_ru'] as const
   const pages = await Promise.all(collections.map(collection =>
     queryCollection(collection).select('path').all(),
   ))
   return pages.flat().map(page => page.path)
 })
 const localeHeadLinks = computed(() => (i18nHead.value.link || []).filter((link) => {
-  if (!('hreflang' in link) || !/^(?:\/(?:zh-cn|zh-hk|en-us|ja-jp|ko-kr))?\/(?:news|docs)\/.+/.test(route.path)) {
+  if (!('hreflang' in link) || !/^(?:\/(?:zh-cn|zh-hk|en-us|ja-jp|ko-kr|ru-ru))?\/(?:news|docs)\/.+/.test(route.path)) {
     return true
   }
   const path = new URL(link.href, site.url).pathname.replace(/^\/zh-cn(?=\/)/, '').replace(/\/$/, '')

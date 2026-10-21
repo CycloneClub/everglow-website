@@ -57,6 +57,11 @@ export default defineContentConfig({
       source: 'zh-HK/news/**/*.md',
       schema: newsSchema,
     }),
+    news_ru: defineCollection({
+      type: 'page',
+      source: 'ru-RU/news/**/*.md',
+      schema: newsSchema,
+    }),
 
     docs: defineCollection({
       type: 'page',
@@ -81,6 +86,11 @@ export default defineContentConfig({
     docs_hk: defineCollection({
       type: 'page',
       source: 'zh-HK/docs/**/*.md',
+      schema: docsSchema,
+    }),
+    docs_ru: defineCollection({
+      type: 'page',
+      source: 'ru-RU/docs/**/*.md',
       schema: docsSchema,
     }),
   },

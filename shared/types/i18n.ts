@@ -1,6 +1,6 @@
-export type Langs = 'zh-cn' | 'zh-hk' | 'en-us' | 'ja-jp' | 'ko-kr'
-export type NewsContentKey = 'news' | 'news_en' | 'news_hk' | 'news_ja' | 'news_ko'
-export type DocsContentKey = 'docs' | 'docs_en' | 'docs_hk' | 'docs_ja' | 'docs_ko'
+export type Langs = 'zh-cn' | 'zh-hk' | 'en-us' | 'ja-jp' | 'ko-kr' | 'ru-ru'
+export type NewsContentKey = 'news' | 'news_en' | 'news_hk' | 'news_ja' | 'news_ko' | 'news_ru'
+export type DocsContentKey = 'docs' | 'docs_en' | 'docs_hk' | 'docs_ja' | 'docs_ko' | 'docs_ru'
 
 export type I18nLocale = {
   nuxtSiteConfig: {
@@ -49,6 +49,7 @@ export type I18nLocale = {
           'zh-hk': string
           'ja-jp': string
           'ko-kr': string
+          'ru-ru': string
         }
       }
     }

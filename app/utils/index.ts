@@ -62,6 +62,8 @@ export const newsCollectionKey = (locale: Langs): NewsContentKey => {
       return 'news_ja'
     case 'ko-kr':
       return 'news_ko'
+    case 'ru-ru':
+      return 'news_ru'
     default:
       return 'news'
   }
@@ -79,6 +81,8 @@ export const docsCollectionKey = (locale: Langs): DocsContentKey => {
       return 'docs_ja'
     case 'ko-kr':
       return 'docs_ko'
+    case 'ru-ru':
+      return 'docs_ru'
     default:
       return 'docs'
   }

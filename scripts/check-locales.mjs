@@ -53,8 +53,52 @@ try {
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
   await page.getByRole('button', { name: '메뉴 열기', exact: true }).click()
   await page.locator('#header-menu .main-menu').waitFor()
+
+  await page.setViewportSize({ width: 1365, height: 900 })
+  await page.goto(`${baseURL}/ko-kr/about`)
+  await hydrated()
+  await page.locator('.everglow-chooser').hover()
+  await page.locator('.options-content span').filter({ hasText: 'Русский' }).click()
+  await page.waitForURL('**/ru-ru/about')
+  await page.waitForFunction(() => document.documentElement.lang.toLowerCase() === 'ru-ru')
+  await page.getByRole('heading', { name: /Кодекс поведения/ }).waitFor()
+  assert.match(await page.locator('.markdown').innerText(), /\p{Script=Cyrillic}/u)
+  assert.equal(await page.locator('.content-fallback').count(), 0)
+
+  await page.goto(`${baseURL}/ru-ru/news`)
+  await hydrated()
+  await page.locator('.news-item .btn').first().click()
+  await page.waitForURL(/\/ru-ru\/news\/.+/)
+  await page.locator('.article-body .markdown').waitFor()
+  assert.match(await page.locator('.article-body .markdown').innerText(), /\p{Script=Cyrillic}/u)
+  assert.equal(await page.locator('.content-fallback').count(), 0)
+
+  await page.goto(`${baseURL}/ru-ru/docs/getting-started/installation`)
+  await hydrated()
+  await page.locator('.article-body .markdown').waitFor()
+  assert.ok(await page.locator('.article-body a[href="https://steamcommunity.com/sharedfiles/filedetails/?id=2906178094"]').count())
+  assert.equal(await page.locator('.content-fallback').count(), 0)
+  const russianLinks = await page.locator('.aside a').evaluateAll(elements => elements.map(element => element.getAttribute('href')))
+  assert.ok(russianLinks.length > 0)
+  assert.ok(russianLinks.every(href => href.startsWith('/ru-ru/')))
+
+  await page.goto(`${baseURL}/ru-ru`)
+  await hydrated()
+  await page.waitForFunction(() => document.body.textContent.includes('Одно дерево. Множество миров.'))
+  const russianCards = await page.locator('.home-news__card[href]').evaluateAll(elements => elements.map(element => element.getAttribute('href')))
+  assert.equal(russianCards.length, 3)
+  assert.ok(russianCards.every(href => href.startsWith('/ru-ru/news/')))
+
+  await page.setViewportSize({ width: 390, height: 844 })
+  for (const path of ['/ru-ru', '/ru-ru/about', '/ru-ru/docs/getting-started/installation']) {
+    await page.goto(`${baseURL}${path}`)
+    await hydrated()
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), `${path}: mobile content fits viewport`)
+  }
+  await page.getByRole('button', { name: 'Открыть меню', exact: true }).click()
+  await page.locator('#header-menu .main-menu').waitFor()
   assert.deepEqual(errors, [])
-  console.debug('PASS: Japanese/Korean language switching, independent article pages, docs navigation, homepage copy and mobile layout')
+  console.debug('PASS: Japanese/Korean/Russian language switching, independent article pages, docs navigation, homepage copy and mobile layout')
 } finally {
   await browser.close()
 }

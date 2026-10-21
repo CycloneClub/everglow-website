@@ -13,6 +13,11 @@
 	line-height: 1.4286;
 }
 
+.markdown :not(pre) > code {
+	max-width: 100%;
+	overflow-wrap: anywhere;
+}
+
 .markdown h1 code,
 .markdown h2 code,
 .markdown h3 code,

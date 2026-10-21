@@ -3,8 +3,8 @@ import test from 'node:test'
 import { docsCollectionKey, mapLocaleDocsNavigation, newsCollectionKey } from '../app/utils/index.ts'
 import { canonicalRedirect } from '../shared/utils/seo.ts'
 
-test('Japanese and Korean use independent content collections and canonical routes', () => {
-  for (const [locale, suffix] of [['ja-jp', 'ja'], ['ko-kr', 'ko']]) {
+test('Japanese, Korean and Russian use independent content collections and canonical routes', () => {
+  for (const [locale, suffix] of [['ja-jp', 'ja'], ['ko-kr', 'ko'], ['ru-ru', 'ru']]) {
     assert.equal(newsCollectionKey(locale), `news_${suffix}`)
     assert.equal(docsCollectionKey(locale), `docs_${suffix}`)
     assert.equal(canonicalRedirect(new URL(`https://everglowmod.com/${locale}/`)), `/${locale}`)

@@ -295,6 +295,11 @@ export default defineNuxtConfig({
         language: 'ko-KR',
         file: 'ko-KR.ts',
       },
+      {
+        code: 'ru-ru',
+        language: 'ru-RU',
+        file: 'ru-RU.ts',
+      },
     ],
     defaultLocale: 'zh-cn',
     strategy: 'prefix_except_default',

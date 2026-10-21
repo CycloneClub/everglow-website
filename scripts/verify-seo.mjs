@@ -10,7 +10,7 @@ function attributes (tag) {
 
 // Exercise the HTTP contract: missing content must not become indexable empty pages.
 export async function verifyDocumentationStatus (baseUrl) {
-  for (const prefix of ['', '/en-us', '/zh-hk', '/ja-jp', '/ko-kr']) {
+  for (const prefix of ['', '/en-us', '/zh-hk', '/ja-jp', '/ko-kr', '/ru-ru']) {
     const validPath = prefix + '/docs/getting-started/installation'
     const valid = await fetch(new URL(validPath, baseUrl), { signal: AbortSignal.timeout(30_000) })
     assert.equal(valid.status, 200, validPath + ': existing installation guide remains available')
@@ -21,7 +21,7 @@ export async function verifyDocumentationStatus (baseUrl) {
       assert.equal(response.status, 404, path + ': missing documentation must return HTTP 404')
     }
   }
-  for (const path of ['/en-us/docs/mechanics/mission', '/zh-hk/docs/mechanics/mission', '/zh-cn/docs/guide/recipes']) {
+  for (const path of ['/en-us/docs/mechanics/mission', '/zh-hk/docs/mechanics/mission', '/ru-ru/docs/mechanics/mission', '/zh-cn/docs/guide/recipes']) {
     const response = await fetch(new URL(path, baseUrl), { signal: AbortSignal.timeout(30_000) })
     assert.equal(response.status, 404, path + ': missing translations and legacy URLs must not serve empty pages')
   }
@@ -73,7 +73,7 @@ export async function verifySeo (baseUrl) {
   })
   await check('documentation returns real HTTP status codes', () => verifyDocumentationStatus(baseUrl))
   await check('localized homepage aliases permanently redirect to their canonical pages', async () => {
-    for (const locale of ['en-us', 'zh-hk', 'ja-jp', 'ko-kr']) {
+    for (const locale of ['en-us', 'zh-hk', 'ja-jp', 'ko-kr', 'ru-ru']) {
       const response = await fetch(new URL(`/${locale}/?ref=search&value=%2F`, baseUrl), { redirect: 'manual' })
       assert.equal(response.status, 301)
       assert.equal(response.headers.get('location'), `/${locale}?ref=search&value=%2F`)
@@ -112,7 +112,7 @@ export async function verifySeo (baseUrl) {
     assert.match((await fetchText('/indexnow-key.txt')).trim(), /^[a-z0-9-]{8,128}$/i)
     assert.ok(Object.keys(manifest.pages).length > 12)
   })
-  for (const [prefix, locale] of [['', 'zh-CN'], ['/en-us', 'en-US'], ['/zh-hk', 'zh-HK'], ['/ja-jp', 'ja-JP'], ['/ko-kr', 'ko-KR']]) {
+  for (const [prefix, locale] of [['', 'zh-CN'], ['/en-us', 'en-US'], ['/zh-hk', 'zh-HK'], ['/ja-jp', 'ja-JP'], ['/ko-kr', 'ko-KR'], ['/ru-ru', 'ru-RU']]) {
     const home = await fetchText(`${prefix}/`)
     const description = html => (html.match(/<meta\b[^>]*>/g) || []).map(attributes).find(tag => tag.name === 'description')?.content
     await check(`${locale} site aliases`, () => {
@@ -135,7 +135,7 @@ export async function verifySeo (baseUrl) {
           assert.equal(new URL(link.href).origin, siteOrigin)
           assert.ok(new URL(link.href).pathname.replace(/\/$/, '').endsWith(path), `${path}: all alternatives, including x-default, must refer to this page`)
         }
-        for (const language of ['zh-CN', 'zh-HK', 'en-US', 'ja-JP', 'ko-KR']) {
+        for (const language of ['zh-CN', 'zh-HK', 'en-US', 'ja-JP', 'ko-KR', 'ru-RU']) {
           const matches = links.filter(link => link.hreflang.toLowerCase() === language.toLowerCase())
           assert.equal(matches.length, 1, `${path}: one alternate for ${language}`)
           assert.ok(new URL(matches[0].href).pathname.replace(/\/$/, '').endsWith(path), `${path}: alternate must refer to the same content`)
@@ -197,7 +197,7 @@ export async function verifySeo (baseUrl) {
     const html = await fetchText('/docs/mechanics/mission')
     const links = (html.match(/<link\b[^>]*>/g) || []).map(attributes).filter(tag => tag.hreflang)
     assert.ok(links.some(link => link.hreflang === 'zh-CN'))
-    assert.ok(!links.some(link => /^(?:en(?:-US)?|zh-HK)$/i.test(link.hreflang)))
+    assert.ok(!links.some(link => /^(?:en(?:-US)?|zh-HK|ja(?:-JP)?|ko(?:-KR)?|ru(?:-RU)?)$/i.test(link.hreflang)))
   })
   assert.equal(failures.length, 0, failures.join('\n'))
 }
