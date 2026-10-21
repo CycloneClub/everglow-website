@@ -10,7 +10,7 @@ function attributes (tag) {
 
 // Exercise the HTTP contract: missing content must not become indexable empty pages.
 export async function verifyDocumentationStatus (baseUrl) {
-  for (const prefix of ['', '/en-us', '/zh-hk']) {
+  for (const prefix of ['', '/en-us', '/zh-hk', '/ja-jp', '/ko-kr']) {
     const validPath = prefix + '/docs/getting-started/installation'
     const valid = await fetch(new URL(validPath, baseUrl), { signal: AbortSignal.timeout(30_000) })
     assert.equal(valid.status, 200, validPath + ': existing installation guide remains available')
@@ -73,7 +73,7 @@ export async function verifySeo (baseUrl) {
   })
   await check('documentation returns real HTTP status codes', () => verifyDocumentationStatus(baseUrl))
   await check('localized homepage aliases permanently redirect to their canonical pages', async () => {
-    for (const locale of ['en-us', 'zh-hk']) {
+    for (const locale of ['en-us', 'zh-hk', 'ja-jp', 'ko-kr']) {
       const response = await fetch(new URL(`/${locale}/?ref=search&value=%2F`, baseUrl), { redirect: 'manual' })
       assert.equal(response.status, 301)
       assert.equal(response.headers.get('location'), `/${locale}?ref=search&value=%2F`)
@@ -112,7 +112,7 @@ export async function verifySeo (baseUrl) {
     assert.match((await fetchText('/indexnow-key.txt')).trim(), /^[a-z0-9-]{8,128}$/i)
     assert.ok(Object.keys(manifest.pages).length > 12)
   })
-  for (const [prefix, locale] of [['', 'zh-CN'], ['/en-us', 'en-US'], ['/zh-hk', 'zh-HK']]) {
+  for (const [prefix, locale] of [['', 'zh-CN'], ['/en-us', 'en-US'], ['/zh-hk', 'zh-HK'], ['/ja-jp', 'ja-JP'], ['/ko-kr', 'ko-KR']]) {
     const home = await fetchText(`${prefix}/`)
     const description = html => (html.match(/<meta\b[^>]*>/g) || []).map(attributes).find(tag => tag.name === 'description')?.content
     await check(`${locale} site aliases`, () => {
@@ -135,7 +135,7 @@ export async function verifySeo (baseUrl) {
           assert.equal(new URL(link.href).origin, siteOrigin)
           assert.ok(new URL(link.href).pathname.replace(/\/$/, '').endsWith(path), `${path}: all alternatives, including x-default, must refer to this page`)
         }
-        for (const language of ['zh-CN', 'zh-HK', 'en-US']) {
+        for (const language of ['zh-CN', 'zh-HK', 'en-US', 'ja-JP', 'ko-KR']) {
           const matches = links.filter(link => link.hreflang.toLowerCase() === language.toLowerCase())
           assert.equal(matches.length, 1, `${path}: one alternate for ${language}`)
           assert.ok(new URL(matches[0].href).pathname.replace(/\/$/, '').endsWith(path), `${path}: alternate must refer to the same content`)
@@ -169,8 +169,12 @@ export async function verifySeo (baseUrl) {
         const url = new URL(match[1].match(/<loc>([^<]+)<\/loc>/)[1])
         const lastmod = match[1].match(/<lastmod>([^<]+)<\/lastmod>/)?.[1]
         const expected = manifest?.pages[url.pathname]?.lastmod
-        assert.ok(expected, `${url.pathname}: tracked source date`)
-        assert.equal(Date.parse(lastmod), Date.parse(expected), `${url.pathname}: sitemap must use source date`)
+        if (expected) {
+          assert.equal(Date.parse(lastmod), Date.parse(expected), `${url.pathname}: sitemap must use source date`)
+        } else {
+          assert.ok(manifest?.pages[url.pathname], `${url.pathname}: source must be in the manifest`)
+          assert.equal(lastmod, undefined, `${url.pathname}: uncommitted new pages must not invent source dates`)
+        }
       }
     })
     await check(`${locale} article structured data`, async () => {
@@ -182,7 +186,8 @@ export async function verifySeo (baseUrl) {
       const article = articles[0]
       assert.ok(article.headline?.includes('2025'))
       assert.ok(Number.isFinite(Date.parse(article.datePublished)))
-      assert.equal(Date.parse(article.dateModified), Date.parse(manifest?.pages[path]?.lastmod))
+      const expectedModified = manifest?.pages[path]?.lastmod
+      if (expectedModified) { assert.equal(Date.parse(article.dateModified), Date.parse(expectedModified)) } else { assert.equal(article.dateModified, undefined) }
       assert.ok(article.author, 'article must identify its author')
       assert.ok(article.image, 'article cover must be represented')
       assert.ok(html.includes('2025-06-30_FurnaceArea.png'))

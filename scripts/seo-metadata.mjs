@@ -30,9 +30,9 @@ export function createSeoManifest (root, site = 'https://everglowmod.com') {
     return date ? new Date(date).toISOString() : undefined
   }
   const fingerprint = paths => createHash('sha256').update([...new Set(paths)].sort().map(file => `${file}\0${createHash('sha256').update(read(file)).digest('hex')}`).join('\n')).digest('hex')
-  const shared = matching(['app/app.vue', 'app/components/common', 'app/assets', 'app/plugins', 'app/layouts', 'nuxt.config.ts'])
+  const shared = matching(['app/app.vue', 'app/components/common', 'app/assets', 'app/plugins', 'app/layouts', 'app/utils/index.ts', 'nuxt.config.ts'])
   const pages = {}
-  const locales = [['', 'zh-CN'], ['/en-us', 'en-US'], ['/zh-hk', 'zh-HK']]
+  const locales = [['', 'zh-CN'], ['/en-us', 'en-US'], ['/zh-hk', 'zh-HK'], ['/ja-jp', 'ja-JP'], ['/ko-kr', 'ko-KR']]
   for (const [prefix, locale] of locales) {
     const translation = matching([`i18n/locales/${locale}.ts`])
     for (const [path, source, components] of [
@@ -47,7 +47,7 @@ export function createSeoManifest (root, site = 'https://everglowmod.com') {
       pages[prefix + path || '/'] = { hash: fingerprint([...shared, ...own]), lastmod: latest(own) }
     }
   }
-  for (const file of files.filter(file => /^content\/(?:en-US\/|zh-HK\/)?(?:news|docs|about)\/.*\.md$/.test(file))) {
+  for (const file of files.filter(file => /^content\/(?:(?:en-US|zh-HK|ja-JP|ko-KR)\/)?(?:news|docs|about)\/.*\.md$/.test(file))) {
     const path = contentRoute(file)
     const source = read(file).toString('utf8')
     const frontmatter = source.match(/^---\r?\n([\s\S]*?)\r?\n---/)?.[1] || ''
@@ -55,8 +55,8 @@ export function createSeoManifest (root, site = 'https://everglowmod.com') {
     const published = articleDate(field('date'))
     const modified = articleDate(field('updatedAt')) || latest([file])
     const lastmod = modified && published && Date.parse(modified) < Date.parse(published) ? published : modified
-    const locale = path.startsWith('/en-us/') ? 'en-US' : path.startsWith('/zh-hk/') ? 'zh-HK' : 'zh-CN'
-    const section = path.replace(/^\/(?:en-us|zh-hk)\//, '/').split('/')[1]
+    const locale = locales.find(([prefix]) => prefix && path.startsWith(prefix + '/'))?.[1] ?? 'zh-CN'
+    const section = path.replace(/^\/(?:en-us|zh-hk|ja-jp|ko-kr)\//, '/').split('/')[1]
     const assets = [...source.matchAll(/['"(]\/(images\/[^'"\s)]+)/g)].map(match => `public/${match[1]}`).filter(asset => files.includes(asset))
     const own = [file, ...assets, ...matching([`app/pages/${section}`, `app/components/${section}`, `i18n/locales/${locale}.ts`])]
     pages[path] = { hash: fingerprint([...shared, ...own]), ...(lastmod ? { lastmod } : {}) }

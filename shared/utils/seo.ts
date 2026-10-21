@@ -21,7 +21,7 @@ export function canonicalRedirect (url: URL): string | undefined {
     // Keep historical Chinese links local, including paths with extra slashes.
     path = path.slice('/zh-cn'.length).replace(/^\/+/, '/') || '/'
   }
-  if (/^\/(?:en-us|zh-hk)\/+$/.test(path)) {
+  if (/^\/(?:en-us|zh-hk|ja-jp|ko-kr)\/+$/.test(path)) {
     path = path.replace(/\/+$/, '')
   }
   if (isWww) { return `https://everglowmod.com${path}${url.search}` }
