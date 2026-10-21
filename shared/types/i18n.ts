@@ -17,14 +17,12 @@ export type I18nLocale = {
     descriptions: {
       news: string
       docs: string
-      playground: string
       about: string
     }
     subtitles: {
       news: string
       wiki: string
       docs: string
-      playground: string
       about: string
     }
   }
@@ -43,7 +41,6 @@ export type I18nLocale = {
       news: string
       wiki: string
       docs: string
-      playground: string
       about: string
       settings: {
         languages: {

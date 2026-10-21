@@ -39,7 +39,6 @@ export function createSeoManifest (root, site = 'https://everglowmod.com') {
       ['', 'app/pages/index.vue', 'app/components/home'],
       ['/about', 'app/pages/about/index.vue', 'app/components/about'],
       ['/news', 'app/pages/news/index.vue', 'app/components/news'],
-      ['/playground', 'app/pages/playground/index.vue', 'app/components/playground'],
     ]) {
       if (!files.includes(source)) { continue }
       const contentPrefix = `content/${prefix ? locale + '/' : ''}${path.slice(1)}`

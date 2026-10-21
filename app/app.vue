@@ -3,9 +3,6 @@ const { locale, t } = useI18n()
 const route = useRoute()
 const i18nHead = useLocaleHead()
 const localePath = useLocalePath()
-const isPlaygroundWorkspace = computed(
-  () => route.path.startsWith(`${localePath('/playground')}/`),
-)
 
 const i18nTitle = (titleChunk: string) => {
   return titleChunk
@@ -75,11 +72,11 @@ defineOgImage('Everglow.satori', {}, {
 
 <template>
   <div id="everglow">
-    <CommonHeader v-if="!isPlaygroundWorkspace" />
+    <CommonHeader />
     <CommonMain>
       <NuxtPage />
     </CommonMain>
-    <CommonFooter v-if="!isPlaygroundWorkspace" />
+    <CommonFooter />
   </div>
 </template>
 

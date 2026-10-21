@@ -16,7 +16,6 @@
 		"lint:fix": "eslint . --fix"
 	},
 	"dependencies": {
-		"monaco-editor": "0.57.0",
 		"three": "0.185.1",
 		"vue": "^3.5.44",
 		"vue-easy-lightbox": "1.19.0"
@@ -39,9 +38,6 @@
 		"@nuxtjs/i18n": "^10.6.0",
 		"@nuxtjs/seo": "5.3.16",
 		"@resvg/resvg-js": "2.6.2",
-		"@tresjs/cientos": "^5.8.1",
-		"@tresjs/nuxt": "^5.6.3",
-		"@tresjs/post-processing": "^3.7.4",
 		"@types/three": "^0.185.4",
 		"@typescript-eslint/parser": "^8.71.2",
 		"eslint": "^10.11.0",

@@ -19,7 +19,6 @@ export default defineNuxtConfig({
     '@nuxtjs/seo',
     '@nuxt/content',
     '@nuxt/image',
-    '@tresjs/nuxt',
   ],
   ssr: true,
   devtools: {
@@ -307,9 +306,5 @@ export default defineNuxtConfig({
       url: 'https://everglowmod.com',
       logo: 'https://everglowmod.com/logo.png',
     },
-  },
-  tres: {
-    devtools: true,
-    glsl: true,
   },
 })
