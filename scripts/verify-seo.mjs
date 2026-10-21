@@ -126,7 +126,7 @@ export async function verifySeo (baseUrl) {
       assert.ok(home.includes('Dream Chaser Group'), 'retain publisher identity')
     })
     await check(`${locale} page metadata and language links`, async () => {
-      for (const path of ['/about', '/news', '/playground', '/news/2025-06-30', '/docs/getting-started/introduction', '/docs/mechanics/biome-label']) {
+      for (const path of ['/about', '/news', '/news/2025-06-30', '/docs/getting-started/introduction', '/docs/mechanics/biome-label']) {
         const html = await fetchText(`${prefix}${path}`)
         assert.ok(description(html)?.trim(), `${path} has a description`)
         assert.notEqual(description(html), description(home), `${path} must not reuse the homepage description`)

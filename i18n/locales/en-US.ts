@@ -16,14 +16,12 @@ export default {
     descriptions: {
       news: 'Read Everglow development logs, release news, and content previews for the latest updates from Dream Chaser Group.',
       docs: 'Explore installation guides, development documentation, and code examples for the Everglow mod.',
-      playground: 'Explore real-time 3D scenes and experiment with shaders and graphics development tools in the Everglow Playground.',
       about: 'Meet Dream Chaser Group, the team behind Everglow, and find contact details, community links, and ways to contribute.',
     },
     subtitles: {
       news: 'News',
       wiki: 'Wiki',
       docs: 'Docs',
-      playground: 'Playground',
       about: 'About',
     },
   },
@@ -42,7 +40,6 @@ export default {
       news: 'News',
       wiki: 'Wiki',
       docs: 'Docs',
-      playground: 'Playground',
       about: 'About',
       settings: {
         languages: {

@@ -71,10 +71,6 @@ const mainMenuItemList = [
     link: '/docs/getting-started/introduction',
   },
   {
-    name: 'playground',
-    link: '/playground',
-  },
-  {
     name: 'about',
     link: '/about',
   },
