@@ -43,6 +43,35 @@ export async function verifySeo (baseUrl) {
     assert.equal(response.status, 200, path)
     return response.text()
   }
+  await check('organization logo is a crawlable image of sufficient size', async () => {
+    const html = await fetchText('/')
+    const graph = [...html.matchAll(/<script\b[^>]+type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].flatMap(match => JSON.parse(match[1])['@graph'] || [])
+    const organization = graph.find(node => node['@type'] === 'Organization' && node.logo)
+    const logo = graph.find(node => node['@id'] === organization?.logo?.['@id'])
+    assert.ok(logo?.url, 'organization must identify its logo')
+    const response = await fetch(new URL(new URL(logo.url).pathname, baseUrl))
+    assert.equal(response.status, 200, 'logo URL must resolve')
+    assert.match(response.headers.get('content-type'), /image\/png/)
+    const png = Buffer.from(await response.arrayBuffer())
+    assert.ok(png.readUInt32BE(16) >= 112 && png.readUInt32BE(20) >= 112, 'logo must be at least 112 by 112 pixels')
+  })
+  await check('article headings and language navigation are present in server HTML', async () => {
+    for (const prefix of ['', '/en-us', '/zh-hk']) {
+      for (const path of ['/about', '/news/2025-06-30', '/news/2026-06-30', '/docs/getting-started/installation']) {
+        const html = await fetchText(`${prefix}${path}`)
+        const headings = html.match(/<h1\b[\s\S]*?<\/h1>/g) || []
+        assert.equal(headings.length, 1, `${prefix}${path}: one content heading`)
+        assert.ok(!headings[0].includes('class="logo"'), 'site navigation must not supply the content heading')
+        const links = (html.match(/<a\b[^>]*>/g) || []).map(attributes).filter(tag => tag.hreflang)
+        for (const [language, targetPrefix] of [['zh-cn', ''], ['en-us', '/en-us'], ['zh-hk', '/zh-hk']]) {
+          assert.ok(links.some(link => link.hreflang === language && link.href === `${targetPrefix}${path}`), `${prefix}${path}: crawlable ${language} link`)
+        }
+      }
+    }
+    const untranslated = await fetchText('/docs/mechanics/mission')
+    const links = (untranslated.match(/<a\b[^>]*>/g) || []).map(attributes).filter(tag => tag.hreflang)
+    assert.ok(!links.some(link => ['en-us', 'zh-hk'].includes(link.hreflang)), 'do not link to missing translations')
+  })
   await check('legacy Simplified Chinese URLs redirect to unprefixed pages', async () => {
     for (const [from, to] of [
       ['/zh-cn', '/'],

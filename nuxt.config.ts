@@ -304,7 +304,7 @@ export default defineNuxtConfig({
       type: 'Organization',
       name: 'Dream Chaser Group',
       url: 'https://everglowmod.com',
-      logo: 'https://everglowmod.com/logo.png',
+      logo: 'https://everglowmod.com/images/hero/menu/logo.png',
     },
   },
 })
