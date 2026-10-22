@@ -68,20 +68,20 @@ const clearPageAnchor = () => {
                 alt="News head image"
               >
               <div class="title-container">
-                <h2
+                <h1
                   class="text"
                   @click.prevent.stop
                 >
                   {{ title }}
-                </h2>
+                </h1>
               </div>
             </div>
-            <div
+            <h1
               v-else
               class="article-title-noimage"
             >
               {{ title }}
-            </div>
+            </h1>
             <div class="article-head">
               <div class="avatar">
                 <img
@@ -166,7 +166,7 @@ const clearPageAnchor = () => {
                 width: 100%;
                 bottom: 0;
 
-                h2 {
+                .text {
                   cursor: default;
                   font-size: 3rem;
                   user-select: all;
@@ -183,6 +183,7 @@ const clearPageAnchor = () => {
 
             .article-title-noimage {
               font-size: 4rem;
+              font-weight: inherit;
               user-select: all;
               margin: 2rem 2rem 0;
               padding: 0.75rem 1rem 0;

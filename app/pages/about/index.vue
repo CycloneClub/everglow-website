@@ -23,9 +23,9 @@ const { data: page } = await useAsyncData(route.path, () =>
             alt="A boss preview of Everglow mod"
           >
           <div class="title-container">
-            <h2 class="text">
+            <h1 class="text">
               {{ page.title }}
-            </h2>
+            </h1>
           </div>
         </div>
         <ContentRenderer
@@ -83,7 +83,7 @@ const { data: page } = await useAsyncData(route.path, () =>
             width: 100%;
             bottom: 0;
 
-            h2 {
+            .text {
               font-size: 3rem;
               user-select: all;
               margin: 1.5rem;

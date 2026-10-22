@@ -54,9 +54,9 @@ const tocLinks = computed(() => {
                     Everglow
                   </div>
                   <div class="info">
-                    <h2 class="title">
+                    <h1 class="title">
                       {{ title }}
-                    </h2>
+                    </h1>
                     <div class="description">
                       {{ description }}
                     </div>

@@ -3,10 +3,26 @@ import type { Langs } from '#shared/types'
 
 const { availableLocales } = useI18n()
 const app = useNuxtApp()
+const route = useRoute()
+const switchLocalePath = useSwitchLocalePath()
+const { data: contentPaths } = useNuxtData<string[]>('seo-content-paths')
+const languageLinks = computed(() => availableLocales.map(code => ({
+  code,
+  href: switchLocalePath(code),
+})).filter(({ href }) => {
+  if (!href) { return false }
+  if (!/^(?:\/(?:zh-cn|zh-hk|en-us))?\/(?:news|docs)\/.+/.test(route.path)) { return true }
+  const path = href.split(/[?#]/)[0].replace(/\/$/, '')
+  return contentPaths.value?.includes(path) ?? false
+}))
 
 const isShowOptions = ref(false)
 
-const setLanguage = async (code: Langs) => {
+const setLanguage = async (event: MouseEvent, code: Langs) => {
+  // Preserve native new-tab/window behavior for modified clicks.
+  if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) { return }
+  event.preventDefault()
+  event.stopPropagation()
   isShowOptions.value = false
   await app.$switchLocalePreservingPosition(code)
 }
@@ -37,14 +53,15 @@ const setLanguage = async (code: Langs) => {
           class="options bottom"
         >
           <div class="options-content">
-            <span
-              v-for="(option, index) in availableLocales"
-              v-once
-              :key="index"
-              @click.stop.prevent="setLanguage(availableLocales[index])"
+            <a
+              v-for="option in languageLinks"
+              :key="option.code"
+              :href="option.href"
+              :hreflang="option.code"
+              @click="setLanguage($event, option.code)"
             >
-              {{ $t(`body.header.settings.languages.${option}`) }}
-            </span>
+              {{ $t(`body.header.settings.languages.${option.code}`) }}
+            </a>
           </div>
         </div>
       </Transition>
@@ -59,7 +76,7 @@ const setLanguage = async (code: Langs) => {
   }
 
   .everglow-select {
-    span {
+    a {
       padding-right: 10px;
     }
   }
@@ -101,7 +118,7 @@ const setLanguage = async (code: Langs) => {
         box-shadow: var(--shadow);
       }
 
-      span {
+      a {
         font-size: 15px;
         display: flex;
         padding: 5px;

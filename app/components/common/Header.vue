@@ -94,14 +94,14 @@ const changeColorMode = (mode: 'light' | 'dark') => {
     @keydown.tab="trapMenuFocus"
   >
     <div class="common-header-nav">
-      <h1 class="logo">
+      <div class="logo">
         <NuxtLinkLocale to="/">
           <EverglowLogo :size="30" />
           <div class="logo-text">
             {{ $t('body.header.name') }}
           </div>
         </NuxtLinkLocale>
-      </h1>
+      </div>
       <CommonHeaderMenu
         :state="menuState"
         :menu-list="mainMenuItemList"
