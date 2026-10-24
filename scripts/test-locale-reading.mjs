@@ -2,10 +2,12 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 import { captureReadingPosition, isLocaleOnlyNavigation, restoreReadingPosition } from '../app/utils/locale-reading.ts'
 
-const locales = ['zh-cn', 'zh-hk', 'en-us']
+const locales = ['zh-cn', 'zh-hk', 'en-us', 'ja-jp', 'ko-kr', 'ru-ru']
 const route = (path, query = {}, hash = '') => ({ path, query, hash })
 
 test('only the same content, query and anchor qualify for language-position restoration', () => {
+  assert.equal(isLocaleOnlyNavigation(route('/ja-jp/docs/guide', {}, '#one'), route('/ko-kr/docs/guide', {}, '#one'), locales), true)
+  assert.equal(isLocaleOnlyNavigation(route('/ko-kr/docs/guide', {}, '#one'), route('/ru-ru/docs/guide', {}, '#one'), locales), true)
   assert.equal(isLocaleOnlyNavigation(route('/zh-cn'), route('/en-us'), locales), true)
   assert.equal(isLocaleOnlyNavigation(route('/'), route('/en-us/'), locales), true)
   assert.equal(isLocaleOnlyNavigation(route('/docs/guide', { q: 'tree' }, '#one'), route('/en-us/docs/guide', { q: 'tree' }, '#one'), locales), true)

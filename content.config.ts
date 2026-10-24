@@ -42,9 +42,24 @@ export default defineContentConfig({
       source: 'en-US/news/**/*.md',
       schema: newsSchema,
     }),
+    news_ja: defineCollection({
+      type: 'page',
+      source: 'ja-JP/news/**/*.md',
+      schema: newsSchema,
+    }),
+    news_ko: defineCollection({
+      type: 'page',
+      source: 'ko-KR/news/**/*.md',
+      schema: newsSchema,
+    }),
     news_hk: defineCollection({
       type: 'page',
       source: 'zh-HK/news/**/*.md',
+      schema: newsSchema,
+    }),
+    news_ru: defineCollection({
+      type: 'page',
+      source: 'ru-RU/news/**/*.md',
       schema: newsSchema,
     }),
 
@@ -58,9 +73,24 @@ export default defineContentConfig({
       source: 'en-US/docs/**/*.md',
       schema: docsSchema,
     }),
+    docs_ja: defineCollection({
+      type: 'page',
+      source: 'ja-JP/docs/**/*.md',
+      schema: docsSchema,
+    }),
+    docs_ko: defineCollection({
+      type: 'page',
+      source: 'ko-KR/docs/**/*.md',
+      schema: docsSchema,
+    }),
     docs_hk: defineCollection({
       type: 'page',
       source: 'zh-HK/docs/**/*.md',
+      schema: docsSchema,
+    }),
+    docs_ru: defineCollection({
+      type: 'page',
+      source: 'ru-RU/docs/**/*.md',
       schema: docsSchema,
     }),
   },
