@@ -29,52 +29,45 @@ const community = [
           >
         </NuxtLinkLocale>
 
-        <ul class="footer-contact">
-          <li>
-            <a
-              class="footer-email"
-              href="mailto:contact@everglowmod.com"
-              aria-label="contact@everglowmod.com"
-              title="contact@everglowmod.com"
+        <div class="footer-links">
+          <ul class="footer-contact">
+            <li
+              v-for="link in community"
+              :key="link.name"
             >
-              <Icon
-                name="lucide:mail"
-                aria-hidden="true"
-              />
-            </a>
-          </li>
-          <li
-            v-for="link in community"
-            :key="link.name"
-          >
-            <a
-              :href="link.href"
-              :aria-label="link.name"
-              :title="link.name"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <HomeBrandIcon
-                :name="link.icon"
-                aria-hidden="true"
-              />
-            </a>
-          </li>
-          <li class="footer-qq">
-            <a
-              :href="QQ_GROUP_URL"
-              :aria-label="$t('home.community.qq')"
-              :title="$t('home.community.qq')"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <HomeBrandIcon
-                name="qq"
-                aria-hidden="true"
-              />
-            </a>
-          </li>
-        </ul>
+              <a
+                :href="link.href"
+                :aria-label="link.name"
+                :title="link.name"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <HomeBrandIcon
+                  :name="link.icon"
+                  aria-hidden="true"
+                />
+              </a>
+            </li>
+            <li class="footer-qq">
+              <a
+                :href="QQ_GROUP_URL"
+                :aria-label="$t('home.community.qq')"
+                :title="$t('home.community.qq')"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <HomeBrandIcon
+                  name="qq"
+                  aria-hidden="true"
+                />
+              </a>
+            </li>
+          </ul>
+          <a
+            class="footer-email"
+            href="mailto:contact@everglowmod.com"
+          >contact@everglowmod.com</a>
+        </div>
       </div>
 
       <div
@@ -159,6 +152,25 @@ const community = [
   }
 }
 
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 0;
+  max-width: 100%;
+
+  .footer-email {
+    padding: 10px 0;
+    min-height: 44px;
+    font-size: 1.167rem;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+    text-decoration: underline;
+    text-decoration-color: #b6c0d44d;
+    text-underline-offset: 4px;
+  }
+}
+
 .footer-contact {
   display: flex;
   flex-shrink: 0;
@@ -190,7 +202,7 @@ const community = [
     width: 128px;
   }
 
-  .footer-contact { align-self: flex-end; }
+  .footer-links { align-self: flex-end; }
 }
 
 @media (prefers-reduced-motion: reduce) {
