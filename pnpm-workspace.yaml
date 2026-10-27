@@ -5,11 +5,4 @@ allowBuilds:
   sharp: true
   unrs-resolver: true
   vue-demi: true
-
-minimumReleaseAgeExclude:
-  - satori@0.33.5
-  - nuxt-og-image@6.9.0
-
-overrides:
-  nuxt-og-image: 6.9.0
-  sharp: 0.35.4
+minimumReleaseAge: 0

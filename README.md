@@ -21,6 +21,7 @@ Development in progress ✿✿ヽ(°▽°)ノ✿
 This is the website repository of [Everglow](https://github.com/Solaestas/Everglow).
 
 ## Get-Started
+
 ```bash
 # This project is forced to use pnpm
 
