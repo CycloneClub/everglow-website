@@ -162,11 +162,14 @@ const community = [
   .footer-email {
     padding: 10px 0;
     min-height: 44px;
+    color: #8e9bb2;
     font-size: 1.167rem;
+    font-weight: var(--font-weight--light);
     line-height: 1.7;
     overflow-wrap: anywhere;
     text-decoration: underline;
-    text-decoration-color: #b6c0d44d;
+    text-decoration-color: #8e9bb280;
+    text-decoration-thickness: 1px;
     text-underline-offset: 4px;
   }
 }
@@ -179,7 +182,7 @@ const community = [
   a {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     width: 44px;
     height: 44px;
   }
