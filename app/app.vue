@@ -73,6 +73,7 @@ defineOgImage('Everglow.satori', {}, {
 <template>
   <div id="everglow">
     <CommonHeader />
+    <CommonNavigationProgress />
     <CommonMain>
       <NuxtPage />
     </CommonMain>
