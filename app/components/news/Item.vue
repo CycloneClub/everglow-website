@@ -28,10 +28,7 @@ const handleClickLink = () => {
       @click="handleClickLink"
     />
     <div class="news-item-content">
-      <h2
-        class="news-item-header"
-        @click="handleClickLink"
-      >
+      <h2 class="news-item-header">
         <NuxtLink :to="props.path">
           <span>{{ title }}</span>
         </NuxtLink>
