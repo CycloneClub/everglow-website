@@ -181,8 +181,14 @@ export async function verifySeo (baseUrl) {
     await check(`${locale} footer`, () => {
       const footer = home.match(/<footer\b[\s\S]*?<\/footer>/)?.[0]
       assert.ok(footer)
-      assert.ok(/class="copyright"[^>]*data-nosnippet|data-nosnippet[^>]*class="copyright"/.test(footer), 'copyright must be excluded from snippets')
-      if (locale !== 'en-US') { assert.ok(!footer.includes('The official website of the Everglow Mod for')) }
+      const legal = footer.match(/<div\s[^>]*class="footer-legal"[^>]*>[\s\S]*?<\/div>/)?.[0]
+      assert.ok(legal, 'footer must contain the copyright section')
+      const legalTag = legal.slice(0, legal.indexOf('>') + 1)
+      assert.match(legalTag, /\sdata-nosnippet[\s=>]/, 'copyright must be excluded from snippets')
+      assert.match(legalTag, /\slang="en"/, 'English copyright must declare its language')
+      assert.ok(legal.includes('© 2026 Dream Chaser Group. All rights reserved.'), 'all locales must use the English copyright')
+      assert.ok(legal.includes('The official website of the Everglow Mod for'), 'all locales must include the English introduction')
+      assert.ok(legal.includes('Terraria and all its content is copyrighted by Re-Logic.'), 'all locales must include the Re-Logic disclaimer')
     })
     await check(`${locale} content sitemap`, async () => {
       const xml = await fetchText(`/__sitemap__/${locale}.xml`)

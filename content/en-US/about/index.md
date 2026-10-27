@@ -18,11 +18,6 @@ QQ Group For Developer Audit: 710341368
 
 [Bilibili Official Account](https://space.bilibili.com/1079503056)
 
-## Our Community
-
-[Discord Server For Fans](https://discord.gg/pdXvp89Dbp)
-QQ Group: [318736428]()
-
 ## Code of Conduct
 
 ### Our Standards

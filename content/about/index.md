@@ -18,11 +18,6 @@ date: '2024-10-12 09:51:11'
 
 [哔哩哔哩官方账号](https://space.bilibili.com/1079503056)
 
-## 官方社区
-
-[Discord](https://discord.gg/pdXvp89Dbp)
-QQ 群: [318736428]()
-
 ## 行为规范
 
 ### 我们的标准

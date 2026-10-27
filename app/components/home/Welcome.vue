@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { HomeHeroScene, HomeParallexScrollBase } from '#components'
+import { QQ_GROUP_URL } from '~/data/community'
 
 const colorMode = useColorMode()
 const { t, locale } = useI18n()
@@ -53,10 +54,10 @@ const communityLinks = computed(() => [
   },
   {
     brand: 'qq' as const,
-    external: false,
+    external: true,
     key: 'qq',
     label: t('home.community.qq'),
-    to: '/about',
+    to: QQ_GROUP_URL,
   },
 ])
 </script>
