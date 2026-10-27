@@ -10,10 +10,9 @@ Thank you for helping improve the Everglow website. Contributions to the site co
 
 ## Local development
 
-This repository uses Node.js 22 and pnpm 11. Enable Corepack, install dependencies, then start the development server:
+This repository uses Node.js 22 and pnpm 12. Install dependencies, then start the server:
 
 ```bash
-corepack enable
 pnpm install --frozen-lockfile
 pnpm dev
 ```

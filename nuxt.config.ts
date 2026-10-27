@@ -165,6 +165,15 @@ export default defineNuxtConfig({
       }
     },
   },
+  aiReady: {
+    enabled: true,
+    contentSignal: {
+      search: true,
+      contentUsage: true,
+      aiInput: true,
+      aiTrain: false,
+    },
+  },
   eslint: {
     checker: {
       configType: 'flat',
@@ -262,9 +271,7 @@ export default defineNuxtConfig({
     adobe: {
       id: ['sij5ufr', 'grx7wdj'],
     },
-    experimental: {
-      processCSSVariables: true,
-    },
+    processCSSVariables: true,
   },
   i18n: {
     baseUrl: process.env.BASE_URL || 'https://everglowmod.com',
@@ -292,12 +299,6 @@ export default defineNuxtConfig({
   },
   robots: {
     allow: '/',
-    groups: [
-      {
-        userAgent: '*',
-        contentSignal: 'ai-train=no, search=yes, ai-input=no',
-      },
-    ],
   },
   schemaOrg: {
     identity: {
@@ -307,4 +308,5 @@ export default defineNuxtConfig({
       logo: 'https://everglowmod.com/images/hero/menu/logo.png',
     },
   },
+  skewProtection: false,
 })

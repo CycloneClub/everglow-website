@@ -1,4 +1,5 @@
 import { spawn } from 'node:child_process'
+import { randomBytes } from 'node:crypto'
 import { readFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import process from 'node:process'
@@ -122,6 +123,24 @@ async function verifyHttpSurfaces () {
   if (!/user-agent:/i.test(robotsText)) {
     throw new Error('/robots.txt does not contain a User-agent directive.')
   }
+  const contentSignals = [...robotsText.matchAll(/^Content-Signal:([^\r\n]+)/gim)].map(([, value]) =>
+    Object.fromEntries(value.split(',').map(directive => directive.trim().split('='))),
+  )
+  if (contentSignals.length === 0 || contentSignals.some(policy =>
+    policy.search !== 'yes' || policy['ai-input'] !== 'yes' || policy['ai-train'] !== 'no',
+  )) {
+    throw new Error('/robots.txt must allow search and AI input while disallowing AI training.')
+  }
+
+  const llmsText = await (await fetchRequired('/llms.txt')).text()
+  if (!/^#\s+.+/m.test(llmsText) || !/Everglow/i.test(llmsText)) {
+    throw new Error('/llms.txt does not contain the site overview.')
+  }
+  const markdownResponse = await fetchRequired('/docs/getting-started/installation.md')
+  const markdown = await markdownResponse.text()
+  if (!markdownResponse.headers.get('content-type')?.includes('text/markdown') || !markdown.includes('2906178094')) {
+    throw new Error('AI Ready must serve the installation guide as Markdown with its content intact.')
+  }
 
   const sitemapResponse = await fetchRequired('/sitemap.xml')
   const sitemapText = await sitemapResponse.text()
@@ -172,6 +191,9 @@ async function verifyServer () {
       ...process.env,
       HOST: host,
       NODE_ENV: 'production',
+      // OG Image v7 requires a private root secret for signed runtime URLs.
+      // Use an ephemeral key only for this isolated test server.
+      NUXT_APP_SECRET: process.env.NUXT_APP_SECRET || randomBytes(32).toString('hex'),
       PORT: port,
     },
     stdio: ['ignore', 'pipe', 'pipe'],

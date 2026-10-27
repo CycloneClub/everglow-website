@@ -28,7 +28,7 @@ export async function verifyDocumentationStatus (baseUrl) {
 }
 
 export async function verifySeo (baseUrl) {
-  const siteOrigin = new URL(process.env.SEO_SITE_URL || 'https://everglowmod.com').origin
+  const siteOrigin = new URL(process.env.SEO_SITE_URL || process.env.BASE_URL || 'https://everglowmod.com').origin
   const failures = []
   const check = async (name, run) => {
     try {
