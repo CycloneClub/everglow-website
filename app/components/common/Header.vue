@@ -139,7 +139,7 @@ const changeColorMode = (mode: 'light' | 'dark') => {
         <li class="user-actions-item github">
           <div class="icon-button">
             <NuxtLink
-              href="https://github.com/Solaestas/Everglow"
+              href="https://github.com/CycloneClub/Everglow"
               title="Github"
               aria-label="Everglow on Github"
               target="_blank"

@@ -49,7 +49,7 @@ useHead(() => ({
     ...localeHeadLinks.value,
     {
       rel: 'me',
-      href: 'https://github.com/Solaestas/Everglow',
+      href: 'https://github.com/CycloneClub/Everglow',
     },
     {
       rel: 'me',

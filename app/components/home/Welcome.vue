@@ -32,7 +32,7 @@ const heroActions = computed(() => [
     external: true,
     key: 'github',
     title: t('home.hero.github'),
-    to: 'https://github.com/Solaestas/Everglow',
+    to: 'https://github.com/CycloneClub/Everglow',
     variant: 'ghost',
   },
 ])

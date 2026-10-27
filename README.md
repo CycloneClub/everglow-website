@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://github.com/Solaestas/Everglow/blob/master/Sources/Everglow/icon.png" alt="Everglow" width="200">
+<img src="https://github.com/CycloneClub/Everglow/blob/master/Sources/Everglow/icon.png" alt="Everglow" width="200">
 
 # Everglow
 
@@ -18,7 +18,7 @@ Development in progress ✿✿ヽ(°▽°)ノ✿
 
 ## Introduction
 
-This is the website repository of [Everglow](https://github.com/Solaestas/Everglow).
+This is the website repository of [Everglow](https://github.com/CycloneClub/Everglow).
 
 ## Get-Started
 
