@@ -500,7 +500,7 @@ onBeforeUnmount(stop)
         target="_blank"
         rel="noopener noreferrer"
       >Discord ↗</a><a
-        href="https://github.com/Solaestas/Everglow"
+        href="https://github.com/CycloneClub/Everglow"
         target="_blank"
         rel="noopener noreferrer"
       >GitHub ↗</a><a

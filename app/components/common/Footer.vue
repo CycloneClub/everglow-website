@@ -4,7 +4,7 @@ import { QQ_GROUP_URL } from '~/data/community'
 const community = [
   { name: 'Bilibili', icon: 'bilibili', href: 'https://space.bilibili.com/1079503056' },
   { name: 'Discord', icon: 'discord', href: 'https://discord.gg/pdXvp89Dbp' },
-  { name: 'GitHub', icon: 'github', href: 'https://github.com/Solaestas/Everglow' },
+  { name: 'GitHub', icon: 'github', href: 'https://github.com/CycloneClub/Everglow' },
 ] as const
 </script>
 
