@@ -148,7 +148,7 @@ const tocLinks = computed(() => {
                 .title {
                   font-size: 3rem;
                   line-height: 4rem;
-                  font-weight: var(--font-weight--normal);
+                  font-weight: 700;
                 }
 
                 .description {

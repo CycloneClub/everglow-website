@@ -170,6 +170,7 @@ const clearPageAnchor = () => {
                 .text {
                   cursor: default;
                   font-size: 3rem;
+                  font-weight: 700;
                   user-select: all;
                   margin: 1.5rem;
                   padding: 0.75rem 1rem;
@@ -185,7 +186,7 @@ const clearPageAnchor = () => {
             .article-title-noimage {
               font-family: var(--font-family-article-body);
               font-size: 4rem;
-              font-weight: inherit;
+              font-weight: 700;
               user-select: all;
               margin: 2rem 2rem 0;
               padding: 0.75rem 1rem 0;
