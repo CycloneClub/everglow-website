@@ -1,0 +1,12 @@
+Source Han Serif 1.001R by Adobe
+License: LICENSE.txt (SIL Open Font License 1.1)
+
+Source: the user-supplied source-han-serif-1.001R distribution.
+Simplified Chinese: SubsetOTF/CN/SourceHanSerifCN-Regular.otf
+Traditional Chinese: SubsetOTF/TW/SourceHanSerifTW-Regular.otf
+
+Original OTF files copied unchanged for local development.
+Weight: Regular, CSS 400. No conversion or additional subsetting.
+Configured directly through fonts.families in nuxt.config.ts.
+Nuxt generates the font-face declarations; preloading is disabled.
+SC is used by default; the zh-HK locale uses TC. Latin text keeps Rubik.

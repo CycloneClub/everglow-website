@@ -72,7 +72,7 @@ const emit = defineEmits(['navigate', 'openDocs'])
   @media only screen and (max-width: 833px) {
     .main-menu-item-content {
       min-height: var(--header-height);
-      font-size: 2rem;
+      font-size: 2.2rem;
 
       .chevron {
         display: block;

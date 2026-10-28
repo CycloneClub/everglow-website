@@ -176,6 +176,9 @@ importers:
         specifier: 1.19.0
         version: 1.19.0(vue@3.5.44(typescript@6.0.3))
     devDependencies:
+      '@callmebill/lxgw-wenkai-web':
+        specifier: 1.530.0
+        version: 1.530.0
       '@eslint/markdown':
         specifier: ^8.0.3
         version: 8.0.3(supports-color@10.2.2)
@@ -274,6 +277,9 @@ importers:
         version: 4.6.7
 
 packages:
+
+  '@callmebill/lxgw-wenkai-web@1.530.0':
+    resolution: {integrity: sha512-MSZiOoD7yP2TCGSh3ARpeDjkg8pGnZ5IYH+MNBwhzNmXjLT7wfv6SJpZkn+JO/TWca4TJqViv4jOpb83R0ojaw==}
 
   '@antfu/install-pkg@2.1.0':
     resolution: {integrity: sha512-sdg9NxU3zR4Mnawfbc/x6GB5Wf17WYud5qOuEuxXjaKpYpMkISSJEjItGebXJ2bQ4DIcly4NYH23mtkGJjvKUw==}
@@ -7215,6 +7221,8 @@ packages:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
 snapshots:
+
+  '@callmebill/lxgw-wenkai-web@1.530.0': {}
 
   '@antfu/install-pkg@2.1.0':
     dependencies:

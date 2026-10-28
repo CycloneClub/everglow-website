@@ -64,6 +64,7 @@ export default defineNuxtConfig({
       id: '__nuxt',
     },
   },
+  css: ['@callmebill/lxgw-wenkai-web/lxgwwenkai-regular/result.css'],
   router: {
     options: {
       hashMode: false,
@@ -189,6 +190,33 @@ export default defineNuxtConfig({
   fonts: {
     families: [
       {
+        name: 'Inter',
+        fallbacks: ['Arial', 'Helvetica'],
+      },
+      {
+        name: 'Source Han Serif SC',
+        src: '/fonts/source-han-serif/SourceHanSerifCN-Regular.otf',
+        weight: 400,
+        style: 'normal',
+        display: 'swap',
+        preload: false,
+        global: true,
+      },
+      {
+        name: 'Source Han Serif TC',
+        src: '/fonts/source-han-serif/SourceHanSerifTW-Regular.otf',
+        weight: 400,
+        style: 'normal',
+        display: 'swap',
+        preload: false,
+        global: true,
+      },
+      {
+        // Loaded from the local, Unicode-subsetted webfont package above.
+        name: 'LXGW WenKai',
+        provider: 'none',
+      },
+      {
         name: 'Abel',
         provider: 'bunny',
       },
@@ -231,14 +259,20 @@ export default defineNuxtConfig({
       },
       {
         name: 'Noto Sans SC',
-        provider: 'bunny',
-        weights: [400, 500],
+        provider: 'fontsource',
+        global: true,
+        preload: false,
+        weights: [400, 500, 700],
+        styles: ['normal'],
         subsets: ['latin', 'chinese-simplified'],
       },
       {
         name: 'Noto Sans TC',
-        provider: 'bunny',
-        weights: [400, 500],
+        provider: 'fontsource',
+        global: true,
+        preload: false,
+        weights: [400, 500, 700],
+        styles: ['normal'],
         subsets: ['latin', 'chinese-traditional'],
       },
       {
