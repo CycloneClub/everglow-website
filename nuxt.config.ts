@@ -190,6 +190,10 @@ export default defineNuxtConfig({
   fonts: {
     families: [
       {
+        name: 'Inter',
+        fallbacks: ['Arial', 'Helvetica'],
+      },
+      {
         // Loaded from the local, Unicode-subsetted webfont package above.
         name: 'LXGW WenKai',
         provider: 'none',
@@ -237,14 +241,20 @@ export default defineNuxtConfig({
       },
       {
         name: 'Noto Sans SC',
-        provider: 'bunny',
-        weights: [400, 500],
+        provider: 'fontsource',
+        global: true,
+        preload: false,
+        weights: [400, 500, 700],
+        styles: ['normal'],
         subsets: ['latin', 'chinese-simplified'],
       },
       {
         name: 'Noto Sans TC',
-        provider: 'bunny',
-        weights: [400, 500],
+        provider: 'fontsource',
+        global: true,
+        preload: false,
+        weights: [400, 500, 700],
+        styles: ['normal'],
         subsets: ['latin', 'chinese-traditional'],
       },
       {
