@@ -74,7 +74,7 @@ onMounted(() => {
       width: 100%;
       gap: 0.5rem;
       color: var(--everglow-font-color-3);
-      font-size: 1.33rem;
+      font-size: 1.5rem;
 
       .chevron {
         transition: transform 0.2s ease;

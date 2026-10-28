@@ -73,3 +73,9 @@ const groups = computed<NavigationGroup[]>(() => {
     </template>
   </nav>
 </template>
+
+<style lang="scss" scoped>
+  .navigation-tree {
+    font-family: 'Public Sans', 'LXGW WenKai', sans-serif;
+  }
+</style>
