@@ -194,6 +194,24 @@ export default defineNuxtConfig({
         fallbacks: ['Arial', 'Helvetica'],
       },
       {
+        name: 'Source Han Serif SC',
+        src: '/fonts/source-han-serif/SourceHanSerifCN-Regular.otf',
+        weight: 400,
+        style: 'normal',
+        display: 'swap',
+        preload: false,
+        global: true,
+      },
+      {
+        name: 'Source Han Serif TC',
+        src: '/fonts/source-han-serif/SourceHanSerifTW-Regular.otf',
+        weight: 400,
+        style: 'normal',
+        display: 'swap',
+        preload: false,
+        global: true,
+      },
+      {
         // Loaded from the local, Unicode-subsetted webfont package above.
         name: 'LXGW WenKai',
         provider: 'none',
