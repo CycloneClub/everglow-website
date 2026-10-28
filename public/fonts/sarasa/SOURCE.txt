@@ -1,0 +1,7 @@
+Sarasa Gothic 1.0.43 - Sarasa Mono SC / HC Regular
+Project: https://github.com/be5invis/Sarasa-Gothic
+Release: https://github.com/be5invis/Sarasa-Gothic/releases/tag/v1.0.43
+Archives: SarasaMonoSC-TTF-1.0.43.7z, SarasaMonoHC-TTF-1.0.43.7z
+Original Regular TTF files extracted without conversion or subsetting.
+Used as the CJK fallback in Markdown code, following JetBrains Mono.
+License: SIL Open Font License 1.1; see LICENSE.txt.

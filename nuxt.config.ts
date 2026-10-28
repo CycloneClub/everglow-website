@@ -190,6 +190,33 @@ export default defineNuxtConfig({
   fonts: {
     families: [
       {
+        name: 'Sarasa Mono SC',
+        src: '/fonts/sarasa/SarasaMonoSC-Regular.ttf',
+        weight: 400,
+        style: 'normal',
+        display: 'swap',
+        preload: false,
+        global: true,
+      },
+      {
+        name: 'Sarasa Mono HC',
+        src: '/fonts/sarasa/SarasaMonoHC-Regular.ttf',
+        weight: 400,
+        style: 'normal',
+        display: 'swap',
+        preload: false,
+        global: true,
+      },
+      {
+        name: 'Alverata CYR',
+        src: '/fonts/alverata/AlverataCYR-Medium.woff2',
+        weight: 500,
+        style: 'normal',
+        display: 'swap',
+        preload: false,
+        global: true,
+      },
+      {
         name: 'Inter',
         fallbacks: ['Arial', 'Helvetica'],
       },

@@ -1,0 +1,7 @@
+AlverataCYR-Medium.woff2
+Source: font file supplied by the user from their Desktop.
+Used for the English Everglow header wordmark at weight 500.
+The original font file is preserved without conversion or subsetting.
+Font metadata references the TypeTogether EULA:
+http://www.type-together.com/resources/eula/TT-EULA.pdf
+This source note does not grant or replace a font license.

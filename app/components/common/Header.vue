@@ -258,6 +258,11 @@ const changeColorMode = (mode: 'light' | 'dark') => {
           font-size: 1.8rem;
           font-family: 'Courier New', Courier, 'LXGW WenKai', monospace;
           font-weight: var(--font-weight--bold);
+
+          &:lang(en) {
+            font-family: 'Alverata CYR', Georgia, serif;
+            font-weight: 500;
+          }
         }
       }
 
