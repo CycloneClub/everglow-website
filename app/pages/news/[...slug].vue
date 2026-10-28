@@ -148,6 +148,7 @@ const clearPageAnchor = () => {
             }
 
             .article-title {
+              font-family: var(--font-family-article-body);
               height: 25rem;
               width: 100%;
               position: relative;
@@ -182,6 +183,7 @@ const clearPageAnchor = () => {
             }
 
             .article-title-noimage {
+              font-family: var(--font-family-article-body);
               font-size: 4rem;
               font-weight: inherit;
               user-select: all;
@@ -235,7 +237,7 @@ const clearPageAnchor = () => {
                   Arial;
 
                 .author {
-                  font-family: Georgia, 'Times New Roman', Times, serif;
+                  font-family: var(--font-family-article-title);
                   font-weight: var(--font-weight--normal);
                 }
 

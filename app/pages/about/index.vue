@@ -59,6 +59,7 @@ const { data: page } = await useAsyncData(route.path, () =>
         flex-direction: column;
 
         .article-title {
+          font-family: var(--font-family-article-body);
           font-size: 3.5rem;
           height: 25rem;
           position: relative;

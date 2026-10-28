@@ -143,6 +143,7 @@ const tocLinks = computed(() => {
               .info {
                 display: flex;
                 flex-direction: column;
+                font-family: var(--font-family-article-body);
 
                 .title {
                   font-size: 3rem;
@@ -154,17 +155,6 @@ const tocLinks = computed(() => {
                   font-size: 1.5rem;
                   line-height: 2rem;
                   margin-top: 1.5rem;
-
-                  font-family:
-                    DM Sans,
-                    DM Sans fallback,
-                    ui-sans-serif,
-                    system-ui,
-                    sans-serif,
-                    Apple Color Emoji,
-                    Segoe UI Emoji,
-                    Segoe UI Symbol,
-                    Noto Color Emoji;
                 }
               }
             }

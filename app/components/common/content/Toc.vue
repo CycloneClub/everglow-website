@@ -46,6 +46,7 @@ const open = ref(false)
 
 <style lang="scss" scoped>
   .content-toc-wrapper {
+    font-family: var(--font-family-article-body);
     overflow-x: hidden;
 
     .content-toc-container {

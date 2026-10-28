@@ -60,24 +60,15 @@ const scrollToHeading = (id: string) => {
       .content-toc-link {
         display: block;
 
-        font-size: 1.125rem;
-        line-height: 2rem;
+        font-size: 15px;
+        line-height: 26px;
 
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
 
         color: var(--everglow-font-color-1);
-        font-family:
-          DM Sans,
-          'DM Sans Fallback: Arial',
-          ui-sans-serif,
-          system-ui,
-          sans-serif,
-          Apple Color Emoji,
-          Segoe UI Emoji,
-          Segoe UI Symbol,
-          Noto Color Emoji;
+        font-family: var(--font-family-article-body);
         transition: color 0.1s ease-in;
 
         &:hover {
