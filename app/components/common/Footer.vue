@@ -190,24 +190,6 @@ const community = [
   .iconify { font-size: 20px; }
 }
 
-@media (max-width: 540px) {
-  .footer-container { padding: 0 24px; }
-
-  .footer-main {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 24px 0 16px;
-  }
-
-  .footer-logo {
-    flex-basis: auto;
-    width: 128px;
-  }
-
-  .footer-links { align-self: flex-end; }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .common-footer a { transition: none; }
 }
