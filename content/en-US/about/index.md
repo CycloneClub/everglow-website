@@ -14,10 +14,6 @@ Focus on creating the most advanced Terraria mods
 
 QQ Group For Developer Audit: 710341368
 
-### Contact Us
-
-[Bilibili Official Account](https://space.bilibili.com/1079503056)
-
 ## Code of Conduct
 
 ### Our Standards
