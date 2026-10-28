@@ -25,6 +25,7 @@
 	},
 	"packageManager": "pnpm@12.15.0",
 	"devDependencies": {
+		"@callmebill/lxgw-wenkai-web": "1.530.0",
 		"@eslint/markdown": "^8.0.3",
 		"@iconify-json/dashicons": "^1.2.1",
 		"@iconify-json/line-md": "^1.2.16",

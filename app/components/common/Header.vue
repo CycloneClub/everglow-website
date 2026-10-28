@@ -168,6 +168,7 @@ const changeColorMode = (mode: 'light' | 'dark') => {
 
 <style lang="scss" scoped>
   .common-header {
+    font-family: 'Public Sans', 'LXGW WenKai', sans-serif;
     position: fixed;
     top: 0;
     width: 100%;
@@ -254,8 +255,8 @@ const changeColorMode = (mode: 'light' | 'dark') => {
 
         .logo-text {
           padding-left: 10px;
-          font-size: 20px;
-          font-family: 'Courier New', Courier, monospace;
+          font-size: 1.8rem;
+          font-family: 'Courier New', Courier, 'LXGW WenKai', monospace;
           font-weight: var(--font-weight--bold);
         }
       }
@@ -266,7 +267,7 @@ const changeColorMode = (mode: 'light' | 'dark') => {
         column-gap: 0.5rem;
 
         .user-actions-item {
-          font-size: 20px;
+          font-size: 1.7rem;
 
           display: flex;
           align-items: center;

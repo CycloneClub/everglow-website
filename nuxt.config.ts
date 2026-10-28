@@ -64,6 +64,7 @@ export default defineNuxtConfig({
       id: '__nuxt',
     },
   },
+  css: ['@callmebill/lxgw-wenkai-web/lxgwwenkai-regular/result.css'],
   router: {
     options: {
       hashMode: false,
@@ -188,6 +189,11 @@ export default defineNuxtConfig({
   },
   fonts: {
     families: [
+      {
+        // Loaded from the local, Unicode-subsetted webfont package above.
+        name: 'LXGW WenKai',
+        provider: 'none',
+      },
       {
         name: 'Abel',
         provider: 'bunny',

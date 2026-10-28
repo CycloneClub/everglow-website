@@ -98,7 +98,7 @@ const setLanguage = async (event: MouseEvent, code: Langs) => {
       align-items: center;
 
       .icon {
-        font-size: 18px;
+        font-size: 1.5rem;
       }
     }
 
@@ -119,7 +119,7 @@ const setLanguage = async (event: MouseEvent, code: Langs) => {
       }
 
       a {
-        font-size: 15px;
+        font-size: 1.4rem;
         display: flex;
         padding: 5px;
         border-radius: 5px;
