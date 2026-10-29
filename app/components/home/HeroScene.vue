@@ -8,6 +8,9 @@ defineProps<{
   /** Layout parity with ParallexScrollBase so the hero wrapper can swap dynamically. */
   cover?: boolean
 }>()
+const emit = defineEmits<{
+  ready: []
+}>()
 
 // Fetch the menu scene assets alongside the page, not after hydration.
 useHead({
@@ -129,19 +132,17 @@ onMounted(() => {
       water = createMenuWater(waterCanvas.value)
       resize()
     }
-    if (reduced.matches) {
-      // Static hero: a settled frame, no pointer tracking, no loop.
-      paint(performance.now())
-    } else {
+    // The loading screen only releases after the first scene frame is painted.
+    paint(performance.now())
+    emit('ready')
+    if (!reduced.matches) {
       if (finePointer.matches) {
         window.addEventListener('pointermove', onPointerMove, { passive: true })
         document.documentElement.addEventListener('pointerleave', onPointerLeave)
       }
       if (active) { loop.start() }
     }
-  }).catch(() => {
-    // The solid night-sky color remains as the fallback.
-  })
+  }).catch(console.error)
 
   cleanupScene = () => {
     disposed = true

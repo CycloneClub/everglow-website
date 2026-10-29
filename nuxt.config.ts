@@ -141,6 +141,9 @@ export default defineNuxtConfig({
   nitro: {
     // preset: 'node-server',
     publicAssets: [{ dir: seoPublicDir, maxAge: 0 }],
+    // This browser controller is serialized into SSR HTML. Bundle its source
+    // into the server instead of externalizing a workspace-relative JS import.
+    externals: { inline: [resolve('app/utils/site-loading-bootstrap.js')] },
   },
   vite: {
     css: {
