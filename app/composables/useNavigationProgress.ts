@@ -27,15 +27,24 @@ export function useNavigationProgress () {
     function start (to: RouteLocationNormalized) {
       clearTimers()
       activeRoute = to
-      progress.value = 0
+      // A new route can supersede one that is still visible. Keep its position
+      // instead of snapping the butterfly back across the viewport. Restart
+      // hidden once it reaches the final stretch reserved for completion.
+      if (!isLoading.value || progress.value > 90) {
+        isLoading.value = false
+        progress.value = 0
+      }
       error.value = false
       showTimer = setTimeout(() => {
         isLoading.value = true
+        const initialProgress = progress.value
         let started: number | undefined
         function advance (now: number) {
           started ??= now
-          // Preserve Nuxt's original 1800ms estimated-progress curve.
-          progress.value = 200 / Math.PI * Math.atan((now - started) / 900)
+          // Preserve Nuxt's original 1800ms estimated-progress curve, reserving
+          // the final stretch so the butterfly stays onscreen while pending.
+          const estimated = 200 / Math.PI * Math.atan((now - started) / 900)
+          progress.value = Math.min(90, initialProgress + (100 - initialProgress) * estimated / 100)
           frame = requestAnimationFrame(advance)
         }
         frame = requestAnimationFrame(advance)
@@ -46,12 +55,28 @@ export function useNavigationProgress () {
       if (!activeRoute) { return }
       activeRoute = undefined
       clearTimers()
-      progress.value = 100
       error.value = failed
-      hideTimer = setTimeout(() => {
-        isLoading.value = false
-        resetTimer = setTimeout(() => { progress.value = 0 }, 400)
-      }, 240)
+      // Navigations resolved before the show delay need no visible animation.
+      if (!isLoading.value) { progress.value = 0; return }
+      const from = progress.value
+      const duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 0
+        : Math.max(240, (100 - from) * 7)
+      let started: number | undefined
+      function complete (now: number) {
+        started ??= now
+        const elapsed = duration === 0 ? 1 : Math.min(1, (now - started) / duration)
+        progress.value = from + (100 - from) * (1 - (1 - elapsed) ** 2)
+        if (elapsed < 1) {
+          frame = requestAnimationFrame(complete)
+          return
+        }
+        hideTimer = setTimeout(() => {
+          isLoading.value = false
+          resetTimer = setTimeout(() => { progress.value = 0 }, 400)
+        }, 120)
+      }
+      frame = requestAnimationFrame(complete)
     }
 
     function finishRenderedRoute () {

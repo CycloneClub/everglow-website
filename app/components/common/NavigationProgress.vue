@@ -4,28 +4,35 @@ const { progress, isLoading, error } = useNavigationProgress()
 
 <template>
   <div
-    class="navigation-progress"
-    :class="{ 'is-loading': isLoading, 'is-error': error }"
-    :style="{ transform: `scaleX(${progress / 100})` }"
+    class="navigation-progress-viewport"
     aria-hidden="true"
   >
-    <span class="navigation-progress-shimmer" />
+    <!-- One translated track keeps the sprite and bar tip in sync, including
+         the extra travel needed for the whole butterfly to leave the viewport. -->
+    <div
+      class="navigation-progress-track"
+      :style="{ transform: `translateX(${progress - 100}%)`, visibility: progress === 0 ? 'hidden' : undefined }"
+    >
+      <div
+        class="navigation-progress"
+        :class="{ 'is-loading': isLoading, 'is-error': error }"
+      >
+        <span class="navigation-progress-shimmer" />
+      </div>
+      <span
+        class="navigation-butterfly"
+        :class="{ 'is-loading': isLoading }"
+      >
+        <span class="navigation-butterfly-flight">
+          <span class="navigation-butterfly-sprite" />
+        </span>
+      </span>
+    </div>
   </div>
-  <!-- Keep the sprite outside the scaled bar so its pixel proportions stay intact. -->
-  <span
-    class="navigation-butterfly"
-    :class="{ 'is-loading': isLoading }"
-    :style="{ left: `clamp(18px, ${progress}%, calc(100% - 18px))` }"
-    aria-hidden="true"
-  >
-    <span class="navigation-butterfly-flight">
-      <span class="navigation-butterfly-sprite" />
-    </span>
-  </span>
 </template>
 
 <style scoped>
-  .navigation-progress {
+  .navigation-progress-viewport {
     position: fixed;
     top: var(--header-height);
     right: 0;
@@ -33,9 +40,19 @@ const { progress, isLoading, error } = useNavigationProgress()
     z-index: 4001;
     height: 3px;
     pointer-events: none;
-    transform-origin: left;
+    clip-path: inset(-40px 0);
+  }
+
+  .navigation-progress-track {
+    width: calc(100% + 36px);
+    height: 100%;
+    will-change: transform;
+  }
+
+  .navigation-progress {
+    height: 100%;
     opacity: 0;
-    transition: transform 0.1s, opacity 0.4s;
+    transition: opacity 0.4s;
     color: var(--everglow-blue-3);
     background: currentColor;
     box-shadow: 0 0 6px currentColor, 0 3px 16px var(--everglow-trans-blue-3);
@@ -46,15 +63,16 @@ const { progress, isLoading, error } = useNavigationProgress()
   }
 
   .navigation-butterfly {
-    position: fixed;
-    top: calc(var(--header-height) + 1.5px);
+    position: absolute;
+    top: 1.5px;
+    left: 100%;
     z-index: 4002;
     width: 36px;
     height: 34px;
     pointer-events: none;
     transform: translate(-50%, -50%);
     opacity: 0;
-    transition: left 0.1s, opacity 0.4s;
+    transition: opacity 0.4s;
     filter: drop-shadow(0 0 4px #80ccffb3) drop-shadow(0 0 9px #548aff80);
   }
 
