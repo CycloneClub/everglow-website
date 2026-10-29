@@ -205,7 +205,7 @@ export async function verifySeo (baseUrl) {
         }
         assert.ok(!/<title>[^<]*head\./.test(html), `${path}: translated title`)
         if (path.includes('/2025-') || path.includes('/introduction')) {
-          assert.ok(!/<title>(?:新闻|新聞|News|文档|文檔|Docs) - /.test(html), `${path}: content-specific title`)
+          assert.ok(!/<title>(?:新闻|新聞|News|文档|文檔|Docs|指南|Guides) - /.test(html), `${path}: content-specific title`)
         }
       }
     })
