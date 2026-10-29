@@ -94,7 +94,7 @@
 .atlas-static-layer { padding: 3rem 0; border-top: 1px solid #86714955; max-width: 720px; margin: auto; scroll-margin-top: calc(var(--header-height) + 1rem); }
 .atlas-static-layer > p { margin-bottom: 1.3rem; line-height: 1.9; }.atlas-static figure { margin: 2rem 0; }
 .atlas-static figure > img { width: 100%; height: auto; }.atlas-static figcaption { font-size: 12px; font-style: italic; margin-top: 0.8rem; }
-.atlas-static-landscape { aspect-ratio: 1.9; background-size: cover; background-position: center; clip-path: polygon(1% 2%, 49% 0, 99% 3%, 100% 98%, 53% 99%, 0 96%); }
+.atlas-static-landscape { --atlas-landscape-height: auto; aspect-ratio: 1.9; clip-path: polygon(1% 2%, 49% 0, 99% 3%, 100% 98%, 53% 99%, 0 96%); }
 .atlas-static-specimen { display: flex; gap: 2rem; align-items: center; margin: 2rem 0; }.atlas-static-specimen img { object-fit: contain; image-rendering: pixelated; }.atlas-static-specimen p { margin-top: 0.6rem; line-height: 1.8; }
 .atlas-static-margin { color: var(--atlas-red); font-style: italic; }.atlas-static-ending { text-align: center; margin: 4rem 0 2rem; }.atlas-static-ending > p { margin: 1.4rem 0; }.atlas-static-ending .atlas-static-quote { font-size: 2rem; font-style: italic; margin-top: 5rem; }
 .atlas-after { background: #191e1b; color: #e5d8b6; padding: 4.5rem max(7%, 1.5rem); display: flex; align-items: center; justify-content: space-between; gap: 2rem; scroll-margin-top: var(--header-height); }

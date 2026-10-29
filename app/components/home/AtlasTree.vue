@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { atlasLayers, unchartedLayers } from '~/data/world-atlas'
+import { atlasLayers, atlasText, unchartedLayers } from '~/data/world-atlas'
+
+const { locale } = useI18n()
 
 defineProps<{
   camera: string
@@ -231,7 +233,9 @@ const rays = Array.from({ length: 100 }, (_, i) => {
         <g
           :clip-path="`url(#${drawingId}-window-${layer.id})`"
           :opacity="active === index ? illustration : 0"
+          :style="{ pointerEvents: active === index && illustration > 0.1 ? 'auto' : 'none' }"
         >
+          <title>{{ atlasText(layer.imageAlt, locale) }}</title>
           <image
             :href="layer.sky"
             x="330"

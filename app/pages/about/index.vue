@@ -21,6 +21,7 @@ const { data: page } = await useAsyncData(route.path, () =>
           <img
             src="/images/everglow.jpg"
             alt="A boss preview of Everglow mod"
+            title="A boss preview of Everglow mod"
           >
           <div class="title-container">
             <h1 class="text">

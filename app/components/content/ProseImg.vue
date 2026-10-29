@@ -7,6 +7,7 @@ defineOptions({ inheritAttrs: false })
 const props = withDefaults(defineProps<{
   src?: string
   alt?: string
+  title?: string
   width?: string | number
   height?: string | number
 }>(), {
@@ -51,6 +52,7 @@ onDeactivated(() => { visible.value = false })
     v-bind="$attrs"
     :src="source"
     :alt="alt"
+    :title="title ?? (alt || undefined)"
     :width="width"
     :height="height"
     class="prose-image-preview"
