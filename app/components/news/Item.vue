@@ -24,6 +24,7 @@ const handleClickLink = () => {
     <div
       v-if="img"
       class="news-item-img"
+      :title="title"
       :style="`background-image: url('${img}')`"
       @click="handleClickLink"
     />

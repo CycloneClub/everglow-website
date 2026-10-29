@@ -8,6 +8,36 @@ function attributes (tag) {
   return Object.fromEntries([...tag.matchAll(/([\w:-]+)="([^"]*)"/g)].map(([, name, value]) => [name, value.replaceAll('&amp;', '&')]))
 }
 
+// Check the delivered HTML and sitemap, not the component source: crawlers need
+// actual image URLs before running JavaScript or interacting with the atlas.
+export async function verifyHomeImages (baseUrl) {
+  const images = ['/images/atlas/town.png', '/images/atlas/kelp.png']
+  for (const [path, locale] of [['/', 'zh-CN'], ['/en-us', 'en-US'], ['/zh-hk', 'zh-HK']]) {
+    const response = await fetch(new URL(path, baseUrl))
+    assert.equal(response.status, 200)
+    const html = await response.text()
+    const tags = (html.match(/<img\b[^>]*>/g) || []).map(attributes)
+    for (const src of images) {
+      assert.ok(tags.some(tag => tag.src === src && tag.alt?.includes('Everglow')), `${path}: ${src} must be an HTML image with descriptive alt text`)
+    }
+    const sitemap = await fetch(new URL(`/__sitemap__/${locale}.xml`, baseUrl))
+    assert.equal(sitemap.status, 200)
+    const entries = [...(await sitemap.text()).matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1])
+    const home = entries.find(entry => new URL(entry.match(/<loc>([^<]+)<\/loc>/)[1]).pathname === path)
+    assert.ok(home, `${locale}: homepage is listed`)
+    const listed = [...home.matchAll(/<image:loc>([^<]+)<\/image:loc>/g)].map(match => new URL(match[1]).pathname)
+    for (const src of images) { assert.ok(listed.includes(src), `${locale}: sitemap must list ${src} on the homepage`) }
+    assert.equal(new Set(listed).size, listed.length, `${locale}: no duplicate image entries`)
+  }
+  for (const src of images) {
+    const response = await fetch(new URL(src, baseUrl))
+    assert.equal(response.status, 200, src)
+    assert.match(response.headers.get('content-type'), /^image\//, src)
+    assert.ok(!/noindex|noimageindex/i.test(response.headers.get('x-robots-tag') || ''), src)
+    await response.arrayBuffer()
+  }
+}
+
 // Exercise the HTTP contract: missing content must not become indexable empty pages.
 export async function verifyDocumentationStatus (baseUrl) {
   for (const prefix of ['', '/en-us', '/zh-hk']) {
@@ -43,6 +73,7 @@ export async function verifySeo (baseUrl) {
     assert.equal(response.status, 200, path)
     return response.text()
   }
+  await check('localized homepage images are discoverable in HTML and sitemaps', () => verifyHomeImages(baseUrl))
   await check('organization logo is a crawlable image of sufficient size', async () => {
     const html = await fetchText('/')
     const graph = [...html.matchAll(/<script\b[^>]+type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].flatMap(match => JSON.parse(match[1])['@graph'] || [])

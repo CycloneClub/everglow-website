@@ -65,7 +65,8 @@ const clearPageAnchor = () => {
             >
               <img
                 :src="image"
-                alt="News head image"
+                :alt="title || $t('head.subtitles.news')"
+                :title="title || $t('head.subtitles.news')"
               >
               <div class="title-container">
                 <h1

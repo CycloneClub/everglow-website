@@ -325,6 +325,7 @@ onBeforeUnmount(stop)
                   <img
                     :src="layer.specimenImage"
                     :alt="text(layer.specimen)"
+                    :title="text(layer.specimen)"
                     :class="{ 'is-portrait': layer.id === 'town' }"
                     width="140"
                     height="150"
@@ -347,6 +348,7 @@ onBeforeUnmount(stop)
                   v-if="layer.encounterImage"
                   :src="layer.encounterImage"
                   :alt="text(layer.encounter)"
+                  :title="text(layer.encounter)"
                   class="atlas-pinned-image"
                   width="270"
                   height="150"
@@ -439,17 +441,19 @@ onBeforeUnmount(stop)
                 {{ entry.english }}
               </p><p>{{ text(entry.description) }}</p>
               <figure>
-                <div
+                <HomeAtlasLandscape
                   class="atlas-static-landscape"
-                  :style="{ backgroundImage: `${entry.foreground ? `url(${entry.foreground}), ` : ''}url(${entry.landscape}), url(${entry.sky})` }"
-                  role="img"
-                  :aria-label="text(entry.place)"
+                  :landscape="entry.landscape"
+                  :sky="entry.sky"
+                  :foreground="entry.foreground"
+                  :alt="text(entry.imageAlt)"
                 /><figcaption>{{ text(entry.place) }}</figcaption>
               </figure>
               <p>{{ text(entry.note) }}</p><div class="atlas-static-specimen">
                 <img
                   :src="entry.specimenImage"
                   :alt="text(entry.specimen)"
+                  :title="text(entry.specimen)"
                   width="110"
                   height="130"
                   loading="lazy"
@@ -461,6 +465,7 @@ onBeforeUnmount(stop)
                 <img
                   :src="entry.encounterImage"
                   :alt="text(entry.encounter)"
+                  :title="text(entry.encounter)"
                   width="600"
                   height="334"
                   loading="lazy"
