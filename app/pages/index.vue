@@ -10,6 +10,9 @@ const isCjk = computed(() => locale.value.startsWith('zh'))
 const page = ref<HTMLElement>()
 const lore = ref<{ wheel: (event: WheelEvent) => boolean, stage?: HTMLElement }>()
 const coverReady = ref(false)
+function onSceneReady () {
+  window.__everglowLoading?.sceneReady()
+}
 const { enter, coverProgress } = useAtlasEntrance(page, event => lore.value?.wheel(event) ?? false)
 const coverStyle = computed(() => {
   const progress = coverProgress.value
@@ -33,7 +36,9 @@ const coverStyle = computed(() => {
   >
     <div class="home-opening">
       <div class="home-opening__hero">
-        <HomeWelcome />
+        <HomeWelcome
+          @ready="onSceneReady"
+        />
         <a
           class="home-opening__enter"
           href="#lore"

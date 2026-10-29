@@ -32,8 +32,8 @@ jobs:
       - name: Lint
         run: pnpm lint
 
-      - name: Test SEO dates and IndexNow
-        run: node --test scripts/test-seo-metadata.mjs scripts/test-indexnow.mjs
+      - name: Test SEO dates, IndexNow, and loading
+        run: node --test scripts/test-seo-metadata.mjs scripts/test-indexnow.mjs scripts/test-site-loading.mjs scripts/test-home-loading.mjs
 
       - name: Build
         run: pnpm build

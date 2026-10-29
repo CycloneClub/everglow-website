@@ -2,18 +2,30 @@
 import { HomeHeroScene, HomeParallexScrollBase } from '#components'
 import { QQ_GROUP_URL } from '~/data/community'
 
+const emit = defineEmits<{
+  ready: []
+}>()
+
 const colorMode = useColorMode()
+const mounted = ref(false)
+onMounted(() => { mounted.value = true })
+// The server cannot read a locally saved theme. Hydrate the same scene first,
+// then switch behind the loading screen once the client preference is known.
+const lightScene = computed(() => mounted.value && colorMode.value === 'light')
+// Static scenes have no canvas frame to wait for. Report after the DOM update;
+// the global loader discovers and decodes the background along with page images.
+watch(lightScene, (light) => { if (light) { emit('ready') } }, { flush: 'post' })
 const { t, locale } = useI18n()
 const isCjk = computed(() => locale.value.startsWith('zh'))
 
 // The parallax scene is designed for the dark theme; the light theme
 // keeps the static sky photograph.
 const heroWrapper = computed(() =>
-  colorMode.value === 'light' ? HomeParallexScrollBase : HomeHeroScene,
+  lightScene.value ? HomeParallexScrollBase : HomeHeroScene,
 )
 
 const heroProps = computed(() =>
-  colorMode.value === 'light' ? { src: '/images/light-sky.jpg' } : {},
+  lightScene.value ? { src: '/images/light-sky.jpg' } : {},
 )
 
 const heroActions = computed(() => [
@@ -67,6 +79,7 @@ const communityLinks = computed(() => [
     :is="heroWrapper"
     v-bind="heroProps"
     cover
+    @ready="emit('ready')"
   >
     <div
       class="home-welcome"

@@ -137,13 +137,18 @@ function loadImage (src: string) {
 }
 
 export async function loadMenuSkyAssets (base = '/images/hero/menu'): Promise<MenuSkyAssets> {
+  const load = async (name: string) => {
+    const image = await loadImage(`${base}/${name}.png`)
+    await image.decode()
+    return image
+  }
   const [bg, star, moon, water, front2, front1] = await Promise.all([
-    loadImage(`${base}/bg.png`),
-    loadImage(`${base}/star.png`),
-    loadImage(`${base}/moon.png`),
-    loadImage(`${base}/water.png`),
-    loadImage(`${base}/front2.png`),
-    loadImage(`${base}/front1.png`),
+    load('bg'),
+    load('star'),
+    load('moon'),
+    load('water'),
+    load('front2'),
+    load('front1'),
   ])
   return { bg, star, moon, water, front2, front1 }
 }
