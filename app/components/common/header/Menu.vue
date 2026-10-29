@@ -87,15 +87,6 @@ watch(() => state, async (current, previous) => {
     font-family: 'Public Sans', 'LXGW WenKai', sans-serif;
     font-weight: var(--font-weight--normal);
     font-size: 1.3rem;
-
-    :deep(.navigation-links) {
-      font-family: 'DM Sans', 'LXGW WenKai', sans-serif;
-      font-size: 1.3rem;
-    }
-
-    :deep(.navigation-accordion-item > .title) {
-      font-size: 1.5rem;
-    }
   }
 
   .main-menu {

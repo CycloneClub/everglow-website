@@ -3,12 +3,21 @@
 		Public Sans, 'Public Sans Fallback: Arial', ui-sans-serif, system-ui,
 		sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol,
 		Noto Color Emoji;
+	--font-family-article-body: Inter, 'Noto Sans SC', Arial, Helvetica, sans-serif;
+	--font-family-article-title: Rubik, 'Source Han Serif SC', Cambria, 'Times New Roman', Times, serif;
+	--font-family-article-code: 'JetBrains Mono', 'Sarasa Mono SC', Menlo, Monaco, 'Courier New', Courier, monospace;
 
 	--font-weight--light: 300;
 	--font-weight--regular: 400;
 	--font-weight--bold: 600;
 
 	--header-height: 5rem;
+}
+
+:root:lang(zh-HK) {
+	--font-family-article-body: Inter, 'Noto Sans TC', 'Noto Sans SC', Arial, Helvetica, sans-serif;
+	--font-family-article-title: Rubik, 'Source Han Serif TC', 'Source Han Serif SC', Cambria, 'Times New Roman', Times, serif;
+	--font-family-article-code: 'JetBrains Mono', 'Sarasa Mono HC', 'Sarasa Mono SC', Menlo, Monaco, 'Courier New', Courier, monospace;
 }
 
 html,

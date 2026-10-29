@@ -8,6 +8,8 @@
 
 <style lang="scss" scoped>
   .news-list {
+    font-family: var(--font-family-article-body);
+
     .news-list-content {
       display: flex;
       flex-direction: column;

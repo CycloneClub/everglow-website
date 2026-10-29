@@ -27,10 +27,11 @@ const emit = defineEmits(['navigate'])
 
 <style lang="scss" scoped>
   .navigation-links {
-    font-size: 1.125rem;
+    font-size: 1.3rem;
     font-family:
       DM Sans,
       DM Sans fallback,
+      'LXGW WenKai',
       ui-sans-serif,
       system-ui,
       sans-serif,
