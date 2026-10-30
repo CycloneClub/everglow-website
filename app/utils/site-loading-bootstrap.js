@@ -22,6 +22,12 @@ export function startSiteLoading () {
 
   function block (event) { event.preventDefault(); event.stopPropagation() }
 
+  function restoreScroll () {
+    if (previousOverflow === undefined) { return }
+    document.body.style.overflow = previousOverflow
+    previousOverflow = undefined
+  }
+
   function close () {
     if (phase === 'closed') { return }
     phase = 'closed'
@@ -35,7 +41,7 @@ export function startSiteLoading () {
     mutation.disconnect()
     document.removeEventListener('load', loaded, true)
     document.removeEventListener('error', loaded, true)
-    if (previousOverflow !== undefined) { document.body.style.overflow = previousOverflow }
+    restoreScroll()
     elements?.root.close()
     elements?.root.remove()
   }
@@ -76,8 +82,9 @@ export function startSiteLoading () {
 
   function finish () {
     phase = 'painting'
-    // Let the mounted page paint before removing the overlay. The home scene
-    // also reports its own first frame; neither signal fabricates progress.
+    // Restore scrollbar space while the dialog is still opaque, then let the
+    // mounted page repaint at its final width before starting the exit fade.
+    restoreScroll()
     frame = requestAnimationFrame(() => {
       frame = requestAnimationFrame(() => {
         if (phase === 'closed') { return }
