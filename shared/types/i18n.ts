@@ -36,6 +36,7 @@ export type I18nLocale = {
       openMenu: string
       closeMenu: string
       backToMenu: string
+      toggleTheme: string
       name: string
       home: string
       news: string
