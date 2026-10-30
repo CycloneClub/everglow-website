@@ -1,31 +1,21 @@
 .markdown code {
 	display: inline;
-	padding: 0 10px;
-	border-radius: 4px;
-	background: color-mix(
-		in srgb,
-		var(--crepe-color-inline-area),
-		transparent 40%
-	);
 	color: var(--crepe-color-inline-code);
 	font-family: var(--crepe-font-code);
 	font-size: 87.5%;
 	line-height: 1.4286;
 }
 
-.markdown h1 code,
-.markdown h2 code,
-.markdown h3 code,
-.markdown h4 code,
-.markdown h5 code,
-.markdown h6 code {
-	background: color-mix(
-		in srgb,
-		var(--crepe-color-inline-area),
-		transparent 40%
-	);
-	color: var(--crepe-color-inline-code) !important;
-	font-family: var(--crepe-font-code);
+.markdown :not(pre) > code {
+	padding: 0.1em 0.4em;
+	border: 1px solid var(--crepe-color-secondary);
+	border-radius: 6px;
+	background: var(--everglow-code-background);
+	color: var(--crepe-color-primary);
+	line-height: inherit;
+	overflow-wrap: anywhere;
+	-webkit-box-decoration-break: clone;
+	box-decoration-break: clone;
 }
 
 .markdown code::-moz-selection {
@@ -47,11 +37,7 @@
 .markdown pre {
 	display: flex;
 	padding: 0;
-	background: color-mix(
-		in srgb,
-		var(--crepe-color-inline-area),
-		transparent 40%
-	);
+	background: var(--everglow-code-background);
 	white-space: pre-wrap;
 }
 
