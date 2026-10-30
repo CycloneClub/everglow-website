@@ -35,6 +35,7 @@ export default {
       'openMenu': '開啟選單',
       'closeMenu': '關閉選單',
       'backToMenu': '返回主選單',
+      'toggleTheme': '切換主題',
       'name': '流光無際',
       'home': '主頁',
       'news': '新聞',

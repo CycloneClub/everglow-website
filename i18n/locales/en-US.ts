@@ -35,6 +35,7 @@ export default {
       openMenu: 'Open menu',
       closeMenu: 'Close menu',
       backToMenu: 'Back to main menu',
+      toggleTheme: 'Switch theme',
       name: 'Everglow',
       home: 'Home',
       news: 'News',

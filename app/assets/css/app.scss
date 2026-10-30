@@ -26,7 +26,7 @@ body {
 }
 
 .everglow-dark-mode .shiki {
-	background: #2e3440;
+	background: var(--everglow-code-background);
 }
 
 .everglow-dark-mode .shiki,
@@ -35,7 +35,7 @@ body {
 }
 
 .everglow-light-mode .shiki {
-	background-color: #f8f8f2;
+	background-color: var(--everglow-code-background);
 }
 
 .everglow-light-mode .shiki,

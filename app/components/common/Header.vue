@@ -75,12 +75,6 @@ const mainMenuItemList = [
     link: '/about',
   },
 ]
-
-const colorMode = useColorMode()
-
-const changeColorMode = (mode: 'light' | 'dark') => {
-  colorMode.preference = mode
-}
 </script>
 
 <template>
@@ -115,26 +109,7 @@ const changeColorMode = (mode: 'light' | 'dark') => {
           <CommonHeaderLanguage />
         </li>
         <li class="user-actions-item mode">
-          <div class="icon-button">
-            <span
-              v-show="$colorMode.value === 'light'"
-              class="light"
-            >
-              <Icon
-                name="line-md:moon-filled-alt-to-sunny-filled-loop-transition"
-                @click="changeColorMode('dark')"
-              />
-            </span>
-            <span
-              v-show="$colorMode.value === 'dark'"
-              class="dark"
-            >
-              <Icon
-                name="line-md:sunny-outline-to-moon-loop-transition"
-                @click="changeColorMode('light')"
-              />
-            </span>
-          </div>
+          <CommonHeaderNightButterflies />
         </li>
         <li class="user-actions-item github">
           <div class="icon-button">
@@ -287,12 +262,12 @@ const changeColorMode = (mode: 'light' | 'dark') => {
             overflow: hidden;
             transition: background-color 0.15s ease-in;
 
-            & > * {
+            & > :not(.butterfly-flock) {
               width: 20px;
               height: 20px;
             }
 
-            &:hover {
+            &:hover:not(.night-butterflies) {
               background-color: var(--everglow-trans-black-3);
             }
 
@@ -304,12 +279,10 @@ const changeColorMode = (mode: 'light' | 'dark') => {
         }
 
         .mode {
-          .light {
-            color: var(--everglow-red-4);
-          }
+          color: var(--everglow-blue-5);
 
-          .dark {
-            color: var(--everglow-blue-5);
+          .icon-button {
+            overflow: visible;
           }
         }
 
