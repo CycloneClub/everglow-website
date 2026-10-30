@@ -135,10 +135,18 @@
 
 	&::before {
 		position: absolute;
-		top: -4px;
-		left: 15px;
-		font-size: 30px;
-		font-weight: var(--font-weight--bold);
-		content: '·';
+		top: calc(4px + 0.5lh);
+		left: 17px;
+		width: 5px;
+		height: 5px;
+		border-radius: 50%;
+		background-color: currentColor;
+		transform: translateY(-50%);
+		content: '';
+	}
+
+	// Loose Markdown lists wrap the first line in a paragraph with 4px padding.
+	&:has(> p:first-child)::before {
+		top: calc(8px + 0.5lh);
 	}
 }

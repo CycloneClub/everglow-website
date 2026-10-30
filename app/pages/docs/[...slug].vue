@@ -165,6 +165,13 @@ const tocLinks = computed(() => {
               .markdown {
                 padding: 0 !important;
                 background-color: none;
+
+                // The page header already separates the opening section.
+                :deep(> h2:first-of-type:not(:has(h2) ~ h2)),
+                :deep(> :first-child h2:first-of-type) {
+                  border-top: none;
+                  padding-top: 0;
+                }
               }
             }
           }
