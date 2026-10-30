@@ -11,7 +11,7 @@ const changeColorMode = (mode: 'light' | 'dark') => {
   // Keep the restriction at the preference write, so other theme consumers
   // and future theme switching remain available.
   if (mode === 'light') {
-    if (!fluttering.value) { fluttering.value = true }
+    fluttering.value ||= true
     return
   }
 
@@ -26,10 +26,17 @@ const changeColorMode = (mode: 'light' | 'dark') => {
     :aria-label="$t('body.header.toggleTheme')"
     @click="changeColorMode(colorMode.value === 'dark' ? 'light' : 'dark')"
   >
-    <span :class="['moon', { shaking: fluttering }]" aria-hidden="true">
+    <span
+      :class="['moon', { shaking: fluttering }]"
+      aria-hidden="true"
+    >
       <Icon :name="colorMode.value === 'dark' ? 'line-md:sunny-outline-to-moon-loop-transition' : 'line-md:moon-filled-alt-to-sunny-filled-loop-transition'" />
     </span>
-    <span v-if="fluttering" class="butterfly-flock" aria-hidden="true">
+    <span
+      v-if="fluttering"
+      class="butterfly-flock"
+      aria-hidden="true"
+    >
       <span
         v-for="(flight, index) in butterflyFlights"
         :key="index"
@@ -41,7 +48,11 @@ const changeColorMode = (mode: 'light' | 'dark') => {
         }"
         @animationend.self="index === butterflyFlights.length - 1 && (fluttering = false)"
       >
-        <svg class="butterfly-trail" viewBox="-100 -60 200 130" focusable="false">
+        <svg
+          class="butterfly-trail"
+          viewBox="-100 -60 200 130"
+          focusable="false"
+        >
           <path
             v-for="segment in 3"
             :key="segment"
@@ -49,8 +60,8 @@ const changeColorMode = (mode: 'light' | 'dark') => {
             pathLength="100"
             :style="{
               '--tail-offset': `${segment * 6}px`,
-              opacity: 0.6 / segment,
-              strokeWidth: `${2.4 - segment * 0.4}px`,
+              'opacity': 0.6 / segment,
+              'strokeWidth': `${2.4 - segment * 0.4}px`,
             }"
           />
         </svg>
@@ -63,7 +74,11 @@ const changeColorMode = (mode: 'light' | 'dark') => {
     </span>
     <Teleport to="body">
       <Transition name="night-dim">
-        <div v-if="fluttering" class="night-screen-off" aria-hidden="true" />
+        <div
+          v-if="fluttering"
+          class="night-screen-off"
+          aria-hidden="true"
+        />
       </Transition>
     </Teleport>
   </button>
