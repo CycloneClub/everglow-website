@@ -4,12 +4,12 @@ import test from 'node:test'
 import { startSiteLoading } from '../app/utils/site-loading-bootstrap.js'
 import { deferPageStyles, renderSiteLoading } from '../server/utils/site-loading.ts'
 
-function fixture ({ home = false, images = [], cached = [], backgrounds = [], rootInitiallyPresent = true, deferredStyle = false } = {}) {
+function fixture ({ home = false, images = [], cached = [], backgrounds = [], rootInitiallyPresent = true, deferredStyle = false, reducedMotion = false } = {}) {
   const number = { textContent: '00' }
   const bar = { value: '0', setAttribute: (_key, value) => { bar.value = value } }
   const fill = { style: {} }
   const root = {
-    open: true, removed: false, classList: { add () {} },
+    open: true, removed: false, classList: new Set(),
     getAttribute: key => ({ 'data-home-scene': String(home) })[key],
     querySelector: selector => ({ '[data-loading-number]': number, '[role="progressbar"]': bar, '[data-loading-fill]': fill })[selector],
     close () { root.open = false }, showModal () { root.open = true }, focus () {},
@@ -61,7 +61,7 @@ function fixture ({ home = false, images = [], cached = [], backgrounds = [], ro
     removeEventListener: name => events.delete(name),
   }
   const window = {
-    matchMedia: () => ({ matches: false }),
+    matchMedia: () => ({ matches: reducedMotion }),
     addEventListener: (name, callback) => windowEvents.set(name, callback),
     removeEventListener: name => windowEvents.delete(name),
   }
@@ -209,6 +209,30 @@ test('home waits for the explicit first-frame signal after the app mounts', () =
   p.frame(); p.frame()
   assert.equal(Number(p.bar.value), 100)
 })
+
+for (const reducedMotion of [false, true]) {
+  test(`scrollbar layout settles behind the opaque home overlay (reduced motion: ${reducedMotion})`, () => {
+    const p = fixture({ home: true, cached: ['/app.js', '/app.css'], reducedMotion })
+    p.controller.documentReady()
+    p.controller.appReady()
+    assert.equal(p.document.body.style.overflow, 'hidden')
+    p.controller.sceneReady()
+    assert.equal(p.document.body.style.overflow, 'auto')
+    p.frame()
+    p.timers()
+    assert.equal(p.root.open, true)
+    assert.equal(p.root.classList.has('is-leaving'), false, 'allow a paint with the scrollbar before fading')
+    p.frame()
+    p.timers()
+    assert.equal(p.root.classList.has('is-leaving'), true)
+    assert.equal(p.root.removed, false)
+    // A later scroll owner must not be overwritten when the overlay is removed.
+    p.document.body.style.overflow = 'hidden'
+    p.timers()
+    assert.equal(p.root.removed, true)
+    assert.equal(p.document.body.style.overflow, 'hidden')
+  })
+}
 
 test('an image error settles only that resource and still waits for application readiness', async () => {
   const p = fixture({ images: ['/broken.png'], cached: ['/app.js', '/app.css'] })
