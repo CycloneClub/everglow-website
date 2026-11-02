@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { HeaderMenuState } from '#shared/types'
+import { siteLinks } from '#shared/data/links'
 
 const blurMaskVisible = () => true
 const menuState = ref<HeaderMenuState>('closed')
@@ -64,7 +65,7 @@ const mainMenuItemList = [
   },
   {
     name: 'wiki',
-    link: 'https://terrariamods.wiki.gg/wiki/Everglow',
+    link: siteLinks.wiki,
   },
   {
     name: 'docs',
@@ -114,7 +115,7 @@ const mainMenuItemList = [
         <li class="user-actions-item github">
           <div class="icon-button">
             <NuxtLink
-              href="https://github.com/CycloneClub/Everglow"
+              :href="siteLinks.github"
               title="Github"
               aria-label="Everglow on Github"
               target="_blank"

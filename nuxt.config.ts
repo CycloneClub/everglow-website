@@ -134,6 +134,7 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
+    '/api/bilibili-videos': { sitemap: false },
     // Plain locale dictionaries are prerendered at content-hashed URLs.
     '/_i18n/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' }, sitemap: false },
     '/indexnow-manifest.json': { headers: { 'cache-control': 'no-store', 'x-robots-tag': 'noindex' }, sitemap: false },

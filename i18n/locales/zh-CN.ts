@@ -78,6 +78,12 @@ export default {
       'placeholderTitle': '半年报 · 即将发布',
       'placeholderDescription': '新的半年报正在整理中。',
     },
+    'videos': {
+      title: '视频',
+      more: '更多视频',
+      watch: '在 B 站观看',
+      newTab: '在新标签页打开',
+    },
     'lore': {
       'eyebrow': '设定',
       'title': '世界观',

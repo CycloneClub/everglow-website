@@ -94,6 +94,7 @@ const cards = computed(() => {
         </li>
       </ul>
     </div>
+    <HomeVideos />
   </section>
 </template>
 
@@ -101,7 +102,7 @@ const cards = computed(() => {
   .home-news {
     display: flex;
     flex-direction: column;
-    height: 100dvh;
+    min-height: 100dvh;
     padding: calc(var(--header-height) + 1.25rem) max(1.5rem, 7vw)
       max(2rem, 6vh);
     color: var(--everglow-black);
@@ -110,7 +111,7 @@ const cards = computed(() => {
 
   .home-news__inner {
     display: flex;
-    flex: 0 0 58%;
+    flex: 0 0 auto;
     flex-direction: column;
     gap: 1.25rem;
     width: 100%;
@@ -219,8 +220,8 @@ const cards = computed(() => {
 
   .home-news__visual {
     position: relative;
-    flex: 1 1 48%;
-    min-height: 6.5rem;
+    flex: none;
+    height: clamp(8rem, 17vh, 13rem);
     overflow: hidden;
     background:
       linear-gradient(180deg, var(--everglow-trans-blue-0), var(--everglow-trans-blue-1));
@@ -254,15 +255,11 @@ const cards = computed(() => {
 
   @media only screen and (max-width: 833px) {
     .home-news {
-      height: auto;
-      min-height: 100dvh;
       padding-right: max(1.25rem, 5vw);
       padding-left: max(1.25rem, 5vw);
     }
 
     .home-news__inner {
-      flex: none;
-
       ul {
         flex: none;
         grid-template-columns: 1fr;
@@ -270,7 +267,6 @@ const cards = computed(() => {
     }
 
     .home-news__visual {
-      flex: none;
       height: 9rem;
     }
   }
