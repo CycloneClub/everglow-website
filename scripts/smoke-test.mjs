@@ -5,6 +5,7 @@ import { dirname, resolve } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import { verifySeo } from './verify-seo.mjs'
+import { verifyStaticLocaleMessages } from './verify-locale-delivery.mjs'
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const outputRoot = resolve(projectRoot, '.output', 'server')
@@ -218,6 +219,7 @@ async function verifyServer () {
   try {
     await Promise.race([waitUntilReady(server), spawnFailed])
     await verifyHttpSurfaces()
+    await verifyStaticLocaleMessages(baseUrl)
     await verifySeo(baseUrl)
   } catch (error) {
     failure = error

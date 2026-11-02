@@ -134,6 +134,8 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
+    // Plain locale dictionaries are prerendered at content-hashed URLs.
+    '/_i18n/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' }, sitemap: false },
     '/indexnow-manifest.json': { headers: { 'cache-control': 'no-store', 'x-robots-tag': 'noindex' }, sitemap: false },
     '/indexnow-key.txt': { headers: { 'cache-control': 'no-store', 'x-robots-tag': 'noindex' }, sitemap: false },
   },
@@ -339,6 +341,9 @@ export default defineNuxtConfig({
   },
   i18n: {
     baseUrl: process.env.BASE_URL || 'https://everglowmod.com',
+    experimental: {
+      prerenderMessages: true,
+    },
     // langDir: './lang', // @BreakingChanges
     locales: [
       {
