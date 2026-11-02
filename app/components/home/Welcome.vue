@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { HomeHeroScene, HomeParallexScrollBase } from '#components'
-import { QQ_GROUP_URL } from '~/data/community'
+import { siteLinks } from '#shared/data/links'
 
 const emit = defineEmits<{
   ready: []
@@ -44,7 +44,7 @@ const heroActions = computed(() => [
     external: true,
     key: 'github',
     title: t('home.hero.github'),
-    to: 'https://github.com/CycloneClub/Everglow',
+    to: siteLinks.github,
     variant: 'ghost',
   },
 ])
@@ -55,21 +55,21 @@ const communityLinks = computed(() => [
     external: true,
     key: 'discord',
     label: t('home.community.discord'),
-    to: 'https://discord.gg/pdXvp89Dbp',
+    to: siteLinks.discord,
   },
   {
     brand: 'bilibili' as const,
     external: true,
     key: 'bilibili',
     label: t('home.community.bilibili'),
-    to: 'https://space.bilibili.com/1079503056',
+    to: siteLinks.bilibili,
   },
   {
     brand: 'qq' as const,
     external: true,
     key: 'qq',
     label: t('home.community.qq'),
-    to: QQ_GROUP_URL,
+    to: siteLinks.qq,
   },
 ])
 </script>
@@ -87,7 +87,7 @@ const communityLinks = computed(() => [
     >
       <a
         class="home-welcome__tml"
-        href="https://www.tmodloader.net/"
+        :href="siteLinks.tmodloader"
         target="_blank"
         rel="noopener noreferrer"
         :aria-label="$t('home.hero.tmodloader')"

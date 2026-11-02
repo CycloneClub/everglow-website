@@ -79,6 +79,12 @@ export type I18nLocale = {
       placeholderTitle: string
       placeholderDescription: string
     }
+    videos: {
+      title: string
+      more: string
+      watch: string
+      newTab: string
+    }
     lore: {
       eyebrow: string
       title: string

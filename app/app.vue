@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { siteLinks } from '#shared/data/links'
+
 const { locale, t } = useI18n()
 const route = useRoute()
 const i18nHead = useLocaleHead()
@@ -49,11 +51,11 @@ useHead(() => ({
     ...localeHeadLinks.value,
     {
       rel: 'me',
-      href: 'https://github.com/CycloneClub/Everglow',
+      href: siteLinks.github,
     },
     {
       rel: 'me',
-      href: 'https://space.bilibili.com/1079503056',
+      href: siteLinks.bilibili,
     },
   ],
   meta: [...(i18nHead.value.meta || [])],

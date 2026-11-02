@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { QQ_GROUP_URL } from '~/data/community'
+import { contactEmail, siteLinks } from '#shared/data/links'
 
 const community = [
-  { name: 'Bilibili', icon: 'bilibili', href: 'https://space.bilibili.com/1079503056' },
-  { name: 'Discord', icon: 'discord', href: 'https://discord.gg/pdXvp89Dbp' },
-  { name: 'GitHub', icon: 'github', href: 'https://github.com/CycloneClub/Everglow' },
+  { name: 'Bilibili', icon: 'bilibili', href: siteLinks.bilibili },
+  { name: 'Discord', icon: 'discord', href: siteLinks.discord },
+  { name: 'GitHub', icon: 'github', href: siteLinks.github },
 ] as const
 </script>
 
@@ -50,7 +50,7 @@ const community = [
             </li>
             <li class="footer-qq">
               <a
-                :href="QQ_GROUP_URL"
+                :href="siteLinks.qq"
                 :aria-label="$t('home.community.qq')"
                 :title="$t('home.community.qq')"
                 target="_blank"
@@ -65,8 +65,8 @@ const community = [
           </ul>
           <a
             class="footer-email"
-            href="mailto:contact@everglowmod.com"
-          >contact@everglowmod.com</a>
+            :href="siteLinks.email"
+          >{{ contactEmail }}</a>
         </div>
       </div>
 
@@ -79,7 +79,7 @@ const community = [
         <p>
           The official website of the Everglow Mod for
           <a
-            href="https://terraria.org/"
+            :href="siteLinks.terraria"
             target="_blank"
             rel="noopener noreferrer"
           >Terraria</a>.

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { siteLinks } from '#shared/data/links'
 import { atlasCopy, atlasLayers, atlasText, unchartedLayers } from '~/data/world-atlas'
 import { createAtlasPaging, createAtlasScroll } from '~/utils/atlas-scroll'
 import { atlasReadingIndex, atlasScrollProgress, atlasTurnDuration, createAtlasReadingStops, createAtlasTimeline, sampleAtlas } from '~/utils/atlas-timeline'
@@ -501,15 +502,15 @@ onBeforeUnmount(stop)
       <NuxtLinkLocale to="/docs/getting-started/installation">
         {{ text(atlasCopy.download) }} <span aria-hidden="true">↗</span>
       </NuxtLinkLocale><a
-        href="https://discord.gg/pdXvp89Dbp"
+        :href="siteLinks.discord"
         target="_blank"
         rel="noopener noreferrer"
       >Discord ↗</a><a
-        href="https://github.com/CycloneClub/Everglow"
+        :href="siteLinks.github"
         target="_blank"
         rel="noopener noreferrer"
       >GitHub ↗</a><a
-        href="https://terrariamods.wiki.gg/wiki/Everglow"
+        :href="siteLinks.wiki"
         target="_blank"
         rel="noopener noreferrer"
       >Wiki ↗</a>

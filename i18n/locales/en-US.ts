@@ -78,6 +78,12 @@ export default {
       placeholderTitle: 'Semiannual report · Coming soon',
       placeholderDescription: 'A new report is being prepared.',
     },
+    videos: {
+      title: 'Videos',
+      more: 'More videos',
+      watch: 'Watch on Bilibili',
+      newTab: 'opens in a new tab',
+    },
     lore: {
       eyebrow: 'Lore',
       title: 'The world',
