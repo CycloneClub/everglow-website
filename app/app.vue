@@ -65,11 +65,26 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
 })
 
-defineOgImage('Everglow.satori', {}, {
+const ogImages = defineOgImage('Everglow.satori', {}, {
   width: 1200,
   height: 630,
   alt: 'Everglow — a Terraria adventure beneath a moonlit sky',
 })
+
+// Reuse the generated URL (including its signature) instead of the schema
+// module's default homepage logo. Leave article image metadata independent.
+if (import.meta.server && ogImages?.[0] && ['/', '/en-us', '/zh-hk'].includes(route.path.replace(/\/$/, '') || '/')) {
+  useSchemaOrg([
+    defineWebPage({
+      primaryImageOfPage: {
+        '@type': 'ImageObject',
+        'url': new URL(ogImages[0], site.url).href,
+        'width': 1200,
+        'height': 630,
+      },
+    }),
+  ])
+}
 </script>
 
 <template>
