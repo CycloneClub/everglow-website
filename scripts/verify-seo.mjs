@@ -17,6 +17,18 @@ export async function verifyHomeImages (baseUrl) {
     assert.equal(response.status, 200)
     const html = await response.text()
     const tags = (html.match(/<img\b[^>]*>/g) || []).map(attributes)
+    for (const decorative of ['town-sky.png', 'kelp-sky.png', 'kelp-close.png']) {
+      assert.ok(!tags.some(tag => tag.src?.includes(decorative)), `${path}: decorative ${decorative} must not be a content image`)
+      assert.ok(html.includes(decorative), `${path}: decorative layer must remain available as a background`)
+    }
+    const ogImage = (html.match(/<meta\b[^>]*>/g) || []).map(attributes).find(tag => tag.property === 'og:image')?.content
+    assert.ok(ogImage, `${path}: existing OG image is retained`)
+    const graph = [...html.matchAll(/<script\b[^>]+type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].flatMap(match => JSON.parse(match[1])['@graph'] || [])
+    const pages = graph.filter(node => [node['@type']].flat().includes('WebPage'))
+    assert.equal(pages.length, 1, `${path}: a single homepage schema node`)
+    const primary = pages[0].primaryImageOfPage
+    const primaryImage = primary?.['@id'] ? graph.find(node => node['@id'] === primary['@id']) : primary
+    assert.equal(typeof primaryImage === 'string' ? primaryImage : primaryImage?.url || primaryImage?.contentUrl, ogImage, `${path}: primary image must match the generated OG image`)
     for (const src of images) {
       assert.ok(tags.some(tag => tag.src === src && tag.alt?.includes('Everglow')), `${path}: ${src} must be an HTML image with descriptive alt text`)
     }
