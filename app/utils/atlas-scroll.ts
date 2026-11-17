@@ -1,3 +1,5 @@
+export const atlasExitDuration = 1400
+
 type AtlasScrollHost = {
   position: () => number
   now: () => number
@@ -13,14 +15,14 @@ export function createAtlasScroll (host: AtlasScrollHost) {
     if (frame !== undefined) { host.cancel(frame) }
     frame = undefined
   }
-  function start (target: number | (() => number), complete: () => void, duration = 1500) {
+  function start (target: number | (() => number), complete: () => void, duration = 1500, easing?: (progress: number) => number) {
     cancel()
     const from = host.position()
     const started = host.now()
     const tick = (time: number) => {
       const t = Math.min(1, Math.max(0, (time - started) / duration))
       // Quintic smootherstep: zero velocity and acceleration at both ends.
-      const eased = t * t * t * (t * (t * 6 - 15) + 10)
+      const eased = easing ? easing(t) : t * t * t * (t * (t * 6 - 15) + 10)
       const destination = typeof target === 'function' ? target() : target
       host.scroll(from + (destination - from) * eased)
       if (t < 1) {
@@ -38,6 +40,7 @@ export function createAtlasScroll (host: AtlasScrollHost) {
 type PagingHost = AtlasScrollHost & {
   stops: () => number[]
   duration: (from: number, to: number) => number
+  easing?: (from: number, to: number) => ((progress: number) => number) | undefined
   target: (index: number | undefined) => void
   complete: (index: number) => void
 }
@@ -97,8 +100,25 @@ export function createAtlasPaging (host: PagingHost) {
     turn = next
     host.target(to)
     const distance = Math.abs(stops[to]! - y)
-    const duration = host.duration(from, to)
+    let duration = host.duration(from, to)
       * (reversing ? Math.min(1, distance / Math.max(1, Math.abs(stops[to]! - stops[from]!))) : 1)
+    let easing = host.easing?.(from, to)
+    if (easing) {
+      // Resume a phased trajectory at the current position, including reversals.
+      const profile = easing
+      const fraction = Math.min(1, Math.max(0, (y - stops[from]!) / (stops[to]! - stops[from]!)))
+      let low = 0
+      let high = 1
+      if (fraction > 0) {
+        for (let i = 0; i < 40; i++) {
+          const middle = (low + high) / 2
+          if (profile(middle) < fraction) { low = middle } else { high = middle }
+        }
+      } else { high = 0 }
+      const start = (low + high) / 2
+      duration = host.duration(from, to) * (1 - start)
+      easing = progress => fraction >= 1 ? 1 : (profile(start + (1 - start) * progress) - fraction) / (1 - fraction)
+    }
     scroll.start(() => host.stops()[to]!, () => {
       if (turn !== next) { return }
       turn = undefined
@@ -108,7 +128,7 @@ export function createAtlasPaging (host: PagingHost) {
         holdFrame = host.request(settle)
       }
       host.complete(to)
-    }, Math.max(180, duration))
+    }, Math.max(180, duration), easing)
     return true
   }
   function wheel (event: PagingWheel) {
