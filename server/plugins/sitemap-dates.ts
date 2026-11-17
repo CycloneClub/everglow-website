@@ -1,5 +1,5 @@
 import { seoPath } from '#shared/utils/seo'
-import { atlasLayers } from '../../app/data/world-atlas'
+import { atlasDetailImageSources, atlasLayers } from '../../app/data/world-atlas'
 
 export default defineNitroPlugin((nitroApp) => {
   nitroApp.hooks.hook('sitemap:resolved', (context) => {
@@ -10,7 +10,7 @@ export default defineNitroPlugin((nitroApp) => {
       if (['/', '/en-us', '/zh-hk'].includes(path)) {
         const origin = new URL(entry.loc, 'https://everglowmod.com').origin
         const images = (entry.images || []).map(image => ({ ...image, loc: new URL(image.loc, origin).href }))
-        for (const src of atlasLayers.flatMap(layer => [layer.landscape, layer.specimenImage, layer.encounterImage]).filter(Boolean)) {
+        for (const src of atlasLayers.flatMap(layer => [layer.landscape, ...layer.details.flatMap(atlasDetailImageSources)])) {
           const loc = new URL(src, origin).href
           if (!images.some(image => image.loc === loc)) { images.push({ loc }) }
         }

@@ -1,8 +1,42 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 
-import { createAtlasScroll } from '../app/utils/atlas-scroll.ts'
+import { atlasExitDuration, createAtlasScroll } from '../app/utils/atlas-scroll.ts'
 import * as atlasScroll from '../app/utils/atlas-scroll.ts'
+import { atlasTurnDuration, atlasTurnEasing, createAtlasReadingStops, createAtlasTimeline } from '../app/utils/atlas-timeline.ts'
+
+test('phased cross-layer paging preserves movement time and reverses without jumping', () => {
+  const timeline = createAtlasTimeline([{ y: 920, details: [{}, {}] }, { y: 750, details: [{}, {}] }])
+  const stops = createAtlasReadingStops(timeline)
+  let y = stops[3] * 10000
+  let time = 0
+  let callback
+  const paging = atlasScroll.createAtlasPaging({
+    position: () => y,
+    now: () => time,
+    scroll: (value) => { y = value },
+    request: (value) => { callback = value; return 1 },
+    cancel: () => { callback = undefined },
+    stops: () => stops.map(stop => stop * 10000),
+    duration: (from, to) => atlasTurnDuration(timeline, stops[from], stops[to]),
+    easing: (from, to) => atlasTurnEasing(timeline, stops[from], stops[to]),
+    target: () => {},
+    complete: () => {},
+  })
+  const tick = (ms) => { time = ms; const frame = callback; callback = undefined; frame?.(ms) }
+  assert.equal(paging.advance(1), true)
+  tick(1500)
+  assert.ok(Math.abs(y - timeline.readings[0].end * 10000) < 0.001)
+  tick(3750)
+  assert.ok(Math.abs(y - timeline.readings[1].start * 10000) < 0.001)
+  tick(4500)
+  const reversingAt = y
+  assert.equal(paging.advance(-1), true)
+  tick(4500)
+  assert.ok(Math.abs(y - reversingAt) < 0.001)
+  tick(9001)
+  assert.ok(Math.abs(y - stops[3] * 10000) < 0.001)
+})
 
 function pagingScene () {
   assert.equal(typeof atlasScroll.createAtlasPaging, 'function', 'shared wheel/button paging controller is available')
@@ -214,16 +248,17 @@ test('large camera movements use 3000ms while preserving the same easing', () =>
   assert.equal(scene.completed(), 1)
 })
 
-test('a fast exit follows a changing viewport boundary and finishes in 700ms', () => {
+test('the slower exit follows a changing viewport boundary and finishes in 1400ms', () => {
   const scene = setup()
   let viewportHeight = 700
   // The boundary is at document y=1400; toolbar collapse exposes more height.
-  scene.start(() => 1400 - viewportHeight, 700)
+  scene.start(() => 1400 - viewportHeight, atlasExitDuration)
   assert.equal(scene.position(), 0, 'the exit must not jump immediately')
-  scene.tick(350)
-  assert.equal(scene.position(), 350)
-  viewportHeight = 800
   scene.tick(700)
+  assert.equal(scene.position(), 350)
+  assert.equal(scene.completed(), 0)
+  viewportHeight = 800
+  scene.tick(1400)
   assert.equal(scene.position(), 600, 'the boundary finishes at the new viewport bottom')
   assert.equal(scene.completed(), 1)
 })

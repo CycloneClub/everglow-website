@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { siteLinks } from '#shared/data/links'
 import { atlasCopy, atlasLayers, atlasText, unchartedLayers } from '~/data/world-atlas'
-import { createAtlasPaging, createAtlasScroll } from '~/utils/atlas-scroll'
-import { atlasReadingIndex, atlasScrollProgress, atlasTurnDuration, createAtlasReadingStops, createAtlasTimeline, sampleAtlas } from '~/utils/atlas-timeline'
+import { atlasExitDuration, createAtlasPaging, createAtlasScroll } from '~/utils/atlas-scroll'
+import { atlasReadingIndex, atlasScrollProgress, atlasTurnDuration, atlasTurnEasing, createAtlasReadingStops, createAtlasTimeline, sampleAtlas } from '~/utils/atlas-timeline'
 
 const { locale } = useI18n()
 const text = (value: Parameters<typeof atlasText>[0]) => atlasText(value, locale.value)
@@ -129,8 +129,11 @@ function start () {
       return [...readingStops.map(stop => top + stop * stableHeight() * timeline.units * 0.46), exitPosition()]
     },
     duration: (from, to) => Math.max(from, to) >= readingStops.length
-      ? 700
+      ? atlasExitDuration
       : atlasTurnDuration(timeline, readingStops[from]!, readingStops[to]!),
+    easing: (from, to) => Math.max(from, to) >= readingStops.length
+      ? undefined
+      : atlasTurnEasing(timeline, readingStops[from]!, readingStops[to]!),
     target: (index) => { pendingStop.value = index; pagingHeight = stableHeight() },
     complete: (index) => {
       if (index === readingStops.length) { after.value?.focus({ preventScroll: true }) }
@@ -190,7 +193,7 @@ function skip () {
     return
   }
   skipping = true
-  pageTurn?.start(exitPosition, complete, 700)
+  pageTurn?.start(exitPosition, complete, atlasExitDuration)
 }
 onMounted(start)
 onActivated(() => { start(); schedule() })
@@ -206,7 +209,7 @@ onBeforeUnmount(stop)
     class="world-atlas"
     :class="{ 'is-animated': animated }"
     :style="animated ? { height } : undefined"
-    :aria-label="text(atlasCopy.subtitle)"
+    :aria-label="text(atlasCopy.title)"
   >
     <div class="atlas-sheet">
       <div
@@ -266,24 +269,6 @@ onBeforeUnmount(stop)
                 :unknown="state.unknown"
               />
             </div>
-            <div
-              class="atlas-introduction"
-              :style="{ opacity: state.intro }"
-              :aria-hidden="state.intro < 0.1"
-            >
-              <p class="atlas-kicker">
-                {{ text(atlasCopy.subtitle) }}
-              </p><h2>{{ text(atlasCopy.title) }}</h2><p class="atlas-intro-note">
-                {{ text(atlasCopy.intro) }}
-              </p>
-            </div>
-            <div
-              class="atlas-discovery"
-              :style="{ opacity: state.map * (1 - state.title) * (1 - state.unknown) }"
-              aria-hidden="true"
-            >
-              <span>fig. 01</span><p>{{ text(atlasCopy.mapNote) }}</p><svg viewBox="0 0 140 70"><path d="M130 7Q55 -5 12 60m0 0 4-17m-4 17 18-5" /></svg>
-            </div>
             <article
               v-if="layer"
               class="atlas-reading"
@@ -307,75 +292,39 @@ onBeforeUnmount(stop)
               >
                 {{ text(layer.place) }}
               </p>
-              <aside
-                class="atlas-annotation atlas-note"
-                :style="{ opacity: noteOpacity(0) }"
-                :aria-hidden="(noteOpacity(0) ?? 0) < 0.1"
+              <div
+                class="atlas-details"
+                :class="{ 'has-three': layer.details.length === 3 }"
               >
-                <span class="atlas-small-label">01 / {{ text(atlasCopy.observation) }}</span><p>{{ text(layer.note) }}</p><svg
-                  viewBox="0 0 190 50"
-                  aria-hidden="true"
-                ><path d="M6 8q90 48 170 4m0 0-19-1m19 1-9 16" /></svg>
-              </aside>
-              <aside
-                class="atlas-annotation atlas-specimen"
-                :style="{ opacity: noteOpacity(1) }"
-                :aria-hidden="(noteOpacity(1) ?? 0) < 0.1"
-              >
-                <span class="atlas-small-label">02 / {{ text(atlasCopy.specimen) }}</span><div class="atlas-specimen-study">
-                  <img
-                    :src="layer.specimenImage"
-                    :alt="text(layer.specimen)"
-                    :title="text(layer.specimen)"
-                    :class="{ 'is-portrait': layer.id === 'town' }"
-                    width="140"
-                    height="150"
-                  ><span aria-hidden="true">a.</span>
-                </div><h4>{{ text(layer.specimen) }}</h4><p>{{ text(layer.specimenNote) }}</p>
-              </aside>
-              <aside
-                class="atlas-annotation atlas-mechanism"
-                :style="{ opacity: noteOpacity(2) }"
-                :aria-hidden="(noteOpacity(2) ?? 0) < 0.1"
-              >
-                <span aria-hidden="true">※</span><p>{{ text(layer.mechanism) }}</p>
-              </aside>
-              <aside
-                class="atlas-annotation atlas-encounter"
-                :style="{ opacity: noteOpacity(3) }"
-                :aria-hidden="(noteOpacity(3) ?? 0) < 0.1"
-              >
-                <span class="atlas-small-label">03 / {{ text(atlasCopy.encounter) }}</span><img
-                  v-if="layer.encounterImage"
-                  :src="layer.encounterImage"
-                  :alt="text(layer.encounter)"
-                  :title="text(layer.encounter)"
-                  class="atlas-pinned-image"
-                  width="270"
-                  height="150"
-                ><span
-                  v-else
-                  class="atlas-question"
-                  aria-hidden="true"
-                >?</span><h4>{{ text(layer.encounter) }}</h4><p>{{ text(layer.encounterNote) }}</p>
-              </aside>
+                <aside
+                  v-for="(detail, index) in layer.details"
+                  :key="detail.id"
+                  class="atlas-annotation"
+                  :data-atlas-detail="detail.id"
+                  :style="{ opacity: noteOpacity(index) }"
+                  :aria-hidden="(noteOpacity(index) ?? 0) < 0.1"
+                >
+                  <span class="atlas-small-label">{{ text(detail.label) }}</span>
+                  <HomeAtlasDetailImage
+                    :detail="detail"
+                    :label="text(detail.name)"
+                  />
+                  <h4>{{ text(detail.name) }}</h4>
+                  <p v-if="detail.description">
+                    {{ text(detail.description) }}
+                  </p>
+                </aside>
+              </div>
             </article>
             <div
               class="atlas-unknown"
-              :style="{ opacity: state.unknown * (1 - state.closing) }"
-              :aria-hidden="state.unknown * (1 - state.closing) < 0.1"
+              :style="{ opacity: state.unknown * (1 - state.returning) }"
+              :aria-hidden="state.unknown * (1 - state.returning) < 0.1"
             >
               <p class="atlas-kicker">
                 {{ unchartedLabel }}
               </p><h3>{{ text(atlasCopy.unknown) }}</h3><p>{{ text(atlasCopy.unknownNote) }}</p>
             </div>
-            <p
-              class="atlas-closing"
-              :style="{ opacity: state.closing }"
-              :aria-hidden="state.closing < 0.1"
-            >
-              Hang on to your dreams.
-            </p>
             <div
               class="atlas-location"
               :style="{ opacity: state.map }"
@@ -412,7 +361,7 @@ onBeforeUnmount(stop)
                 </button>
               </template>
               <template v-else>
-                <span>{{ text(atlasCopy.scroll) }}</span><span aria-hidden="true">↓</span><span>FOLIO / {{ layer ? layer.numeral : state.unknown > 0.5 ? '∞' : '00' }}</span>
+                <span aria-hidden="true" /><span aria-hidden="true">↓</span><span>FOLIO / {{ layer ? layer.numeral : state.unknown > 0.5 ? '∞' : '00' }}</span>
               </template>
             </footer>
           </template>
@@ -421,7 +370,7 @@ onBeforeUnmount(stop)
             class="atlas-static"
           >
             <div class="atlas-static-opening">
-              <h2>{{ text(atlasCopy.title) }}</h2><p>{{ text(atlasCopy.intro) }}</p><HomeAtlasTree
+              <HomeAtlasTree
                 camera="translate(500 600) scale(0.88) translate(-500 -600)"
                 :map="0.3"
                 :active="-1"
@@ -450,28 +399,22 @@ onBeforeUnmount(stop)
                   :alt="text(entry.imageAlt)"
                 /><figcaption>{{ text(entry.place) }}</figcaption>
               </figure>
-              <p>{{ text(entry.note) }}</p><div class="atlas-static-specimen">
-                <img
-                  :src="entry.specimenImage"
-                  :alt="text(entry.specimen)"
-                  :title="text(entry.specimen)"
-                  width="110"
-                  height="130"
-                  loading="lazy"
-                ><div><h4>{{ text(entry.specimen) }}</h4><p>{{ text(entry.specimenNote) }}</p></div>
+              <div
+                v-for="detail in entry.details"
+                :key="detail.id"
+                class="atlas-static-detail"
+                :data-atlas-detail="detail.id"
+              >
+                <span class="atlas-small-label">{{ text(detail.label) }}</span>
+                <HomeAtlasDetailImage
+                  :detail="detail"
+                  :label="text(detail.name)"
+                />
+                <h4>{{ text(detail.name) }}</h4>
+                <p v-if="detail.description">
+                  {{ text(detail.description) }}
+                </p>
               </div>
-              <p class="atlas-static-margin">
-                ※ {{ text(entry.mechanism) }}
-              </p><figure v-if="entry.encounterImage">
-                <img
-                  :src="entry.encounterImage"
-                  :alt="text(entry.encounter)"
-                  :title="text(entry.encounter)"
-                  width="600"
-                  height="334"
-                  loading="lazy"
-                >
-              </figure><h4>{{ text(entry.encounter) }}</h4><p>{{ text(entry.encounterNote) }}</p>
             </article>
             <div class="atlas-static-ending">
               <p>{{ unchartedLabel }}</p><h3>{{ text(atlasCopy.unknown) }}</h3><p>{{ text(atlasCopy.unknownNote) }}</p>
@@ -483,9 +426,6 @@ onBeforeUnmount(stop)
                 :illustration="0"
                 :unknown="1"
               />
-              <p class="atlas-static-quote">
-                Hang on to your dreams.
-              </p>
             </div>
           </div>
         </div>

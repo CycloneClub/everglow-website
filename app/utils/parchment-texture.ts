@@ -63,7 +63,7 @@ export async function createParchmentTextures (stage: HTMLElement) {
     letteringContext.lineWidth = 1
     letteringContext.strokeRect(rect.left - bounds.left, rect.top - bounds.top, rect.width, rect.height)
   }
-  const texts = stage.querySelectorAll<HTMLElement>('.atlas-running-head, .atlas-toolbar, .atlas-introduction, .atlas-discovery, .atlas-running-foot, .atlas-static-opening')
+  const texts = stage.querySelectorAll<HTMLElement>('.atlas-running-head, .atlas-toolbar, .atlas-running-foot, .atlas-static-opening')
   for (const element of texts) {
     const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT)
     let node: Node | null
