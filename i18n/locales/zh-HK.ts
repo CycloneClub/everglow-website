@@ -81,7 +81,7 @@ export default {
     'videos': {
       title: '影片',
       more: '更多影片',
-      watch: '在 B 站觀看',
+      watch: '觀看',
       newTab: '在新分頁開啟',
     },
     'lore': {

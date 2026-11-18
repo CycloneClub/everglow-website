@@ -286,12 +286,6 @@ onBeforeUnmount(stop)
                   {{ text(layer.description) }}
                 </p>
               </div>
-              <p
-                class="atlas-plate-caption"
-                :style="{ opacity: state.illustration }"
-              >
-                {{ text(layer.place) }}
-              </p>
               <div
                 class="atlas-details"
                 :class="{ 'has-three': layer.details.length === 3 }"
@@ -304,7 +298,6 @@ onBeforeUnmount(stop)
                   :style="{ opacity: noteOpacity(index) }"
                   :aria-hidden="(noteOpacity(index) ?? 0) < 0.1"
                 >
-                  <span class="atlas-small-label">{{ text(detail.label) }}</span>
                   <HomeAtlasDetailImage
                     :detail="detail"
                     :label="text(detail.name)"
@@ -323,7 +316,7 @@ onBeforeUnmount(stop)
             >
               <p class="atlas-kicker">
                 {{ unchartedLabel }}
-              </p><h3>{{ text(atlasCopy.unknown) }}</h3><p>{{ text(atlasCopy.unknownNote) }}</p>
+              </p><h3>{{ text(atlasCopy.unknown) }}</h3>
             </div>
             <div
               class="atlas-location"
@@ -397,7 +390,7 @@ onBeforeUnmount(stop)
                   :sky="entry.sky"
                   :foreground="entry.foreground"
                   :alt="text(entry.imageAlt)"
-                /><figcaption>{{ text(entry.place) }}</figcaption>
+                />
               </figure>
               <div
                 v-for="detail in entry.details"
@@ -405,7 +398,6 @@ onBeforeUnmount(stop)
                 class="atlas-static-detail"
                 :data-atlas-detail="detail.id"
               >
-                <span class="atlas-small-label">{{ text(detail.label) }}</span>
                 <HomeAtlasDetailImage
                   :detail="detail"
                   :label="text(detail.name)"
@@ -417,7 +409,7 @@ onBeforeUnmount(stop)
               </div>
             </article>
             <div class="atlas-static-ending">
-              <p>{{ unchartedLabel }}</p><h3>{{ text(atlasCopy.unknown) }}</h3><p>{{ text(atlasCopy.unknownNote) }}</p>
+              <p>{{ unchartedLabel }}</p><h3>{{ text(atlasCopy.unknown) }}</h3>
               <HomeAtlasTree
                 camera="translate(500 600) scale(0.88) translate(-500 -600)"
                 :map="1"

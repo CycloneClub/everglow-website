@@ -81,7 +81,7 @@ export default {
     videos: {
       title: 'Videos',
       more: 'More videos',
-      watch: 'Watch on Bilibili',
+      watch: 'Watch',
       newTab: 'opens in a new tab',
     },
     lore: {
