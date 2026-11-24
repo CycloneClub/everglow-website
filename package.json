@@ -26,7 +26,7 @@
 	"packageManager": "pnpm@12.15.0",
 	"devDependencies": {
 		"@callmebill/lxgw-wenkai-web": "1.530.0",
-		"@eslint/markdown": "^8.0.3",
+		"@eslint/markdown": "^9.0.0",
 		"@iconify-json/dashicons": "^1.2.1",
 		"@iconify-json/line-md": "^1.2.16",
 		"@iconify-json/lucide": "^1.2.157",
@@ -44,7 +44,7 @@
 		"@resvg/resvg-js": "2.6.2",
 		"@types/three": "^0.187.0",
 		"@typescript-eslint/parser": "^8.72.1",
-		"eslint": "^10.14.0",
+		"eslint": "^10.15.0",
 		"eslint-plugin-import-x": "^4.18.1",
 		"eslint-plugin-no-only-tests": "^3.4.0",
 		"eslint-plugin-perfectionist": "^5.13.0",
